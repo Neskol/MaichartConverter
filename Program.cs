@@ -8,19 +8,31 @@ namespace MusicConverterTest
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Specify A000 location:");
-            //string a000Location = Console.ReadLine();
-            string a000Location = @"C:\MUG\maimai\SDEZ1.17\Package\Sinmai_Data\StreamingAssets\A000\";
+            Console.WriteLine("Specify A000 location: *Be sure to add \\ in the end");
+            string a000Location =Console.ReadLine();
+            if (a000Location.Equals(""))
+            {
+                a000Location = @"C:\MUG\maimai\SDEZ1.17\Package\Sinmai_Data\StreamingAssets\A000\";
+            }
             string musiclocation = a000Location + @"music\";
-            Console.WriteLine("Specify Audio location:");
-            //string audioLocation = Console.ReadLine();
-            string audioLocation = @"D:\MaiAnalysis\Audio\";
-            Console.WriteLine("Specify Image location");
-            //string imageLocation = Console.ReadLine();
-            string imageLocation = @"D:\MaiAnalysis\Image\Texture2D\";
-            Console.WriteLine("Specify Output location;");
+            Console.WriteLine("Specify Audio location: *Be sure to add \\ in the end");
+            string audioLocation = Console.ReadLine();
+            if (audioLocation.Equals(""))
+            {
+                audioLocation = @"D:\MaiAnalysis\Audio\";
+            }
+            Console.WriteLine("Specify Image location: *Be sure to add \\ in the end");
+            string imageLocation = Console.ReadLine();
+            if (imageLocation.Equals(""))
+            {
+                imageLocation = @"D:\MaiAnalysis\Image\Texture2D\";
+            }
+            Console.WriteLine("Specify Output location: *Be sure to add \\ in the end");
             string outputLocation = @"D:\MaiAnalysis\Output\";
-            //string outputLocation = Console.ReadLine();
+            if (outputLocation.Equals(""))
+            {
+                outputLocation = Console.ReadLine();
+            }
             string[] musicFolders = Directory.GetDirectories(musiclocation);
             //GoodBrother1 test = new GoodBrother1(@"D:\MaiAnalysis\music\music000834\000834_04.ma2");
             //MaidataCompiler compiler = new MaidataCompiler(musiclocation+@"music000834\", @"D:\MaiAnalysis\Output\");
@@ -62,17 +74,11 @@ namespace MusicConverterTest
                     File.Copy(originalMusicLocation, newMusicLocation);
 
                     string originalImageLocation = imageLocation;
-                    if (File.Exists(originalImageLocation + "UI_Jacket_00" + shortID + ".png"))
-                    {
-                        originalImageLocation += "UI_Jacket_00" + shortID + ".png";
-                    }
-                    else
-                    {
-                        originalImageLocation += "UI_Jacket_000000.png";
-                    }
+                    originalImageLocation += "UI_Jacket_00"+shortID+".png";
                     string newImageLocation = outputLocation + trackInfo.TrackGenre + "\\" + trackInfo.TrackName + trackInfo.DXChart + "\\bg.png";
                     File.Copy(originalImageLocation, newImageLocation);
                     Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + "\\" + trackInfo.TrackName + trackInfo.DXChart);
+                    Console.WriteLine("Find bg in 835:" + File.Exists(@"D:\MaiAnalysis\Output\maimai\Believe The Railbow\bg.png"));
                 }
                 catch (Exception ex)
             {
