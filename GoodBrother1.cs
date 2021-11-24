@@ -247,14 +247,54 @@ namespace MusicConverterTest
                 {            
                     if (x.Bar == i)
                     {
-                        if (x.NoteSpecificGenre().Equals("BPM"))
+                        //if (x.NoteSpecificGenre().Equals("BPM"))
+                        //{
+                        //    currentBPM = x.BPM;
+                        //}
+                        //else
+                        //{
+                        //    x.BPM = currentBPM;
+                        //}
+                        //x.Prev = lastNote;
+                        //lastNote.Next = x;
+                        //bar.Add(x);
+                        //if (!x.NoteSpecificGenre().Equals("SLIDE"))
+                        //{
+                        //    lastNote = x;
+                        //}
+                        switch (x.NoteSpecificGenre())
                         {
-                            currentBPM = x.BPM;
+                            case "BPM":
+                                currentBPM = x.BPM;
+                                break;
+                            case "MEASURE":
+                                break;
+                            case "REST":
+                                break;
+                            case "TAP":
+                                this.tapNumber++;
+                                if (x.NoteType.Equals("TTP"))
+                                {
+                                    this.touchNumber++;
+                                }
+                                break;
+                            case "HOLD":
+                                this.holdNumber++;
+                                if (x.NoteType.Equals("THO"))
+                                {
+                                    this.touchNumber++;
+                                }
+                                break;
+                            case "SLIDE_START":
+                                this.touchNumber++;
+                                break;
+                            case "SLIDE":
+                                this.slideNumber++;
+                                break;
+                            default:
+                                break;
                         }
-                        else
-                        {
-                            x.BPM = currentBPM;
-                        }
+                        x.BPM = currentBPM;
                         x.Prev = lastNote;
                         lastNote.Next = x;
                         bar.Add(x);

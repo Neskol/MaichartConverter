@@ -185,25 +185,6 @@ namespace MusicConverterTest
             {
                 result += 8;
             }
-            
-                    //if ((Int32.Parse(x.EndKey) - Int32.Parse(x.Key) > 3 && Int32.Parse(x.EndKey) - Int32.Parse(x.Key) > 0) ||
-                    //        (Int32.Parse(x.EndKey) - Int32.Parse(x.Key) + 8 > 3 && Int32.Parse(x.EndKey) - Int32.Parse(x.Key) < 0))
-                    //{
-                    //    result = Int32.Parse(x.Key) + 3;//There is 1 difference in MA2 and Simai
-                    //    if (result > 8)
-                    //    {
-                    //        result -= 8;
-                    //    }
-                    //}
-                    //else if ((Int32.Parse(x.EndKey) - Int32.Parse(x.Key) < 3 && Int32.Parse(x.EndKey) - Int32.Parse(x.Key) > 0) ||
-                    //    (Int32.Parse(x.EndKey) - Int32.Parse(x.Key) - 8 < 3 && Int32.Parse(x.EndKey) - Int32.Parse(x.Key) < 0))
-                    //{
-                    //    result = Int32.Parse(x.Key) - 1;//There is 1 difference in MA2 and Simai
-                    //    if (result < 1)
-                    //    {
-                    //        result += 8;
-                    //    }
-                    //}
             return result;
         }
 
