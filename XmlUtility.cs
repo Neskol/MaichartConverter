@@ -9,6 +9,7 @@ namespace MusicConverterTest
 {
     internal class XmlUtility : IXmlUtility
     {
+        public static readonly string[] level = { "1", "2", "3", "4", "5", "6","7", "7+", "8", "8+", "9", "9+", "10", "10+", "11", "11+", "12", "12+", "13", "13+", "14", "14+", "15" ,"15+"};
         private Dictionary<string, string> information;
         private XmlDocument takeinValue;
 
@@ -16,13 +17,15 @@ namespace MusicConverterTest
         {
             takeinValue = new XmlDocument();
             information = new Dictionary<string, string>();
+            this.Update();
         }
 
         public XmlUtility(string location)
         {
             this.takeinValue = new XmlDocument();
-            this.takeinValue.LoadXml(location);
+            this.takeinValue.Load(location+"Music.xml");
             this.information = new Dictionary<string, string>();
+            this.Update();
         }
 
         public XmlNodeList GetMatchNodes(string name)
@@ -41,12 +44,12 @@ namespace MusicConverterTest
             get { return information; }
         }
 
-        public void Load(string location)
-        {
-            this.takeinValue = new XmlDocument();
-            this.takeinValue.LoadXml(location);
-            this.information = new Dictionary<string, string>();
-        }
+        //public void Load(string location)
+        //{
+        //    this.takeinValue = new XmlDocument();
+        //    this.takeinValue.LoadXml(location);
+        //    this.information = new Dictionary<string, string>();
+        //}
 
         public void Save(string location)
         {
@@ -55,8 +58,8 @@ namespace MusicConverterTest
 
         public void Update()
         {
-            try
-            {
+            //try
+            //{
                 XmlNodeList nameCandidate = takeinValue.GetElementsByTagName("name");
                 XmlNodeList bpmCandidate = takeinValue.GetElementsByTagName("bpm");
                 XmlNodeList chartCandidate = takeinValue.GetElementsByTagName("Notes");
@@ -70,7 +73,7 @@ namespace MusicConverterTest
                     if (!this.information.ContainsKey("Music ID"))
                     {
                         this.information.Add("Music ID", candidate["id"].InnerText);
-                        this.information.Add("Name", candidate["name"].InnerText);
+                        this.information.Add("Name", candidate["str"].InnerText);
                     }
                 }
                 //Add Chart information
@@ -82,37 +85,80 @@ namespace MusicConverterTest
                 //}
                 foreach (XmlNode candidate in chartCandidate)
                 {
-                    if (candidate["file"]["path"].InnerText.Contains(this.information.GetValueOrDefault("00.ma2")))
+                try
+                {
+                    if (candidate["file"]["path"].InnerText.Contains("00.ma2"))
                     {
-                        this.information.Add("Basic", candidate["musicLevelID"].InnerText);
-                        this.information.Add("Basic Chart Maker", candidate["noteDesigner"].InnerText);
+                        this.information.Add("Basic", level[Int32.Parse(candidate["musicLevelID"].InnerText) - 1]);
+                        this.information.Add("Basic Chart Maker", candidate["notesDesigner"]["str"].InnerText);
+                        this.information.Add("Basic Chart Path", candidate["file"]["path"].InnerText);
                     }
-                    else if (candidate["file"]["path"].InnerText.Contains(this.information.GetValueOrDefault("01.ma2")))
+                    else if (candidate["file"]["path"].InnerText.Contains("01.ma2"))
                     {
-                        this.information.Add("Advanced", candidate["musicLevelID"].InnerText);
-                        this.information.Add("Advanced Chart Maker", candidate["noteDesigner"].InnerText);
+                        this.information.Add("Advanced", level[Int32.Parse(candidate["musicLevelID"].InnerText) - 1]);
+                        this.information.Add("Advanced Chart Maker", candidate["notesDesigner"]["str"].InnerText);
+                        this.information.Add("Advanced Chart Path", candidate["file"]["path"].InnerText);
                     }
-                    else if (candidate["file"]["path"].InnerText.Contains(this.information.GetValueOrDefault("02.ma2")))
+                    else if (candidate["file"]["path"].InnerText.Contains("02.ma2"))
                     {
-                        this.information.Add("Expert", candidate["musicLevelID"].InnerText);
-                        this.information.Add("Expert Chart Maker", candidate["noteDesigner"].InnerText);
+                        this.information.Add("Expert", level[Int32.Parse(candidate["musicLevelID"].InnerText) - 1]);
+                        this.information.Add("Expert Chart Maker", candidate["notesDesigner"]["str"].InnerText);
+                        this.information.Add("Expert Chart Path", candidate["file"]["path"].InnerText);
                     }
-                    else if (candidate["file"]["path"].InnerText.Contains(this.information.GetValueOrDefault("03.ma2")))
+                    else if (candidate["file"]["path"].InnerText.Contains("03.ma2"))
                     {
-                        this.information.Add("Master", candidate["musicLevelID"].InnerText);
-                        this.information.Add("Master Chart Maker", candidate["noteDesigner"].InnerText);
+                        this.information.Add("Master", level[Int32.Parse(candidate["musicLevelID"].InnerText) - 1]);
+                        this.information.Add("Master Chart Maker", candidate["notesDesigner"]["str"].InnerText);
+                        this.information.Add("Master Chart Path", candidate["file"]["path"].InnerText);
                     }
-                    else if (candidate["file"]["path"].InnerText.Contains(this.information.GetValueOrDefault("04.ma2")))
+                    else if (candidate["file"]["path"].InnerText.Contains("04.ma2"))
                     {
-                        this.information.Add("Remaster", candidate["musicLevelID"].InnerText);
-                        this.information.Add("Remaster Chart Maker", candidate["noteDesigner"].InnerText);
+                        this.information.Add("Remaster", level[Int32.Parse(candidate["musicLevelID"].InnerText) - 1]);
+                        this.information.Add("Remaster Chart Maker", candidate["notesDesigner"]["str"].InnerText);
+                        this.information.Add("Remaster Chart Path", candidate["file"]["path"].InnerText);
                     }
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("There is no such chart: "+ex.Message);
+                }
+                }
 
-            }catch (Exception e)
+            foreach (XmlNode candidate in bpmCandidate)
             {
-
+                {
+                    if (!this.information.ContainsKey("BPM"))
+                    {
+                        this.information.Add("BPM", candidate.InnerText);
+                    }
+                }
             }
+
+            foreach (XmlNode candidate in composerCandidate)
+            {
+                {
+                    if (!this.information.ContainsKey("Composer"))
+                    {
+                        this.information.Add("Composer", candidate["str"].InnerText);
+                    }
+                }
+            }
+
+            foreach (XmlNode candidate in genreCandidate)
+            {
+                {
+                    if (!this.information.ContainsKey("Genre"))
+                    {
+                        this.information.Add("Genre", candidate["str"].InnerText);
+                    }
+                }
+            }
+
+            //}catch (Exception e)
+            //{
+            //    throw e;
+            //    Console.WriteLine(e.Message);
+            //}
         }
     }
 }

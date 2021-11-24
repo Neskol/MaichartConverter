@@ -7,16 +7,58 @@ namespace MusicConverterTest
 {
     internal class MaidataCompiler : ICompiler
     {
-        private GoodBrother1[] charts;
+        private List<GoodBrother1> charts;
         private Dictionary<string, string> information;
-        public MaidataCompiler(GoodBrother1[] intakeChart)
+        /// <summary>
+        /// Construct compiler of a single song.
+        /// </summary>
+        /// <param name="location">Folder</param>
+        /// <param name="targetLocation">Output folder</param>
+        public MaidataCompiler(string location, string targetLocation)
         {
-            this.charts = intakeChart;
+            charts = new List<GoodBrother1>();
+            for (int i = 0;i<5; i++)
+            {
+                charts.Add(new GoodBrother1());
+            }
+            XmlUtility musicXml = new XmlUtility(location);
+            this.information = musicXml.Information;
+            //Construct charts
+            {
+                if (this.information.ContainsKey("Basic"))
+                {
+                    //Console.WriteLine("Have basic: "+ location + this.information.GetValueOrDefault("Basic Chart Path"));
+                    charts[0] = new GoodBrother1(location + this.information.GetValueOrDefault("Basic Chart Path"));
+                }
+                if (this.information.ContainsKey("Advanced"))
+                {
+                    charts[1] = new GoodBrother1(location + this.information.GetValueOrDefault("Advanced Chart Path"));
+                }
+                if (this.information.ContainsKey("Expert"))
+                {
+                    charts[2] = new GoodBrother1(location + this.information.GetValueOrDefault("Expert Chart Path"));
+                }
+                if (this.information.ContainsKey("Master"))
+                {
+                    charts[3] = new GoodBrother1(location + this.information.GetValueOrDefault("Master Chart Path"));
+                }
+                if (this.information.ContainsKey("Remaster"))
+                {
+                    charts[4] = new GoodBrother1(location + this.information.GetValueOrDefault("Remaster Chart Path"));
+                }
+            }
+            string result = this.Compose();
+            Console.WriteLine(result);
+            StreamWriter sw = new StreamWriter(targetLocation + "\\maidata.txt", false);
+            {
+                sw.WriteLine(result);
+            }
         }
 
         public MaidataCompiler()
         {
-
+            charts = new List<GoodBrother1>();
+            information = new Dictionary<string, string>();
         }
 
         public bool CheckValidity()
@@ -31,7 +73,64 @@ namespace MusicConverterTest
 
         public string Compose()
         {
-            throw new NotImplementedException();
+            string result = "";
+            //Add information
+            {
+                string beginning = "";
+                beginning += "&title=" + this.information.GetValueOrDefault("Name")+"\n";
+                beginning += "&wholebpm=" + this.information.GetValueOrDefault("BPM")+"\n";
+                beginning += "&freemsg=" + this.information.GetValueOrDefault("Composer")+"\n";
+                beginning += "\n";
+                if (this.information.TryGetValue("Basic", out string basic) && this.information.TryGetValue("Basic Chart Maker", out string basicMaker))
+                {
+                    beginning += "&lv_2=" + basic+"\n";
+                    beginning += "&des_2=" + basicMaker + "\n";
+                    beginning += "\n";
+                }
+                if (this.information.TryGetValue("Advanced", out string advance) && this.information.TryGetValue("Advanced Chart Maker", out string advanceMaker))
+                {
+                    beginning += "&lv_3=" + advance + "\n";
+                    beginning += "&des_3=" + advanceMaker + "\n";
+                    beginning += "\n";
+                }
+                if (this.information.TryGetValue("Expert", out string expert) && this.information.TryGetValue("Expert Chart Maker", out string expertMaker))
+                {
+                    beginning += "&lv_4=" + expert + "\n";
+                    beginning += "&des_4=" + expertMaker + "\n";
+                    beginning += "\n";
+                }
+                if (this.information.TryGetValue("Master", out string master) && this.information.TryGetValue("Master Chart Maker", out string masterMaker))
+                {
+                    beginning += "&lv_5=" + master + "\n";
+                    beginning += "&des_5=" + masterMaker + "\n";
+                    beginning += "\n";
+                }
+                if (this.information.TryGetValue("Remaster", out string remaster) && this.information.TryGetValue("Remaster Chart Maker", out string remasterMaker))
+                {
+                    beginning += "&lv_6=" + remaster + "\n";
+                    beginning += "&des_6=" + remasterMaker; beginning += "\n";
+                    beginning += "\n";
+                }
+                result += beginning;
+            }
+            Console.WriteLine("Finished writing header of " + this.information.GetValueOrDefault("Name"));
+            
+            //Compose charts
+            {
+                for (int i = 0; i < this.charts.Count; i++)
+                {
+                    Console.WriteLine("Processing: " + i);
+                    result += "&inote_" + (i + 2) + "=\n";
+                    if (!charts[i].Equals(null))
+                    {
+                        result += this.Compose(charts[i]);
+                        //result += charts[i].Compose();
+                    } 
+                    result += "\n";
+                }
+            }
+            Console.WriteLine("Finished composing.");
+            return result;
         }
 
         /// <summary>
@@ -41,104 +140,33 @@ namespace MusicConverterTest
         /// <returns>Maidata of specified chart WITHOUT headers</returns>
         public string Compose(GoodBrother1 chart)
         {
-            ////Set all storage variables
-            //int nextBpmChangeIndex = 0;
-            //int nextBpmChangeBar= chart.BPMChanges.Bar[nextBpmChangeIndex];
-            //int nextBpmChangeQuaver = chart.BPMChanges.Tick[nextBpmChangeIndex];
-            //int nextMeasureChangeIndex = 0;
-            //int nextMeasureChangeBar= chart.MeasureChanges.Bar[nextMeasureChangeIndex];
-            //int nextMeasureChangeQuaver = chart.MeasureChanges.Tick[nextMeasureChangeIndex];
-            //string lastNote = "";
-            //string result = "";
-            //bool prettyPrint=false;
-            //int bar = 0;
-            //int measure = 0;
-            //int quaver = chart.MeasureChanges.Quavers[0];
-            //int beat = chart.MeasureChanges.Beats[0];
-            //double bpm = chart.BPMChanges.Bpm[0];
-            //bool separate = true;
-            //for (int i = 0; i < chart.Notes.Count; i++)
-            //{
-            //    //Print measure changes: (BPM)
-
-            //    //Print measure changes: {Quaver}
-
-            //    //Reserve time: Only in first note
-            //    if (i == 0)
-            //    {
-            //        int prefix = chart.MeasureChanges.Beats[0];
-            //        for (int x = 0; x < prefix-1; x++)
-            //        {
-            //            result += ",";
-            //            result += "\n";
-            //        }
-            //    }
-            //    //Process Both Note
-            //    if (chart.Notes[i].Bar == bar && chart.Notes[i].StartTime == measure)
-            //    {
-            //        if ((!IsSlideStart(lastNote) && !IsSlide(lastNote))||
-            //            (IsSlide(lastNote) && !IsSlide(chart.Notes[i].NoteType)))
-            //        {
-            //            result += "/";
-            //            separate = false;
-            //        }
-            //        else if ((!IsSlideStart(lastNote) && IsSlide(chart.Notes[i].NoteType))||
-            //            (IsSlide(lastNote) && IsSlide(chart.Notes[i].NoteType)))
-            //        {
-            //            result += "*";
-            //            separate = false;
-            //        }
-
-            //    }
-            //    else if ((chart.Notes[i].Bar != bar || chart.Notes[i].StartTime != quaver) && separate)
-            //    {
-            //        result += ",";
-            //    }
-            //    //Add separator
-
-            //    //Compose note
-            //    result +=chart.Notes[i].Compose(0);
-            //    prettyPrint = chart.Notes[i].Bar > bar;
-            //    bar = chart.Notes[i].Bar;
-            //    measure = chart.Notes[i].StartTime;
-            //    lastNote = chart.Notes[i].NoteType;
-            //    separate = true;
-            //    //Auto return
-            //    if (prettyPrint)
-            //    {
-            //        result += "\n";
-            //        prettyPrint=false;
-            //    }
-            //}
-            //result += ",E";
-            //return result;
             string result = "";
-            Console.WriteLine(chart.Compose());
-            foreach (BPMChange x in chart.BPMChanges.ChangeNotes)
-            {
-                Console.WriteLine("BPM Change verified in "+x.Bar+" "+x.StartTime+" of BPM"+x.BPM);
-            }
-            foreach(List<Note> bar in chart.Chart)
+            //Console.WriteLine(chart.Compose());
+            //foreach (BPMChange x in chart.BPMChanges.ChangeNotes)
+            //{
+            //    Console.WriteLine("BPM Change verified in " + x.Bar + " " + x.StartTime + " of BPM" + x.BPM);
+            //}
+            foreach (List<Note> bar in chart.Chart)
             {
                 Note lastNote = new MeasureChange();
                 //result += bar[1].Bar;
                 foreach (Note x in bar)
                 {
-                    switch(lastNote.NoteSpecificGenre())
+                    switch (lastNote.NoteSpecificGenre())
                     {
                         case "MEASURE":
                             break;
                         case "BPM":
                             break;
                         case "TAP":
-                            if (x.IsNote() && (!IsSlide(x.NoteType))&& x.StartTime == lastNote.StartTime&&!x.NoteGenre().Equals("BPM"))
+                            if (x.IsNote() && ((!x.NoteSpecificGenre().Equals("SLIDE")) && x.StartTime == lastNote.StartTime && !x.NoteGenre().Equals("BPM")))
                             {
                                 result += "/";
                             }
                             else result += ",";
                             break;
                         case "HOLD":
-                            if (x.IsNote() && !IsSlide(x.NoteType) && x.StartTime == lastNote.StartTime && !x.NoteGenre().Equals("BPM"))
+                            if (x.IsNote() && (!x.NoteSpecificGenre().Equals("SLIDE")) && x.StartTime == lastNote.StartTime && !x.NoteGenre().Equals("BPM"))
                             {
                                 result += "/";
                             }
@@ -151,11 +179,11 @@ namespace MusicConverterTest
                             //}
                             break;
                         case "SLIDE":
-                            if (x.IsNote() && (!IsSlide(x.NoteType)) && x.StartTime == lastNote.StartTime && !x.NoteGenre().Equals("BPM"))
+                            if (x.IsNote() && (!x.NoteSpecificGenre().Equals("SLIDE")) && x.StartTime == lastNote.StartTime && !x.NoteGenre().Equals("BPM"))
                             {
                                 result += "/";
                             }
-                            else if (x.IsNote() && IsSlide(x.NoteType) && x.StartTime == lastNote.StartTime && !x.NoteGenre().Equals("BPM"))
+                            else if (x.IsNote() && x.NoteSpecificGenre().Equals("SLIDE") && x.StartTime == lastNote.StartTime && !x.NoteGenre().Equals("BPM"))
                             {
                                 result += "*";
                             }
@@ -174,7 +202,7 @@ namespace MusicConverterTest
                 }
                 result += ",\n";
             }
-            result += "E";
+            result += "E\n";
             return result;
         }
 
@@ -182,42 +210,5 @@ namespace MusicConverterTest
         {
             this.information = information;
         }
-
-        /// <summary>
-        /// Return if this note is Slide.
-        /// </summary>
-        /// <param name="noteType">String of Note Type</param>
-        /// <returns>True if it is, false elsewise</returns>
-        static bool IsSlide(string noteType)
-        {
-            bool result = true;
-            result = result && (noteType.Equals("SI_") ||
-                noteType.Equals("SV_") ||
-                noteType.Equals("SF_") ||
-                noteType.Equals("SCL") ||
-                noteType.Equals("SCR") ||
-                noteType.Equals("SLL") ||
-                noteType.Equals("SLR") ||
-                noteType.Equals("SUL") ||
-                noteType.Equals("SUR") ||
-                noteType.Equals("SXL") ||
-                noteType.Equals("SXR"));
-            return result;
-        }
-
-        /// <summary>
-        /// Return if this note is Slide Start.
-        /// </summary>
-        /// <param name="noteType">String of Note Type</param>
-        /// <returns>True if it is, false elsewise</returns>
-        static bool IsSlideStart(string noteType)
-        {
-            bool result = true;
-            result = result && (noteType.Equals("STR") ||
-                noteType.Equals("XST") ||
-                noteType.Equals("BST"));
-            return result;
-        }
-
     }
 }

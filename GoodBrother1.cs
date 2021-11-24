@@ -154,6 +154,15 @@ namespace MusicConverterTest
             }
         }
 
+        public GoodBrother1()
+        {
+            this.notes = new List<Note>();
+            this.bpmChanges = new BPMChanges();
+            this.measureChanges = new MeasureChanges();
+            this.chart = new List<List<Note>>();
+            this.information = new Dictionary<string, string>();
+        }
+
         /// <summary>
         /// Construct Good Brother with given notes, bpm change definitions and measure change definitions.
         /// </summary>
@@ -247,21 +256,6 @@ namespace MusicConverterTest
                 {            
                     if (x.Bar == i)
                     {
-                        //if (x.NoteSpecificGenre().Equals("BPM"))
-                        //{
-                        //    currentBPM = x.BPM;
-                        //}
-                        //else
-                        //{
-                        //    x.BPM = currentBPM;
-                        //}
-                        //x.Prev = lastNote;
-                        //lastNote.Next = x;
-                        //bar.Add(x);
-                        //if (!x.NoteSpecificGenre().Equals("SLIDE"))
-                        //{
-                        //    lastNote = x;
-                        //}
                         switch (x.NoteSpecificGenre())
                         {
                             case "BPM":
@@ -307,13 +301,13 @@ namespace MusicConverterTest
                 
                 List<Note> afterBar = new List<Note>();
                 afterBar.Add(new MeasureChange(i, 0, CalculateQuaver(CalculateLeastMeasure(bar))));
-                Console.WriteLine();
-                Console.WriteLine("In bar "+i+", LeastMeasure is "+ CalculateLeastMeasure(bar)+", so quaver will be "+ CalculateQuaver(CalculateLeastMeasure(bar)));
+                //Console.WriteLine();
+                //Console.WriteLine("In bar "+i+", LeastMeasure is "+ CalculateLeastMeasure(bar)+", so quaver will be "+ CalculateQuaver(CalculateLeastMeasure(bar)));
                 afterBar.AddRange(bar);
-                chart.Add(FinishBar(afterBar, this.BPMChanges.ChangeNotes, i,CalculateQuaver(CalculateLeastMeasure(bar))));
+                this.chart.Add(FinishBar(afterBar, this.BPMChanges.ChangeNotes, i,CalculateQuaver(CalculateLeastMeasure(bar))));
             }
             bool hasBPMChange = false;
-            foreach (List<Note> bar in chart)
+            foreach (List<Note> bar in this.chart)
             {
                 foreach (Note x in bar)
                 {
@@ -323,10 +317,6 @@ namespace MusicConverterTest
                     }
                 }
             }
-            //if (!hasBPMChange)
-            //{
-            //    throw new Exception("No bpm change found");
-            //}
         }
 
         public string Compose()
@@ -388,36 +378,6 @@ namespace MusicConverterTest
         /// <returns>List none 0 measure</returns>
         public static int CalculateLeastMeasure(List<Note> bar)
         {
-            ////List<Note> candidateBar = new List<Note>();
-            ////candidateBar.Add(new Rest("RST", 0, 0));
-            ////foreach (Note x in bar)
-            ////{
-            ////    if (x.IsNote())
-            ////    {
-            ////        candidateBar.Add(x);
-            ////    }
-            ////}
-            ////candidateBar.Add(new Rest("RST", 0, 384));
-            ////List<int> intervalCandidates = new List<int>();
-            ////int minimalInterval = 384;
-            ////for (int i = 1; i < candidateBar.Count; i++)
-            ////{
-            ////    //if (candidateBar[i].StartTime>candidateBar[i-1].StartTime &&
-            ////    //    candidateBar[i].StartTime-candidateBar[i-1].StartTime<minimalInterval)
-            ////    //{
-            ////    //    minimalInterval = candidateBar[i].StartTime - candidateBar[i - 1].StartTime;
-            ////    //}
-            ////    if (candidateBar[i].StartTime > candidateBar[i - 1].StartTime && candidateBar[i].StartTime - candidateBar[i - 1].StartTime > 0)
-            ////        intervalCandidates.Add(candidateBar[i].StartTime - candidateBar[i - 1].StartTime);
-            ////}
-            ////for (int i = 1; i < intervalCandidates.Count; i++)
-            ////{
-            ////    if (minimalInterval/GCD(intervalCandidates[i], intervalCandidates[i - 1]) < minimalInterval)
-            ////    {
-            ////        minimalInterval /= GCD(intervalCandidates[i], intervalCandidates[i - 1]);
-            ////    }
-            ////}
-            ////return minimalInterval;
             List<int> startTimeList = new List<int>();
             startTimeList.Add(0);
             foreach (Note x in bar)
@@ -445,7 +405,7 @@ namespace MusicConverterTest
             }
             if (intervalCandidates.Min() == 0)
             {
-                throw new Exception();
+                throw new Exception("Error: Least interval was 0");
             }
             int minimalInterval = intervalCandidates.Min();
             if (minimalInterval == 0)
@@ -454,8 +414,6 @@ namespace MusicConverterTest
             }
             bool primeInterval = false;
             bool notAllDivisible = true;
-            //while (notAllDivisible)
-            //{
                 foreach (int num in intervalCandidates)
                 {
                     notAllDivisible = notAllDivisible || num % minimalInterval != 0;
@@ -479,19 +437,9 @@ namespace MusicConverterTest
                                 primeInterval=true;
                                 notAllDivisible=false;
                             }
-                            //minimalInterval/=2;
                         }
                     }
                 }
-            //}
-            
-            //for (int i = 1;i<intervalCandidates.Count;i++)
-            //{
-            //    if (intervalCandidates[i] / (GCD(minimalInterval, intervalCandidates[i]))<minimalInterval&& intervalCandidates[i] / (GCD(minimalInterval, intervalCandidates[i])) > 0)
-            //    {
-            //        minimalInterval = intervalCandidates[i] / (GCD(minimalInterval, intervalCandidates[i]));
-            //    }
-            //}
             return minimalInterval;
             //return 1;
         }
@@ -551,7 +499,7 @@ namespace MusicConverterTest
         public static List<Note> FinishBar(List<Note> bar, List<BPMChange> bpmChanges, int barNumber, int minimalQuaver)
         {
             List<Note> result = new List<Note>();
-            Console.WriteLine("The taken in minimal interval is "+minimalQuaver);
+            //Console.WriteLine("The taken in minimal interval is "+minimalQuaver);
             //foreach (BPMChange x in bpmChanges)
             //{
             //    if (x.Bar == barNumber && x.NoteGenre().Equals("BPM"))
@@ -575,7 +523,7 @@ namespace MusicConverterTest
                     if ((x.StartTime == i)&&x.IsNote())
                     {
                         eachSet.Add(x);
-                        Console.WriteLine("A note was found at tick " + i + " of bar " + barNumber + ", it is "+x.NoteType);
+                        //Console.WriteLine("A note was found at tick " + i + " of bar " + barNumber + ", it is "+x.NoteType);
                         writeRest = false ;
                     }
                 }
@@ -603,25 +551,27 @@ namespace MusicConverterTest
                 //}
                 if (writeRest)
                 {
-                    Console.WriteLine("There is no note at tick " + i + " of bar " + barNumber + ", Adding one");
+                    //Console.WriteLine("There is no note at tick " + i + " of bar " + barNumber + ", Adding one");
                     eachSet.Add(new Rest("RST", barNumber, i));
                 }
                 result.AddRange(eachSet);
             }
             if (RealNoteNumber(result)!=RealNoteNumber(bar))
             {
-                Console.WriteLine("Bar notes not match in bar: "+barNumber);
-                Console.WriteLine("Expected: "+RealNoteNumber(bar));
+                string error = "";
+                error+=("Bar notes not match in bar: "+barNumber);
+                error += ("Expected: "+RealNoteNumber(bar));
                 foreach (Note x in bar)
                 {
-                    Console.WriteLine(x.Compose(1));
+                    error += (x.Compose(1));
                 }
-                Console.WriteLine("\nActrual: "+RealNoteNumber(result));
+                error += ("\nActrual: "+RealNoteNumber(result));
                 foreach (Note y in result)
                 {
-                    Console.WriteLine(y.Compose(1));
+                    error += (y.Compose(1));
                 }
-                throw new Exception("NOTE NUMBER IS NOT MATCHING");
+                Console.WriteLine(error);
+                throw new Exception("NOTE NUMBER IS NOT MATCHING");            
             }
             //result.Sort();
             //if (RealNoteNumber(result)==0)

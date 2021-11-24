@@ -12,11 +12,11 @@ namespace MusicConverterTest
     /// </summary>
     internal interface IXmlUtility
     {
-        /// <summary>
-        /// Load and construct Xml document from given location.
-        /// </summary>
-        /// <param name="location">Location to find</param>
-        public void Load(string location);
+        ///// <summary>
+        ///// Load and construct Xml document from given location.
+        ///// </summary>
+        ///// <param name="location">Location to find</param>
+        //public void Load(string location);
 
         /// <summary>
         /// Save Xml to specified location.
