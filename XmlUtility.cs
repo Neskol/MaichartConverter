@@ -22,10 +22,48 @@ namespace MusicConverterTest
 
         public XmlUtility(string location)
         {
-            this.takeinValue = new XmlDocument();
-            this.takeinValue.Load(location+"Music.xml");
-            this.information = new Dictionary<string, string>();
-            this.Update();
+            try
+            {
+                this.takeinValue = new XmlDocument();
+                this.takeinValue.Load(location + "Music.xml");
+                this.information = new Dictionary<string, string>();
+                this.Update();
+            }catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public string TrackName
+        {
+            get { return this.Information.GetValueOrDefault("Name"); }
+        }
+
+        public string TrackID
+        {
+            get { return this.Information.GetValueOrDefault("Music ID"); }
+        }
+
+        public string TrackGenre
+        {
+            get { return this.Information.GetValueOrDefault("Genre"); }
+        }
+
+        public string DXChart
+        {
+            get {
+                if (this.Information.GetValueOrDefault("Music ID").Length > 3)
+                    return "_DX";
+                else return "";
+            }
+        }
+
+        public bool IsDXChart
+        {
+            get
+            {
+                return this.Information.GetValueOrDefault("Music ID").Length > 3;
+            }
         }
 
         public XmlNodeList GetMatchNodes(string name)
@@ -76,13 +114,6 @@ namespace MusicConverterTest
                         this.information.Add("Name", candidate["str"].InnerText);
                     }
                 }
-                //Add Chart information
-                //{
-                //    //Add Basic Chart
-                //    XmlNode basicCandidate = chartCandidate[0];
-                //    string basicChartPath = basicCandidate["file"].InnerText;
-                    
-                //}
                 foreach (XmlNode candidate in chartCandidate)
                 {
                 try

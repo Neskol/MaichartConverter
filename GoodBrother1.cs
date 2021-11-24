@@ -271,12 +271,16 @@ namespace MusicConverterTest
                                 {
                                     this.touchNumber++;
                                 }
+                                else if (x.NoteType.Equals("BRK")||x.NoteType.Equals("BST"))
+                                {
+                                    this.breakNumber++;
+                                }
                                 break;
                             case "HOLD":
                                 this.holdNumber++;
                                 if (x.NoteType.Equals("THO"))
                                 {
-                                    this.touchNumber++;
+                                    this.thoNumber++;
                                 }
                                 break;
                             case "SLIDE_START":
@@ -585,6 +589,7 @@ namespace MusicConverterTest
                 result[0] = result[1];
                 result[1] = temp;
             }
+            
             return result;
         }
 

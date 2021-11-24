@@ -7,6 +7,7 @@ namespace MusicConverterTest
 {
     internal class MaidataCompiler : ICompiler
     {
+        public static readonly string[] difficulty = { "Basic","Advanced","Expert","Master","Remaster"};
         private List<GoodBrother1> charts;
         private Dictionary<string, string> information;
         /// <summary>
@@ -53,6 +54,7 @@ namespace MusicConverterTest
             {
                 sw.WriteLine(result);
             }
+            sw.Close();
         }
 
         public MaidataCompiler()
@@ -119,10 +121,10 @@ namespace MusicConverterTest
             {
                 for (int i = 0; i < this.charts.Count; i++)
                 {
-                    Console.WriteLine("Processing: " + i);
-                    result += "&inote_" + (i + 2) + "=\n";
-                    if (!charts[i].Equals(null))
+                    //Console.WriteLine("Processing: " + i);
+                    if (this.information.ContainsKey(difficulty[i]))
                     {
+                        result += "&inote_" + (i + 2) + "=\n";
                         result += this.Compose(charts[i]);
                         //result += charts[i].Compose();
                     } 
@@ -202,6 +204,7 @@ namespace MusicConverterTest
                 }
                 result += ",\n";
             }
+            result += "{1},\n{1},\n";
             result += "E\n";
             return result;
         }
