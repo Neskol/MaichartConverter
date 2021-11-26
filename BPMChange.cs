@@ -31,6 +31,10 @@
             this.BPM = BPM;
         }
 
+        /// <summary>
+        /// Construct BPMChange with takein value
+        /// </summary>
+        /// <param name="takein">Take in BPMChange</param>
         public BPMChange(BPMChange takein)
         {
             this.Bar = takein.Bar;
@@ -38,33 +42,10 @@
             this.BPM = takein.BPM;
         }
 
-        //public int Bar
-        //{
-        //    get { return this.Bar; }
-        //    set { this.Bar = value; }
-        //}
-
-        public int Tick
-        {
-            get
-            { return this.StartTime; }
-            set
-            { this.StartTime = value; }
-        }
-
-        //public int StartTime
-        //{
-        //    get
-        //    { return this.StartTime; }
-        //    set
-        //    {
-        //        this.StartTime = value;
-        //    }
-        //}
 
         public override bool CheckValidity()
         {
-            throw new NotImplementedException();
+            return this.BPM != 0;
         }
 
         public override string Compose(int format)

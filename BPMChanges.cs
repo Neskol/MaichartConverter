@@ -81,6 +81,9 @@
             this.changeNotes.Add(x);
         }
 
+        /// <summary>
+        /// Compose change notes according to BPMChanges
+        /// </summary>
         public void Update()
         {
             for (int i = 0; i < tick.Count; i++)
@@ -127,6 +130,10 @@
             }
         }
 
+        /// <summary>
+        /// See if the BPMChange is valid
+        /// </summary>
+        /// <returns>True if valid, false elsewise</returns>
         public bool CheckValidity()
         {
             bool result = bar.IndexOf(0) == 0;
@@ -135,12 +142,16 @@
             return result;
         }
 
+        /// <summary>
+        /// Compose BPMChanges in beginning of MA2
+        /// </summary>
+        /// <returns></returns>
         public string Compose()
         {
             string result = "";
             for (int i = 0; i < bar.Count; i++)
             {
-                result += "BPM" + "\t" + changeNotes[i].Bar + "\t" + changeNotes[i].Tick + "\t" + changeNotes[i].BPM + "\n";
+                result += "BPM" + "\t" + changeNotes[i].Bar + "\t" + changeNotes[i].StartTime + "\t" + changeNotes[i].BPM + "\n";
                 //result += "BPM" + "\t" + bar[i] + "\t" + tick[i] + "\t" + String.Format("{0:F3}", bpm[i])+"\n";
             }
             return result;

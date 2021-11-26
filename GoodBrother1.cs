@@ -317,6 +317,8 @@
                 afterBar.AddRange(bar);
                 this.chart.Add(FinishBar(afterBar, this.BPMChanges.ChangeNotes, i, CalculateQuaver(CalculateLeastMeasure(bar))));
             }
+            Console.WriteLine("TOTAL DELAY: "+this.TotalDelay);
+            Console.WriteLine("TOTAL COUNT: "+ this.chart.Count * 384);
             if (this.totalDelay<this.chart.Count*384)
             {
                 this.totalDelay = 0;
@@ -550,9 +552,10 @@
                     //    writeRest = false;
                     //}
                 }
+                bool addedTouch = false;
                 foreach (BPMChange x in bpmChanges)
                 {
-                    if (eachSet.Contains(x))
+                    if (eachSet.Contains(x)&&!addedTouch)
                     {
                         eachSet.Remove(x);
                         List<Note> adjusted = new List<Note>();
@@ -560,13 +563,15 @@
                         adjusted.AddRange(touchEachSet);
                         adjusted.AddRange(eachSet);
                         eachSet = adjusted;
+                        addedTouch = true;
                     }
-                    else
+                    else if (!addedTouch)
                     {
                         List<Note> adjusted = new List<Note>();
                         adjusted.AddRange(touchEachSet);
                         adjusted.AddRange(eachSet);
                         eachSet = adjusted;
+                        addedTouch= true;
                     }
                 }
                 //for (int index = 0;index<eachSet.Count;index++)
@@ -590,16 +595,16 @@
             if (RealNoteNumber(result) != RealNoteNumber(bar))
             {
                 string error = "";
-                error += ("Bar notes not match in bar: " + barNumber);
-                error += ("Expected: " + RealNoteNumber(bar));
+                error += ("Bar notes not match in bar: " + barNumber)+"\n";
+                error += ("Expected: " + RealNoteNumber(bar)) + "\n";
                 foreach (Note x in bar)
                 {
-                    error += (x.Compose(1));
+                    error += (x.Compose(1)) + "\n";
                 }
-                error += ("\nActrual: " + RealNoteNumber(result));
+                error += ("\nActrual: " + RealNoteNumber(result)) + "\n";
                 foreach (Note y in result)
                 {
-                    error += (y.Compose(1));
+                    error += (y.Compose(1)) + "\n";
                 }
                 Console.WriteLine(error);
                 throw new Exception("NOTE NUMBER IS NOT MATCHING");

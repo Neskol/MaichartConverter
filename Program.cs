@@ -1,10 +1,17 @@
 ﻿namespace MusicConverterTest
 {
+    /// <summary>
+    /// Main program of converter
+    /// </summary>
     class Program
     {
+        /// <summary>
+        /// Main method to process charts
+        /// </summary>
+        /// <param name="args">Parameters to takein</param>
         public static void Main(string[] args)
         {
-            //GoodBrother1 good = new GoodBrother1(@"C:\MUG\maimai\SDEZ1.17\Package\Sinmai_Data\StreamingAssets\A000\music\music011089\011089_03.ma2");
+            //GoodBrother1 good = new GoodBrother1(@"C:\MUG\maimai\SDEZ1.17\Package\Sinmai_Data\StreamingAssets\A000\music\music011038\011038_03.ma2");
             //MaidataCompiler compiler = new MaidataCompiler();
             //Console.WriteLine(good.Compose());
             //Console.WriteLine(compiler.Compose(good));

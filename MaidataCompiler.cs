@@ -138,7 +138,7 @@
         public string Compose(GoodBrother1 chart)
         {
             string result = "";
-            int delayBar = (chart.TotalDelay) / 384 + 1;
+            int delayBar = (chart.TotalDelay) / 384 + 2;
             //Console.WriteLine(chart.Compose());
             //foreach (BPMChange x in chart.BPMChanges.ChangeNotes)
             //{
