@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-
-namespace MusicConverterTest
+﻿namespace MusicConverterTest
 {
     class Program
     {
         public static void Main(string[] args)
         {
+            //GoodBrother1 good = new GoodBrother1(@"C:\MUG\maimai\SDEZ1.17\Package\Sinmai_Data\StreamingAssets\A000\music\music011089\011089_03.ma2");
+            //MaidataCompiler compiler = new MaidataCompiler();
+            //Console.WriteLine(good.Compose());
+            //Console.WriteLine(compiler.Compose(good));
+
             Console.WriteLine("Specify A000 location: *Be sure to add \\ in the end");
-            string a000Location =Console.ReadLine();
+            string a000Location = Console.ReadLine();
             if (a000Location.Equals(""))
             {
                 a000Location = @"C:\MUG\maimai\SDEZ1.17\Package\Sinmai_Data\StreamingAssets\A000\";
@@ -74,19 +75,18 @@ namespace MusicConverterTest
                     File.Copy(originalMusicLocation, newMusicLocation);
 
                     string originalImageLocation = imageLocation;
-                    originalImageLocation += "UI_Jacket_00"+shortID+".png";
+                    originalImageLocation += "UI_Jacket_00" + shortID + ".png";
                     string newImageLocation = outputLocation + trackInfo.TrackGenre + "\\" + trackInfo.TrackName + trackInfo.DXChart + "\\bg.png";
                     File.Copy(originalImageLocation, newImageLocation);
                     Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + "\\" + trackInfo.TrackName + trackInfo.DXChart);
                     Console.WriteLine("Find bg in 835:" + File.Exists(@"D:\MaiAnalysis\Output\maimai\Believe The Railbow\bg.png"));
                 }
                 catch (Exception ex)
-            {
-                Console.WriteLine("There might not be Music.xml in " + track);
+                {
+                    Console.WriteLine("There might not be Music.xml in " + track);
+                }
             }
         }
-    }
-
         /// <summary>
         /// Componsate 0 for music IDs
         /// </summary>
@@ -95,7 +95,7 @@ namespace MusicConverterTest
         public static string ComponsateZero(string intake)
         {
             string result = intake;
-            while (result.Length<6)
+            while (result.Length < 6)
             {
                 result = "0" + result;
             }

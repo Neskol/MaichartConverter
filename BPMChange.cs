@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MusicConverterTest
+﻿namespace MusicConverterTest
 {
     /// <summary>
     /// BPMChange note for Simai
     /// </summary>
-    public class BPMChange:Note
+    public class BPMChange : Note
     {
 
         /// <summary>
@@ -50,11 +44,11 @@ namespace MusicConverterTest
         //    set { this.Bar = value; }
         //}
 
-        public int Tick 
-        { 
-            get 
+        public int Tick
+        {
+            get
             { return this.StartTime; }
-            set 
+            set
             { this.StartTime = value; }
         }
 
@@ -76,13 +70,13 @@ namespace MusicConverterTest
         public override string Compose(int format)
         {
             string result = "";
-            if (format==0)
+            if (format == 0)
             {
                 result += "(" + this.BPM + ")";
                 //result += "(" + this.BPM + "_" + this.Bar + "_" + this.StartTime + ")";
             }
             else result += "(" + this.BPM + "_" + this.Bar + "_" + this.StartTime + ")";
-                return result;
+            return result;
         }
 
         public override string NoteGenre()
@@ -95,7 +89,7 @@ namespace MusicConverterTest
             return true;
         }
 
-        public override string NoteSpecificGenre()
+        public override string NoteSpecificType()
         {
             return "BPM";
         }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MusicConverterTest
+﻿namespace MusicConverterTest
 {
     public class MeasureChanges : IGoodBrother
     {
@@ -31,13 +27,13 @@ namespace MusicConverterTest
         /// </summary>
         /// <param name="initialQuaver">Initial Quaver</param>
         /// <param name="initialBeat">Initial Beat</param>
-        public MeasureChanges(int initialQuaver,int initialBeat)
+        public MeasureChanges(int initialQuaver, int initialBeat)
         {
             bar = new List<int>();
             tick = new List<int>();
             quavers = new List<int>();
             beats = new List<int>();
-            changeNotes=new List<MeasureChange>();
+            changeNotes = new List<MeasureChange>();
             this.initialQuaver = initialQuaver;
             this.initialBeat = initialBeat;
         }
@@ -72,7 +68,7 @@ namespace MusicConverterTest
         /// </summary>
         public List<int> Tick
         {
-           get { return tick; }
+            get { return tick; }
         }
 
         /// <summary>
@@ -134,8 +130,8 @@ namespace MusicConverterTest
         public string InitialChange
         {
             get
-            {          
-                return "MET_DEF" + "\t"+this.initialQuaver+"\t"+this.initialBeat+"\n";               
+            {
+                return "MET_DEF" + "\t" + this.initialQuaver + "\t" + this.initialBeat + "\n";
             }
         }
 
@@ -153,7 +149,7 @@ namespace MusicConverterTest
             string result = "";
             for (int i = 0; i < bar.Count; i++)
             {
-                result += "MET" + "\t" + bar[i] + "\t" + tick[i] + "\t" + quavers[i]+"\t"+beats[i] + "\n";
+                result += "MET" + "\t" + bar[i] + "\t" + tick[i] + "\t" + quavers[i] + "\t" + beats[i] + "\n";
             }
             return result;
         }

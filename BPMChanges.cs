@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MusicConverterTest
+﻿namespace MusicConverterTest
 {
     public class BPMChanges : IGoodBrother
     {
@@ -17,12 +13,12 @@ namespace MusicConverterTest
         /// <param name="bar">Bar which contains changes</param>
         /// <param name="tick">Tick in bar contains changes</param>
         /// <param name="bpm">Specified BPM changes</param>
-        public BPMChanges(List<int>bar,List<int> tick, List<double> bpm)
+        public BPMChanges(List<int> bar, List<int> tick, List<double> bpm)
         {
             this.bar = bar;
             this.tick = tick;
             this.bpm = bpm;
-            this.changeNotes=new List<BPMChange>();
+            this.changeNotes = new List<BPMChange>();
             this.Update();
         }
 
@@ -76,7 +72,7 @@ namespace MusicConverterTest
         /// <param name="bar">Bar to change</param>
         /// <param name="tick">Tick to change</param>
         /// <param name="bpm">BPM to change</param>
-        public void Add(int bar,int tick,double bpm)
+        public void Add(int bar, int tick, double bpm)
         {
             this.bar.Add(bar);
             this.tick.Add(tick);
@@ -100,15 +96,15 @@ namespace MusicConverterTest
         {
             get
             {
-                if (bar.Count>4)
+                if (bar.Count > 4)
                 {
                     string result = "BPM_DEF" + "\t";
-                    for(int x=0;x<4;x++)
+                    for (int x = 0; x < 4; x++)
                     {
                         result = result + String.Format("{0:F3}", bpm[x]);
                         result += "\t";
                     }
-                    return result+"\n";
+                    return result + "\n";
                 }
                 else
                 {
@@ -120,13 +116,13 @@ namespace MusicConverterTest
                         result += "\t";
                         times++;
                     }
-                    while (times<4)
+                    while (times < 4)
                     {
                         result += String.Format("{0:F3}", bpm[0]);
                         result += "\t";
                         times++;
                     }
-                    return result+"\n";
+                    return result + "\n";
                 }
             }
         }
@@ -142,9 +138,9 @@ namespace MusicConverterTest
         public string Compose()
         {
             string result = "";
-            for (int i = 0;i<bar.Count;i++)
+            for (int i = 0; i < bar.Count; i++)
             {
-                result+="BPM"+"\t"+changeNotes[i].Bar+"\t"+changeNotes[i].Tick+"\t"+changeNotes[i].BPM+"\n";
+                result += "BPM" + "\t" + changeNotes[i].Bar + "\t" + changeNotes[i].Tick + "\t" + changeNotes[i].BPM + "\n";
                 //result += "BPM" + "\t" + bar[i] + "\t" + tick[i] + "\t" + String.Format("{0:F3}", bpm[i])+"\n";
             }
             return result;

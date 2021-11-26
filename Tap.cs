@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MusicConverterTest
+﻿namespace MusicConverterTest
 {
     /// <summary>
     /// Tap note
@@ -11,7 +7,7 @@ namespace MusicConverterTest
     {
         private int specialEffect;
         private string touchSize;
-        private readonly string[] allowedType = {"TAP","STR","BRK","BST","XTP","XST","TTP"};
+        private readonly string[] allowedType = { "TAP", "STR", "BRK", "BST", "XTP", "XST", "TTP" };
         /// <summary>
         /// Construct a Tap note
         /// </summary>
@@ -44,7 +40,7 @@ namespace MusicConverterTest
             this.Key = key;
             this.Bar = bar;
             this.StartTime = startTime;
-            this.specialEffect=specialEffect;
+            this.specialEffect = specialEffect;
             this.touchSize = touchSize;
         }
 
@@ -72,7 +68,7 @@ namespace MusicConverterTest
             {
                 result = result || this.NoteType.Equals(x);
             }
-            result =    result && NoteType.Length == 3;
+            result = result && NoteType.Length == 3;
             result = result && Key.Length <= 2;
             return result;
         }
@@ -80,26 +76,26 @@ namespace MusicConverterTest
         public override string Compose(int format)
         {
             string result = "";
-            if (format == 1&&!(this.NoteType.Equals("TTP")))
+            if (format == 1 && !(this.NoteType.Equals("TTP")))
             {
                 result = this.NoteType + "\t" + this.Bar + "\t" + this.StartTime + "\t" + this.Key;
             }
-            else if (format == 1&& this.NoteType.Equals("TTP"))
+            else if (format == 1 && this.NoteType.Equals("TTP"))
             {
                 result = this.NoteType + "\t" +
                     this.Bar + "\t" +
                     this.StartTime + "\t" +
                     this.Key.ToCharArray()[0] + "\t" +
-                    this.Key.ToCharArray()[1]+"\t"+
-                    this.specialEffect+"\t"+
+                    this.Key.ToCharArray()[1] + "\t" +
+                    this.specialEffect + "\t" +
                     this.touchSize; //M1 for regular note and L1 for Larger Note
             }
-            else if (format==0)
+            else if (format == 0)
             {
-                switch(this.NoteType)
+                switch (this.NoteType)
                 {
                     case "TAP":
-                        result += (Int32.Parse(this.Key)+1).ToString();
+                        result += (Int32.Parse(this.Key) + 1).ToString();
                         break;
                     case "STR":
                         result += (Int32.Parse(this.Key) + 1).ToString();
@@ -117,8 +113,8 @@ namespace MusicConverterTest
                         result += (Int32.Parse(this.Key) + 1).ToString() + "x";
                         break;
                     case "TTP":
-                        result += this.Key.ToCharArray()[1]+((Convert.ToInt32(this.Key.Substring(0,1))+1).ToString());
-                        if (this.SpecialEffect==1)
+                        result += this.Key.ToCharArray()[1] + ((Convert.ToInt32(this.Key.Substring(0, 1)) + 1).ToString());
+                        if (this.SpecialEffect == 1)
                         {
                             result += "f";
                         }
@@ -139,7 +135,7 @@ namespace MusicConverterTest
             return true;
         }
 
-        public override string NoteSpecificGenre()
+        public override string NoteSpecificType()
         {
             string result = "";
             switch (this.NoteType)
@@ -166,7 +162,7 @@ namespace MusicConverterTest
                     result += "TAP";
                     break;
             }
-           
+
             return result;
         }
     }

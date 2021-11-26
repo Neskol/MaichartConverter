@@ -1,7 +1,6 @@
-﻿using System;
-namespace MusicConverterTest
+﻿namespace MusicConverterTest
 {
-    public class Tokenizer:ITokenizer
+    public class Tokenizer : ITokenizer
     {
         public Tokenizer()
         {
@@ -11,12 +10,12 @@ namespace MusicConverterTest
         {
             try
             {
-               string[] result = System.IO.File.ReadAllLines(location);
+                string[] result = System.IO.File.ReadAllLines(location);
                 return result;
             }
-            catch(DirectoryNotFoundException)
+            catch (DirectoryNotFoundException)
             {
-               throw new DirectoryNotFoundException(location);
+                throw new DirectoryNotFoundException(location);
             }
         }
     }

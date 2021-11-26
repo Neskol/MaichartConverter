@@ -1,5 +1,4 @@
-﻿using System;
-namespace MusicConverterTest
+﻿namespace MusicConverterTest
 {
     public interface IParser
     {

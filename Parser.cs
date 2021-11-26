@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MusicConverterTest
+﻿namespace MusicConverterTest
 {
-    public class Parser:IParser
+    public class Parser : IParser
     {
         public Parser()
         {
@@ -15,7 +12,7 @@ namespace MusicConverterTest
             BPMChanges bpmChanges = new BPMChanges();
             MeasureChanges measureChanges = new MeasureChanges();
             List<Note> notes = new List<Note>();
-            if (token!=null)
+            if (token != null)
             {
                 foreach (string x in token)
                 {
@@ -87,7 +84,7 @@ namespace MusicConverterTest
 
         public MeasureChanges MeasureChangesOfToken(string token)
         {
-            return new MeasureChanges(Int32.Parse(token.Split('\t')[1]),Int32.Parse(token.Split('\t')[2]));
+            return new MeasureChanges(Int32.Parse(token.Split('\t')[1]), Int32.Parse(token.Split('\t')[2]));
         }
 
         public Note NoteOfToken(string token)
@@ -100,7 +97,7 @@ namespace MusicConverterTest
                 || token.Split('\t')[0].Equals("XST")
                 || token.Split('\t')[0].Equals("BRK")
                 || token.Split('\t')[0].Equals("BST");
-            bool isHold= token.Split('\t')[0].Equals("HLD")
+            bool isHold = token.Split('\t')[0].Equals("HLD")
                 || token.Split('\t')[0].Equals("XHO")
                 || token.Split('\t')[0].Equals("THO");
             bool isSlide = token.Split('\t')[0].Equals("SI_")
@@ -117,7 +114,7 @@ namespace MusicConverterTest
                 || token.Split('\t')[0].Equals("SSL")
                 || token.Split('\t')[0].Equals("SSR"); ;
             string[] candidate = token.Split('\t');
-            foreach(string x in candidate)
+            foreach (string x in candidate)
             {
                 if (isTap)
                 {
@@ -146,12 +143,13 @@ namespace MusicConverterTest
                 candidate[3] + candidate[5], Int32.Parse(candidate[4]),
                 Int32.Parse(candidate[6]),
                 candidate[7]); //candidate[6] is special effect
-            }else
-            return new Hold(candidate[0],
-                        Int32.Parse(candidate[1]),
-                        Int32.Parse(candidate[2]),
-                        candidate[3],
-                        Int32.Parse(candidate[4]));
+            }
+            else
+                return new Hold(candidate[0],
+                            Int32.Parse(candidate[1]),
+                            Int32.Parse(candidate[2]),
+                            candidate[3],
+                            Int32.Parse(candidate[4]));
         }
 
         public Slide SlideOfToken(string token)
@@ -174,15 +172,15 @@ namespace MusicConverterTest
                 return new Tap(candidate[0],
                 Int32.Parse(candidate[1]),
                 Int32.Parse(candidate[2]),
-                candidate[3]+candidate[4],
+                candidate[3] + candidate[4],
                 Int32.Parse(candidate[5]),
                 candidate[6]);
             }
             else
-            return new Tap(candidate[0],
-                Int32.Parse(candidate[1]),
-                Int32.Parse(candidate[2]),
-                candidate[3]);
+                return new Tap(candidate[0],
+                    Int32.Parse(candidate[1]),
+                    Int32.Parse(candidate[2]),
+                    candidate[3]);
         }
     }
 }

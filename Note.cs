@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MusicConverterTest
+﻿namespace MusicConverterTest
 {
     /// <summary>
     /// Basic
     /// </summary>
-    public abstract class Note : INote,IComparable
+    public abstract class Note : INote, IComparable
     {
         private string noteType;
         private string key;
@@ -173,7 +168,7 @@ namespace MusicConverterTest
             get { return this.next; }
             set { this.next = value; }
         }
-        public abstract string NoteSpecificGenre();
+        public abstract string NoteSpecificType();
 
         /// <summary>
         /// Return this.noteGenre
@@ -194,15 +189,15 @@ namespace MusicConverterTest
         {
             int result = 0;
             Note another = obj as Note;
-            //else if (this.NoteSpecificGenre().Equals("SLIDE")&&(this.NoteSpecificGenre().Equals("TAP")|| this.NoteSpecificGenre().Equals("HOLD")) && this.startTime == another.StartTime && this.bar == another.Bar)
+            //else if (this.NoteSpecificType().Equals("SLIDE")&&(this.NoteSpecificType().Equals("TAP")|| this.NoteSpecificType().Equals("HOLD")) && this.startTime == another.StartTime && this.bar == another.Bar)
             //{
             //    result = -1;
             //}
-            //else if (this.NoteSpecificGenre().Equals("SLIDE_START") && (another.NoteSpecificGenre().Equals("TAP") || another.NoteSpecificGenre().Equals("HOLD")) && this.startTime == another.StartTime && this.bar == another.Bar)
+            //else if (this.NoteSpecificType().Equals("SLIDE_START") && (another.NoteSpecificType().Equals("TAP") || another.NoteSpecificType().Equals("HOLD")) && this.startTime == another.StartTime && this.bar == another.Bar)
             //{
             //    Console.WriteLine("STAR AND TAP");
             //    result = 1;
-            //    Console.WriteLine(this.NoteSpecificGenre() + ".compareTo(" + another.NoteSpecificGenre() + ") is" + result);
+            //    Console.WriteLine(this.NoteSpecificType() + ".compareTo(" + another.NoteSpecificType() + ") is" + result);
             //    //Console.ReadKey();
             //}
             //if (this.Bar==another.Bar&&this.StartTime==another.StartTime)
@@ -215,7 +210,7 @@ namespace MusicConverterTest
             //    {
             //        result = 1;
             //    }
-            //    else if ((this.NoteSpecificGenre().Equals("TAP")|| this.NoteSpecificGenre().Equals("HOLD"))&&another.NoteSpecificGenre().Equals("SLIDE_START"))
+            //    else if ((this.NoteSpecificType().Equals("TAP")|| this.NoteSpecificType().Equals("HOLD"))&&another.NoteSpecificType().Equals("SLIDE_START"))
             //    {
             //        result= -1;
             //    }
@@ -230,25 +225,25 @@ namespace MusicConverterTest
             //    }
             //    else result = this.startTime.CompareTo(another.StartTime);
             //}
-            if (this.Bar!=another.Bar)
+            if (this.Bar != another.Bar)
             {
                 result = this.Bar.CompareTo(another.Bar);
             }
-            else if (this.Bar==another.Bar&&(this.StartTime!=another.StartTime))
+            else if (this.Bar == another.Bar && (this.StartTime != another.StartTime))
             {
                 result = this.StartTime.CompareTo(another.StartTime);
             }
             else
             {
-                if (this.NoteSpecificGenre().Equals("BPM"))
+                if (this.NoteSpecificType().Equals("BPM"))
                 {
-                    result =-1;
+                    result = -1;
                 }
-                //else if (this.NoteSpecificGenre().Equals("SLIDE")&&another.NoteSpecificGenre().Equals("SLIDE_START")&&this.Key.Equals(another.Key))
+                //else if (this.NoteSpecificType().Equals("SLIDE")&&another.NoteSpecificType().Equals("SLIDE_START")&&this.Key.Equals(another.Key))
                 //{
                 //    result = 1;
                 //}
-                else result= 0;
+                else result = 0;
             }
             return result;
         }

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MusicConverterTest;
-
-namespace MusicConverterTest
+﻿namespace MusicConverterTest
 {
-    public class Simai : IGoodBrother,ICompiler
+    public class Simai : IGoodBrother, ICompiler
     {
         private string title;
         private List<double> difficulty;
@@ -56,7 +51,7 @@ namespace MusicConverterTest
                 {
                     if (x.Contains("inotes_1"))
                     {
-                        this.maps.Add(Read(x,1));
+                        this.maps.Add(Read(x, 1));
                     }
                     else if (x.Contains("inotes_2"))
                     {
@@ -83,17 +78,17 @@ namespace MusicConverterTest
         /// <param name="maiNotes">string to take in</param>
         /// <param name="Difficulty">difficulty to mark</param>
         /// <returns></returns>
-        public GoodBrother1 Read(string maiNotes,int Difficulty)
+        public GoodBrother1 Read(string maiNotes, int Difficulty)
         {
             List<Note> notes = new List<Note>();
-            List<int> changedBars = new List<int>(), changedTicks = new List<int>(),changedQuavers = new List<int>(), changedBeats = new List<int>();
+            List<int> changedBars = new List<int>(), changedTicks = new List<int>(), changedQuavers = new List<int>(), changedBeats = new List<int>();
             List<double> changedBPMs = new List<double>();
             int bar = 1, tick = 0, quavers = 0;
             double bpm = this.wholeBPM;
 
             string[] processing = maiNotes.Split(')');
             string candidate = maiNotes;
-            if (processing.Length>=2)
+            if (processing.Length >= 2)
             {
                 foreach (string x in processing)
                 {
@@ -101,7 +96,7 @@ namespace MusicConverterTest
                 }
             }
             processing = candidate.Split(',');
-            for(int x = 0;x<processing.Length;x++)
+            for (int x = 0; x < processing.Length; x++)
             {
                 if (processing[x].Contains("("))
                 {
@@ -116,7 +111,7 @@ namespace MusicConverterTest
                 }
                 else notes.AddRange(Read(processing[x], bar, tick));
                 tick += Resolution / quavers;
-                if (tick>=Resolution)
+                if (tick >= Resolution)
                 {
                     bar++;
                     tick = 0;
@@ -124,7 +119,7 @@ namespace MusicConverterTest
             }
             BPMChanges bpmChanges = new BPMChanges(changedBars, changedTicks, changedBPMs);
             MeasureChanges measureChanges = new MeasureChanges(changedBars, changedTicks, changedQuavers, changedBeats);
-            GoodBrother1 result = new GoodBrother1(notes,bpmChanges,measureChanges);
+            GoodBrother1 result = new GoodBrother1(notes, bpmChanges, measureChanges);
             return result;
         }
 
@@ -200,7 +195,7 @@ namespace MusicConverterTest
                 string[] typeCandidate = section.Split('[');
                 string timeCandidate = typeCandidate[1].Substring(0, typeCandidate[1].Length - 1);
                 string[] quaverCandidate = timeCandidate.Split(':');
-                int overrideQuaver = Resolution/int.Parse(quaverCandidate[0]);
+                int overrideQuaver = Resolution / int.Parse(quaverCandidate[0]);
                 int last = 0;
                 if (section.Contains("-"))
                 {
@@ -222,7 +217,7 @@ namespace MusicConverterTest
                 {
 
                 }
-                else if (section.Contains("s")||section.Contains("z"))
+                else if (section.Contains("s") || section.Contains("z"))
                 {
 
                 }

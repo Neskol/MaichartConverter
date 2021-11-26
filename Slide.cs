@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Diagnostics;
-
-namespace MusicConverterTest
+﻿namespace MusicConverterTest
 {
     /// <summary>
     /// Construct a Slide note (With START!)
@@ -20,7 +15,7 @@ namespace MusicConverterTest
         /// <param name="startTime">Start Time</param>
         /// <param name="lastTime">Last Time</param>
         /// <param name="endKey">0-7</param>
-        public Slide(string noteType,  int bar, int startTime, string key, int waitTime, int lastTime, string endKey)
+        public Slide(string noteType, int bar, int startTime, string key, int waitTime, int lastTime, string endKey)
         {
             this.NoteType = noteType;
             this.Key = key;
@@ -107,7 +102,7 @@ namespace MusicConverterTest
                 }
                 if (this.Delayed)
                 {
-                    result += ((Convert.ToInt32(this.EndKey) + 1).ToString()) + GenerateAppropriateLength(this.LastTime,this.BPM);
+                    result += ((Convert.ToInt32(this.EndKey) + 1).ToString()) + GenerateAppropriateLength(this.LastTime, this.BPM);
                 }
                 else
                 {
@@ -143,10 +138,10 @@ namespace MusicConverterTest
         public string GenerateAppropriateLength(int length, double bpm)
         {
             string result = "";
-            double tickTime = 60 / bpm * 4/384;
+            double tickTime = 60 / bpm * 4 / 384;
             double sustain = this.WaitTime * tickTime;
             double duration = this.LastTime * tickTime;
-            result = "[" +sustain+"##"+ duration + "]";
+            result = "[" + sustain + "##" + duration + "]";
             return result;
         }
 
@@ -168,7 +163,7 @@ namespace MusicConverterTest
         /// <returns>Infection point of this note</returns>
         public static int GenerateInflection(Note x)
         {
-            int result = Int32.Parse(x.Key)+1;
+            int result = Int32.Parse(x.Key) + 1;
             if (x.NoteType.Equals("SLR"))
             {
                 result += 2;
@@ -177,11 +172,11 @@ namespace MusicConverterTest
             {
                 result -= 2;
             }
-            if (result>8)
+            if (result > 8)
             {
                 result -= 8;
             }
-            else if (result<1)
+            else if (result < 1)
             {
                 result += 8;
             }
@@ -198,7 +193,7 @@ namespace MusicConverterTest
             return true;
         }
 
-        public override string NoteSpecificGenre()
+        public override string NoteSpecificType()
         {
             return "SLIDE";
         }

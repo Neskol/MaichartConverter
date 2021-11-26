@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
+﻿using System.Xml;
 
 namespace MusicConverterTest
 {
     internal class XmlUtility : IXmlUtility
     {
-        public static readonly string[] level = { "1", "2", "3", "4", "5", "6","7", "7+", "8", "8+", "9", "9+", "10", "10+", "11", "11+", "12", "12+", "13", "13+", "14", "14+", "15" ,"15+"};
+        public static readonly string[] level = { "1", "2", "3", "4", "5", "6", "7", "7+", "8", "8+", "9", "9+", "10", "10+", "11", "11+", "12", "12+", "13", "13+", "14", "14+", "15", "15+" };
         private Dictionary<string, string> information;
         private XmlDocument takeinValue;
 
@@ -28,7 +23,8 @@ namespace MusicConverterTest
                 this.takeinValue.Load(location + "Music.xml");
                 this.information = new Dictionary<string, string>();
                 this.Update();
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -51,7 +47,8 @@ namespace MusicConverterTest
 
         public string DXChart
         {
-            get {
+            get
+            {
                 if (this.Information.GetValueOrDefault("Music ID").Length > 3)
                     return "_DX";
                 else return "";
@@ -98,24 +95,24 @@ namespace MusicConverterTest
         {
             //try
             //{
-                XmlNodeList nameCandidate = takeinValue.GetElementsByTagName("name");
-                XmlNodeList bpmCandidate = takeinValue.GetElementsByTagName("bpm");
-                XmlNodeList chartCandidate = takeinValue.GetElementsByTagName("Notes");
-                XmlNodeList composerCandidate = takeinValue.GetElementsByTagName("artistName");
-                XmlNodeList genreCandidate = takeinValue.GetElementsByTagName("genreName");
-                //Add in name and music ID.
-                ////Add BPM
-                //this.information.Add("BPM",bpmCandidate[0].InnerText);
-                foreach (XmlNode candidate in nameCandidate)
+            XmlNodeList nameCandidate = takeinValue.GetElementsByTagName("name");
+            XmlNodeList bpmCandidate = takeinValue.GetElementsByTagName("bpm");
+            XmlNodeList chartCandidate = takeinValue.GetElementsByTagName("Notes");
+            XmlNodeList composerCandidate = takeinValue.GetElementsByTagName("artistName");
+            XmlNodeList genreCandidate = takeinValue.GetElementsByTagName("genreName");
+            //Add in name and music ID.
+            ////Add BPM
+            //this.information.Add("BPM",bpmCandidate[0].InnerText);
+            foreach (XmlNode candidate in nameCandidate)
+            {
+                if (!this.information.ContainsKey("Music ID"))
                 {
-                    if (!this.information.ContainsKey("Music ID"))
-                    {
-                        this.information.Add("Music ID", candidate["id"].InnerText);
-                        this.information.Add("Name", candidate["str"].InnerText);
-                    }
+                    this.information.Add("Music ID", candidate["id"].InnerText);
+                    this.information.Add("Name", candidate["str"].InnerText);
                 }
-                foreach (XmlNode candidate in chartCandidate)
-                {
+            }
+            foreach (XmlNode candidate in chartCandidate)
+            {
                 try
                 {
                     if (candidate["file"]["path"].InnerText.Contains("00.ma2"))
@@ -151,9 +148,9 @@ namespace MusicConverterTest
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("There is no such chart: "+ex.Message);
+                    Console.WriteLine("There is no such chart: " + ex.Message);
                 }
-                }
+            }
 
             foreach (XmlNode candidate in bpmCandidate)
             {

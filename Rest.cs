@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MusicConverterTest
+﻿namespace MusicConverterTest
 {
     /// <summary>
     /// Construct Rest Note solely for Simai
@@ -28,11 +22,11 @@ namespace MusicConverterTest
         /// <param name="noteType">Note Type to take in</param>
         /// <param name="bar">Bar to take in</param>
         /// <param name="startTime">Start to take in</param>
-        public Rest(string noteType, int bar,int startTime)
+        public Rest(string noteType, int bar, int startTime)
         {
             this.NoteType = noteType;
             this.Bar = bar;
-            this.StartTime=startTime;
+            this.StartTime = startTime;
         }
 
         /// <summary>
@@ -67,7 +61,7 @@ namespace MusicConverterTest
             return false;
         }
 
-        public override string NoteSpecificGenre()
+        public override string NoteSpecificType()
         {
             return "REST";
         }

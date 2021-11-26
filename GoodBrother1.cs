@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace MusicConverterTest
+﻿namespace MusicConverterTest
 {
     /// <summary>
     /// Good Brother Implementation.
     /// </summary>
-    public class GoodBrother1 : IGoodBrother,ICompiler
+    public class GoodBrother1 : IGoodBrother, ICompiler
     {
         private List<Note> notes;
         private BPMChanges bpmChanges;
@@ -18,11 +14,12 @@ namespace MusicConverterTest
         private int slideNumber;
         private int touchNumber;
         private int thoNumber;
-        private int[] unitScore = { 500,1000,1500,2500 };
+        private int[] unitScore = { 500, 1000, 1500, 2500 };
         private int achievement = 0;
+        private int totalDelay = 0;
         private List<List<Note>> chart;
         private Dictionary<string, string> information;
-        private readonly string[] TapTypes = { "TAP","STR","TTP", "XTP","XST" };
+        private readonly string[] TapTypes = { "TAP", "STR", "TTP", "XTP", "XST" };
         private readonly string[] HoldTypes = { "HLD", "THO", "XHO" };
         private readonly string[] SlideTypes = { "SI_", "SV_", "SF_", "SCL", "SCR", "SUL", "SUR", "SLL", "SLR", "SXL", "SXR", "SSL", "SSR" };
 
@@ -154,6 +151,11 @@ namespace MusicConverterTest
             }
         }
 
+        public int TotalDelay
+        {
+            get => this.totalDelay;
+        }
+
         public GoodBrother1()
         {
             this.notes = new List<Note>();
@@ -237,14 +239,14 @@ namespace MusicConverterTest
         /// Update properties in Good Brother for exporting
         /// </summary>
         public void Update()
-        {          
-            int maxBar=notes[notes.Count-1].Bar;
-            for (int i=0;i<=maxBar;i++)
+        {
+            int maxBar = notes[notes.Count - 1].Bar;
+            for (int i = 0; i <= maxBar; i++)
             {
                 List<Note> bar = new List<Note>();
                 BPMChange noteChange = new BPMChange();
-                double currentBPM=this.BPMChanges.ChangeNotes[0].BPM;
-                Note lastNote=new Rest();
+                double currentBPM = this.BPMChanges.ChangeNotes[0].BPM;
+                Note lastNote = new Rest();
                 foreach (BPMChange x in this.BPMChanges.ChangeNotes)
                 {
                     if (x.Bar == i)
@@ -253,10 +255,10 @@ namespace MusicConverterTest
                     }
                 }
                 foreach (Note x in this.Notes)
-                {            
+                {
                     if (x.Bar == i)
                     {
-                        switch (x.NoteSpecificGenre())
+                        switch (x.NoteSpecificType())
                         {
                             case "BPM":
                                 currentBPM = x.BPM;
@@ -271,7 +273,7 @@ namespace MusicConverterTest
                                 {
                                     this.touchNumber++;
                                 }
-                                else if (x.NoteType.Equals("BRK")||x.NoteType.Equals("BST"))
+                                else if (x.NoteType.Equals("BRK") || x.NoteType.Equals("BST"))
                                 {
                                     this.breakNumber++;
                                 }
@@ -288,6 +290,11 @@ namespace MusicConverterTest
                                 break;
                             case "SLIDE":
                                 this.slideNumber++;
+                                int delay = x.Bar * 384 + x.StartTime + x.WaitTime;
+                                if (delay > this.TotalDelay)
+                                {
+                                    this.totalDelay = delay;
+                                }
                                 break;
                             default:
                                 break;
@@ -296,30 +303,27 @@ namespace MusicConverterTest
                         x.Prev = lastNote;
                         lastNote.Next = x;
                         bar.Add(x);
-                        if (!x.NoteSpecificGenre().Equals("SLIDE"))
+                        if (!x.NoteSpecificType().Equals("SLIDE"))
                         {
                             lastNote = x;
                         }
                     }
                 }
-                
+
                 List<Note> afterBar = new List<Note>();
                 afterBar.Add(new MeasureChange(i, 0, CalculateQuaver(CalculateLeastMeasure(bar))));
                 //Console.WriteLine();
                 //Console.WriteLine("In bar "+i+", LeastMeasure is "+ CalculateLeastMeasure(bar)+", so quaver will be "+ CalculateQuaver(CalculateLeastMeasure(bar)));
                 afterBar.AddRange(bar);
-                this.chart.Add(FinishBar(afterBar, this.BPMChanges.ChangeNotes, i,CalculateQuaver(CalculateLeastMeasure(bar))));
+                this.chart.Add(FinishBar(afterBar, this.BPMChanges.ChangeNotes, i, CalculateQuaver(CalculateLeastMeasure(bar))));
             }
-            bool hasBPMChange = false;
-            foreach (List<Note> bar in this.chart)
+            if (this.totalDelay<this.chart.Count*384)
             {
-                foreach (Note x in bar)
-                {
-                    if (x.NoteType.Equals("BPM"))
-                    {
-                        hasBPMChange = hasBPMChange || x.NoteType.Equals("BPM");
-                    }
-                }
+                this.totalDelay = 0;
+            }
+            else
+            {
+                this.totalDelay -= this.chart.Count * 384;
             }
         }
 
@@ -340,7 +344,7 @@ namespace MusicConverterTest
 
             foreach (Note x in notes)
             {
-                result+=x.Compose(1)+"\n";
+                result += x.Compose(1) + "\n";
             }
             result += "\n";
             return result;
@@ -363,8 +367,8 @@ namespace MusicConverterTest
             result += header2;
             result += "\n";
 
-            result+=bpm.Compose();
-            result+=measure.Compose();
+            result += bpm.Compose();
+            result += measure.Compose();
             result += "\n";
 
             foreach (Note y in notes)
@@ -414,36 +418,36 @@ namespace MusicConverterTest
             int minimalInterval = intervalCandidates.Min();
             if (minimalInterval == 0)
             {
-                throw new Exception("Error: Note number does not match in bar "+bar[0].Bar);
+                throw new Exception("Error: Note number does not match in bar " + bar[0].Bar);
             }
             bool primeInterval = false;
             bool notAllDivisible = true;
-                foreach (int num in intervalCandidates)
+            foreach (int num in intervalCandidates)
+            {
+                notAllDivisible = notAllDivisible || num % minimalInterval != 0;
+                if (IsPrime(num))
                 {
-                    notAllDivisible = notAllDivisible || num % minimalInterval != 0;
-                    if (IsPrime(num))
+                    minimalInterval = 1;
+                    primeInterval = true;
+                    notAllDivisible = false;
+                }
+                else if (!primeInterval)
+                {
+                    if (minimalInterval != 0 && (num % minimalInterval) != 0)
                     {
-                        minimalInterval = 1;
-                        primeInterval = true;
-                        notAllDivisible = false;
-                    }
-                    else if (!primeInterval)
-                    {
-                        if (minimalInterval != 0 && (num % minimalInterval) != 0)
+                        if (GCD(num, minimalInterval) != 1)
                         {
-                            if (GCD(num, minimalInterval)!=1)
-                            {
-                                minimalInterval /= GCD(minimalInterval,num);
-                            }
-                            else
-                            {
-                                minimalInterval = 1;
-                                primeInterval=true;
-                                notAllDivisible=false;
-                            }
+                            minimalInterval /= GCD(minimalInterval, num);
+                        }
+                        else
+                        {
+                            minimalInterval = 1;
+                            primeInterval = true;
+                            notAllDivisible = false;
                         }
                     }
                 }
+            }
             return minimalInterval;
             //return 1;
         }
@@ -456,7 +460,7 @@ namespace MusicConverterTest
         public static int RealNoteNumber(List<Note> Bar)
         {
             int result = 0;
-            foreach(Note x in Bar)
+            foreach (Note x in Bar)
             {
                 if (x.IsNote())
                 {
@@ -469,8 +473,8 @@ namespace MusicConverterTest
 
         public static bool ContainNotes(List<Note> Bar)
         {
-            bool result =false;
-            foreach(Note x in Bar)
+            bool result = false;
+            foreach (Note x in Bar)
             {
                 result = result || x.IsNote();
             }
@@ -514,22 +518,37 @@ namespace MusicConverterTest
             //} 
             bool writeRest = true;
             result.Add(bar[0]);
-            for (int i = 0;i<384;i+=384/minimalQuaver)
+            for (int i = 0; i < 384; i += 384 / minimalQuaver)
             {
                 List<Note> eachSet = new List<Note>();
+                List<Note> touchEachSet = new List<Note>();
                 writeRest = true;
-                foreach(Note x in bar)
+                foreach (Note x in bar)
                 {
                     //Console.Write("c1: " + (x.StartTime == i));
                     //Console.Write("; c2: " + (x.IsNote()));
-                    //Console.Write("; c3: " + (x.NoteSpecificGenre().Equals("MEASURE")));
-                    //Console.Write("; FINAL: " + ((x.StartTime == i && x.IsNote()) || x.NoteSpecificGenre().Equals("MEASURE")));
-                    if ((x.StartTime == i)&&x.IsNote())
+                    //Console.Write("; c3: " + (x.NoteSpecificType().Equals("MEASURE")));
+                    //Console.Write("; FINAL: " + ((x.StartTime == i && x.IsNote()) || x.NoteSpecificType().Equals("MEASURE")));
+
+                    if ((x.StartTime == i) && x.IsNote() && !(x.NoteType.Equals("TTP")|| x.NoteType.Equals("THO")))
                     {
                         eachSet.Add(x);
                         //Console.WriteLine("A note was found at tick " + i + " of bar " + barNumber + ", it is "+x.NoteType);
-                        writeRest = false ;
+                        writeRest = false;
                     }
+                    else if ((x.StartTime == i) && x.IsNote() && (x.NoteType.Equals("TTP") || x.NoteType.Equals("THO")))
+                    {
+                        touchEachSet.Add(x);
+                        //Console.WriteLine("A note was found at tick " + i + " of bar " + barNumber + ", it is "+x.NoteType);
+                        writeRest = false;
+                    }
+
+                    //if ((x.StartTime == i) && x.IsNote())
+                    //{
+                    //    eachSet.Add(x);
+                    //    //Console.WriteLine("A note was found at tick " + i + " of bar " + barNumber + ", it is "+x.NoteType);
+                    //    writeRest = false;
+                    //}
                 }
                 foreach (BPMChange x in bpmChanges)
                 {
@@ -538,13 +557,21 @@ namespace MusicConverterTest
                         eachSet.Remove(x);
                         List<Note> adjusted = new List<Note>();
                         adjusted.Add(x);
+                        adjusted.AddRange(touchEachSet);
+                        adjusted.AddRange(eachSet);
+                        eachSet = adjusted;
+                    }
+                    else
+                    {
+                        List<Note> adjusted = new List<Note>();
+                        adjusted.AddRange(touchEachSet);
                         adjusted.AddRange(eachSet);
                         eachSet = adjusted;
                     }
                 }
                 //for (int index = 0;index<eachSet.Count;index++)
                 //{
-                //    if (eachSet[index].NoteSpecificGenre().Equals("BPM"))
+                //    if (eachSet[index].NoteSpecificType().Equals("BPM"))
                 //    {
                 //        List<Note> adjusted = new List<Note>();
                 //        adjusted.Add(eachSet[index]);
@@ -560,22 +587,22 @@ namespace MusicConverterTest
                 }
                 result.AddRange(eachSet);
             }
-            if (RealNoteNumber(result)!=RealNoteNumber(bar))
+            if (RealNoteNumber(result) != RealNoteNumber(bar))
             {
                 string error = "";
-                error+=("Bar notes not match in bar: "+barNumber);
-                error += ("Expected: "+RealNoteNumber(bar));
+                error += ("Bar notes not match in bar: " + barNumber);
+                error += ("Expected: " + RealNoteNumber(bar));
                 foreach (Note x in bar)
                 {
                     error += (x.Compose(1));
                 }
-                error += ("\nActrual: "+RealNoteNumber(result));
+                error += ("\nActrual: " + RealNoteNumber(result));
                 foreach (Note y in result)
                 {
                     error += (y.Compose(1));
                 }
                 Console.WriteLine(error);
-                throw new Exception("NOTE NUMBER IS NOT MATCHING");            
+                throw new Exception("NOTE NUMBER IS NOT MATCHING");
             }
             //result.Sort();
             //if (RealNoteNumber(result)==0)
@@ -583,13 +610,13 @@ namespace MusicConverterTest
             //    Console.WriteLine("There is no note at tick " + 0 + " of bar " + barNumber + ", Adding one");
             //    result.Add(new Rest("RST", barNumber,0));
             //}
-            if (result[1].NoteSpecificGenre().Equals("BPM"))
+            if (result[1].NoteSpecificType().Equals("BPM"))
             {
                 Note temp = result[0];
                 result[0] = result[1];
                 result[1] = temp;
             }
-            
+
             return result;
         }
 
@@ -630,9 +657,9 @@ namespace MusicConverterTest
         /// <param name="information">Dicitionary containing information needed</param>
         public void TakeInformation(Dictionary<string, string> information)
         {
-            foreach(KeyValuePair<string, string> x in information)
+            foreach (KeyValuePair<string, string> x in information)
             {
-                this.information.Add(x.Key,x.Value);
+                this.information.Add(x.Key, x.Value);
             }
         }
     }

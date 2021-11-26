@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MusicConverterTest
+﻿namespace MusicConverterTest
 {
     public class Hold : Note
     {
@@ -77,18 +73,18 @@ namespace MusicConverterTest
                 switch (this.NoteType)
                 {
                     case "HLD":
-                        result += (Convert.ToInt32(this.Key)+1) + "h" + GenerateAppropriateLength(this.LastTime);
+                        result += (Convert.ToInt32(this.Key) + 1) + "h" + GenerateAppropriateLength(this.LastTime);
                         break;
                     case "XHO":
-                        result += (Convert.ToInt32(this.Key)+1) + "xh" + GenerateAppropriateLength(this.LastTime);
+                        result += (Convert.ToInt32(this.Key) + 1) + "xh" + GenerateAppropriateLength(this.LastTime);
                         break;
                     case "THO":
-                        if (this.SpecialEffect==1)
+                        if (this.SpecialEffect == 1)
                         {
                             result += this.Key.ToCharArray()[1].ToString() + ((Convert.ToInt32(this.Key.Substring(0, 1)) + 1).ToString() + "hf" + GenerateAppropriateLength(this.LastTime));
                         }
                         else
-                        result += this.Key.ToCharArray()[1].ToString()+((Convert.ToInt32(this.Key.Substring(0, 1)) + 1).ToString()+"xh"+GenerateAppropriateLength(this.LastTime));
+                            result += this.Key.ToCharArray()[1].ToString() + ((Convert.ToInt32(this.Key.Substring(0, 1)) + 1).ToString() + "xh" + GenerateAppropriateLength(this.LastTime));
                         break;
                 }
             }
@@ -106,7 +102,7 @@ namespace MusicConverterTest
             const int definition = 384;
             int divisor = GCD(definition, length);
             int quaver = definition / divisor, beat = length / divisor;
-            result = "[" + quaver.ToString()+":" + beat.ToString()+"]";
+            result = "[" + quaver.ToString() + ":" + beat.ToString() + "]";
             return result;
         }
 
@@ -131,7 +127,7 @@ namespace MusicConverterTest
             return true;
         }
 
-        public override string NoteSpecificGenre()
+        public override string NoteSpecificType()
         {
             string result = "HOLD";
             //switch (this.NoteType)
