@@ -17,7 +17,11 @@
         private Note prev;
         private Note next;
 
+#pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的 字段“prev”必须包含非 null 值。请考虑将 字段 声明为可以为 null。
+#pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的 字段“next”必须包含非 null 值。请考虑将 字段 声明为可以为 null。
         public Note()
+#pragma warning restore CS8618 // 在退出构造函数时，不可为 null 的 字段“next”必须包含非 null 值。请考虑将 字段 声明为可以为 null。
+#pragma warning restore CS8618 // 在退出构造函数时，不可为 null 的 字段“prev”必须包含非 null 值。请考虑将 字段 声明为可以为 null。
         {
             noteType = "";
             key = "";
@@ -188,7 +192,9 @@
         public int CompareTo(Object? obj)
         {
             int result = 0;
+#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
             Note another = obj as Note;
+#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
             //else if (this.NoteSpecificType().Equals("SLIDE")&&(this.NoteSpecificType().Equals("TAP")|| this.NoteSpecificType().Equals("HOLD")) && this.startTime == another.StartTime && this.bar == another.Bar)
             //{
             //    result = -1;
@@ -225,7 +231,9 @@
             //    }
             //    else result = this.startTime.CompareTo(another.StartTime);
             //}
+#pragma warning disable CS8602 // 解引用可能出现空引用。
             if (this.Bar != another.Bar)
+#pragma warning restore CS8602 // 解引用可能出现空引用。
             {
                 result = this.Bar.CompareTo(another.Bar);
             }

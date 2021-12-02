@@ -37,22 +37,23 @@
             this.initialQuaver = initialQuaver;
             this.initialBeat = initialBeat;
         }
+
         /// <summary>
-        /// Construct a Measure of 4/4 beat
+        /// Construct a measure of given beats
         /// </summary>
-        public MeasureChanges(string empty)
+        /// <param name="bar"></param>
+        /// <param name="tick"></param>
+        /// <param name="quavers"></param>
+        /// <param name="beats"></param>
+        public MeasureChanges(List<int> bar, List<int> tick, List<int> quavers, List<int> beats)
         {
-            bar = new List<int>();
-            tick = new List<int>();
-            quavers = new List<int>();
-            beats = new List<int>();
-            this.changeNotes = new List<MeasureChange>();
-            bar.Add(0);
-            tick.Add(0);
-            quavers.Add(4);
-            initialQuaver = 4;
-            beats.Add(4);
-            initialBeat = 4;
+            this.bar = bar;
+            this.tick = tick;
+            this.quavers = quavers;
+            this.initialQuaver = quavers[0];
+            this.beats = beats;
+            this.initialBeat = beats[0];
+            changeNotes = new List<MeasureChange>();
         }
 
         /// <summary>
@@ -92,22 +93,7 @@
             get { return changeNotes; }
         }
 
-        /// <summary>
-        /// Construct a measure of given beats
-        /// </summary>
-        /// <param name="bar"></param>
-        /// <param name="tick"></param>
-        /// <param name="quavers"></param>
-        /// <param name="beats"></param>
-        public MeasureChanges(List<int> bar, List<int> tick, List<int> quavers, List<int> beats)
-        {
-            this.bar = bar;
-            this.tick = tick;
-            this.quavers = quavers;
-            this.initialQuaver = quavers[0];
-            this.beats = beats;
-            this.initialBeat = beats[0];
-        }
+        
 
         /// <summary>
         /// Add new measure changes to MeasureChanges

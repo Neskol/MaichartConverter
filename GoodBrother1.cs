@@ -258,6 +258,7 @@
                 {
                     if (x.Bar == i)
                     {
+                        int delay = x.Bar * 384 + x.StartTime + x.WaitTime + x.LastTime;
                         switch (x.NoteSpecificType())
                         {
                             case "BPM":
@@ -280,20 +281,28 @@
                                 break;
                             case "HOLD":
                                 this.holdNumber++;
+                                this.slideNumber++;
+                                if (delay > this.TotalDelay)
+                                {
+                                    this.totalDelay = delay;
+                                    //Console.WriteLine("New delay: " + delay);
+                                    //Console.WriteLine(x.Compose(1));
+                                }
                                 if (x.NoteType.Equals("THO"))
                                 {
                                     this.thoNumber++;
                                 }
                                 break;
                             case "SLIDE_START":
-                                this.touchNumber++;
+                                this.tapNumber++;
                                 break;
                             case "SLIDE":
                                 this.slideNumber++;
-                                int delay = x.Bar * 384 + x.StartTime + x.WaitTime;
                                 if (delay > this.TotalDelay)
                                 {
                                     this.totalDelay = delay;
+                                    //Console.WriteLine("New delay: "+delay);
+                                    //Console.WriteLine(x.Compose(1));
                                 }
                                 break;
                             default:
@@ -317,8 +326,8 @@
                 afterBar.AddRange(bar);
                 this.chart.Add(FinishBar(afterBar, this.BPMChanges.ChangeNotes, i, CalculateQuaver(CalculateLeastMeasure(bar))));
             }
-            Console.WriteLine("TOTAL DELAY: "+this.TotalDelay);
-            Console.WriteLine("TOTAL COUNT: "+ this.chart.Count * 384);
+            //Console.WriteLine("TOTAL DELAY: "+this.TotalDelay);
+            //Console.WriteLine("TOTAL COUNT: "+ this.chart.Count * 384);
             if (this.totalDelay<this.chart.Count*384)
             {
                 this.totalDelay = 0;
@@ -398,7 +407,7 @@
                 }
                 if (x.NoteType.Equals("BPM"))
                 {
-                    Console.WriteLine(x.Compose(0));
+                    //Console.WriteLine(x.Compose(0));
                 }
             }
             if (startTimeList[startTimeList.Count - 1] != 384)
@@ -406,50 +415,49 @@
                 startTimeList.Add(384);
             }
             List<int> intervalCandidates = new List<int>();
+            int minimalInterval = GCD(startTimeList[0],startTimeList[1]);
             for (int i = 1; i < startTimeList.Count; i++)
             {
-                if (startTimeList[i] - startTimeList[i - 1] > 0)
-                {
-                    intervalCandidates.Add(startTimeList[i] - startTimeList[i - 1]);
-                }
+                minimalInterval = GCD(minimalInterval, startTimeList[i]);
             }
-            if (intervalCandidates.Min() == 0)
-            {
-                throw new Exception("Error: Least interval was 0");
-            }
-            int minimalInterval = intervalCandidates.Min();
-            if (minimalInterval == 0)
-            {
-                throw new Exception("Error: Note number does not match in bar " + bar[0].Bar);
-            }
-            bool primeInterval = false;
-            bool notAllDivisible = true;
-            foreach (int num in intervalCandidates)
-            {
-                notAllDivisible = notAllDivisible || num % minimalInterval != 0;
-                if (IsPrime(num))
-                {
-                    minimalInterval = 1;
-                    primeInterval = true;
-                    notAllDivisible = false;
-                }
-                else if (!primeInterval)
-                {
-                    if (minimalInterval != 0 && (num % minimalInterval) != 0)
-                    {
-                        if (GCD(num, minimalInterval) != 1)
-                        {
-                            minimalInterval /= GCD(minimalInterval, num);
-                        }
-                        else
-                        {
-                            minimalInterval = 1;
-                            primeInterval = true;
-                            notAllDivisible = false;
-                        }
-                    }
-                }
-            }
+            //if (intervalCandidates.Min() == 0)
+            //{
+            //    throw new Exception("Error: Least interval was 0");
+            //}
+            //int minimalInterval = intervalCandidates.Min();
+            //if (minimalInterval == 0)
+            //{
+            //    throw new Exception("Error: Note number does not match in bar " + bar[0].Bar);
+            //}
+            //bool primeInterval = false;
+            //bool notAllDivisible = true;
+            //foreach (int num in intervalCandidates)
+            //{
+            //    notAllDivisible = notAllDivisible || num % minimalInterval != 0;
+            //    if (IsPrime(num))
+            //    {
+            //        minimalInterval = 1;
+            //        primeInterval = true;
+            //        notAllDivisible = false;
+            //    }
+            //    else if (!primeInterval)
+            //    {
+            //        if (minimalInterval != 0 && (num % minimalInterval) != 0)
+            //        {
+            //            if (GCD(num, minimalInterval) != 1)
+            //            {
+            //                minimalInterval /=minimalInterval% GCD(minimalInterval, num);
+            //            }
+            //            else
+            //            {
+            //                minimalInterval = 1;
+            //                primeInterval = true;
+            //                notAllDivisible = false;
+            //            }
+            //        }
+            //    }
+            //}
+            //Console.WriteLine("Minimal Interval: "+minimalInterval);
             return minimalInterval;
             //return 1;
         }
@@ -534,15 +542,31 @@
 
                     if ((x.StartTime == i) && x.IsNote() && !(x.NoteType.Equals("TTP")|| x.NoteType.Equals("THO")))
                     {
-                        eachSet.Add(x);
-                        //Console.WriteLine("A note was found at tick " + i + " of bar " + barNumber + ", it is "+x.NoteType);
-                        writeRest = false;
+                        if (x.NoteSpecificType().Equals("BPM"))
+                        {
+                            eachSet.Add(x);
+                            //Console.WriteLine("A note was found at tick " + i + " of bar " + barNumber + ", it is "+x.NoteType);
+                        }
+                        else
+                        {
+                            eachSet.Add(x);
+                            //Console.WriteLine("A note was found at tick " + i + " of bar " + barNumber + ", it is "+x.NoteType);
+                            writeRest = false;
+                        }                      
                     }
                     else if ((x.StartTime == i) && x.IsNote() && (x.NoteType.Equals("TTP") || x.NoteType.Equals("THO")))
                     {
-                        touchEachSet.Add(x);
-                        //Console.WriteLine("A note was found at tick " + i + " of bar " + barNumber + ", it is "+x.NoteType);
-                        writeRest = false;
+                        if (x.NoteSpecificType().Equals("BPM"))
+                        {
+                            touchEachSet.Add(x);
+                            //Console.WriteLine("A note was found at tick " + i + " of bar " + barNumber + ", it is "+x.NoteType);
+                        }
+                        else
+                        {
+                            touchEachSet.Add(x);
+                            //Console.WriteLine("A note was found at tick " + i + " of bar " + barNumber + ", it is "+x.NoteType);
+                            writeRest = false;
+                        }
                     }
 
                     //if ((x.StartTime == i) && x.IsNote())

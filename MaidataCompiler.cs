@@ -1,10 +1,13 @@
-﻿namespace MusicConverterTest
+﻿using System.Xml;
+
+namespace MusicConverterTest
 {
     internal class MaidataCompiler : ICompiler
     {
         public static readonly string[] difficulty = { "Basic", "Advanced", "Expert", "Master", "Remaster" };
         private List<GoodBrother1> charts;
         private Dictionary<string, string> information;
+        private XmlInformation musicXml;
         /// <summary>
         /// Construct compiler of a single song.
         /// </summary>
@@ -17,7 +20,7 @@
             {
                 charts.Add(new GoodBrother1());
             }
-            XmlUtility musicXml = new XmlUtility(location);
+            this.musicXml = new XmlInformation(location);
             this.information = musicXml.Information;
             //Construct charts
             {
@@ -44,7 +47,7 @@
                 }
             }
             string result = this.Compose();
-            Console.WriteLine(result);
+            //Console.WriteLine(result);
             StreamWriter sw = new StreamWriter(targetLocation + "\\maidata.txt", false);
             {
                 sw.WriteLine(result);
@@ -56,6 +59,7 @@
         {
             charts = new List<GoodBrother1>();
             information = new Dictionary<string, string>();
+            this.musicXml = new XmlInformation();
         }
 
         public bool CheckValidity()
@@ -77,32 +81,65 @@
                 beginning += "&title=" + this.information.GetValueOrDefault("Name") + "\n";
                 beginning += "&wholebpm=" + this.information.GetValueOrDefault("BPM") + "\n";
                 beginning += "&freemsg=" + this.information.GetValueOrDefault("Composer") + "\n";
+                beginning += "&shortid=" + this.information.GetValueOrDefault("Music ID") + "\n";
+                beginning += "&genre=" + this.information.GetValueOrDefault("Genre") + "\n";
+                beginning += "&cabinate=";
+                if (this.musicXml.IsDXChart)
+                {
+                    beginning += "DX\n";
+                }
+                else
+                {
+                    beginning += "SD\n";
+                }
+                beginning += "&version=" + this.musicXml.Version + "\n";
+                beginning += "&chartconverter=Neskol\n";
                 beginning += "\n";
+#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
+#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
                 if (this.information.TryGetValue("Basic", out string basic) && this.information.TryGetValue("Basic Chart Maker", out string basicMaker))
+#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
+#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
                 {
                     beginning += "&lv_2=" + basic + "\n";
                     beginning += "&des_2=" + basicMaker + "\n";
                     beginning += "\n";
                 }
+#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
+#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
                 if (this.information.TryGetValue("Advanced", out string advance) && this.information.TryGetValue("Advanced Chart Maker", out string advanceMaker))
+#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
+#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
                 {
                     beginning += "&lv_3=" + advance + "\n";
                     beginning += "&des_3=" + advanceMaker + "\n";
                     beginning += "\n";
                 }
+#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
+#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
                 if (this.information.TryGetValue("Expert", out string expert) && this.information.TryGetValue("Expert Chart Maker", out string expertMaker))
+#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
+#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
                 {
                     beginning += "&lv_4=" + expert + "\n";
                     beginning += "&des_4=" + expertMaker + "\n";
                     beginning += "\n";
                 }
+#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
+#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
                 if (this.information.TryGetValue("Master", out string master) && this.information.TryGetValue("Master Chart Maker", out string masterMaker))
+#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
+#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
                 {
                     beginning += "&lv_5=" + master + "\n";
                     beginning += "&des_5=" + masterMaker + "\n";
                     beginning += "\n";
                 }
+#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
+#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
                 if (this.information.TryGetValue("Remaster", out string remaster) && this.information.TryGetValue("Remaster Chart Maker", out string remasterMaker))
+#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
+#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
                 {
                     beginning += "&lv_6=" + remaster + "\n";
                     beginning += "&des_6=" + remasterMaker; beginning += "\n";
@@ -212,7 +249,11 @@
                 }
                 result += ",\n";
             }
-            for (int i = 0; i < delayBar; i++)
+            //if (delayBar>0)
+            //{
+            //    Console.WriteLine("TOTAL DELAYED BAR: "+delayBar);
+            //}
+            for (int i = 0; i < delayBar+1; i++)
             {
                 result += "{1},\n";
             }

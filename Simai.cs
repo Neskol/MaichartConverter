@@ -196,7 +196,9 @@
                 string timeCandidate = typeCandidate[1].Substring(0, typeCandidate[1].Length - 1);
                 string[] quaverCandidate = timeCandidate.Split(':');
                 int overrideQuaver = Resolution / int.Parse(quaverCandidate[0]);
+#pragma warning disable CS0219 // 变量“last”已被赋值，但从未使用过它的值
                 int last = 0;
+#pragma warning restore CS0219 // 变量“last”已被赋值，但从未使用过它的值
                 if (section.Contains("-"))
                 {
 
