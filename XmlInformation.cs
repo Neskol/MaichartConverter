@@ -18,23 +18,39 @@ namespace MusicConverterTest
 
         public XmlInformation(string location)
         {
-            try
+            //try
             {
                 this.takeinValue = new XmlDocument();
-                this.takeinValue.Load(location + "Music.xml");
-                this.information = new Dictionary<string, string>();
-                this.Update();
+                if (File.Exists(location+"Music.xml"))
+                {
+                    this.takeinValue.Load(location + "Music.xml");
+                    this.information = new Dictionary<string, string>();
+                    this.Update();
+                }
+                else
+                {
+                    this.information = new Dictionary<string, string>();
+                }
+                
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine(location);
+            //    throw ex;
+            //}
         }
 
         public string TrackName
         {
 #pragma warning disable CS8603 // 可能返回 null 引用。
             get { return this.Information.GetValueOrDefault("Name"); }
+#pragma warning restore CS8603 // 可能返回 null 引用。
+        }
+
+        public string TrackSortName
+        {
+#pragma warning disable CS8603 // 可能返回 null 引用。
+            get { return this.Information.GetValueOrDefault("Sort Name"); }
 #pragma warning restore CS8603 // 可能返回 null 引用。
         }
 
@@ -117,6 +133,7 @@ namespace MusicConverterTest
             XmlNodeList composerCandidate = takeinValue.GetElementsByTagName("artistName");
             XmlNodeList genreCandidate = takeinValue.GetElementsByTagName("genreName");
             XmlNodeList addVersionCandidate = takeinValue.GetElementsByTagName("AddVersion");
+            XmlNodeList sortNameCandidate = takeinValue.GetElementsByTagName("sortName");
             //Add in name and music ID.
             ////Add BPM
             //this.information.Add("BPM",bpmCandidate[0].InnerText);
@@ -134,10 +151,10 @@ namespace MusicConverterTest
             }
             foreach (XmlNode candidate in chartCandidate)
             {
-                try
+                //try
                 {
 #pragma warning disable CS8602 // 解引用可能出现空引用。
-                    if (candidate["file"]["path"].InnerText.Contains("00.ma2"))
+                    if (candidate["file"]["path"].InnerText.Contains("00.ma2")&&candidate["isEnable"].InnerText.Equals("true"))
 #pragma warning restore CS8602 // 解引用可能出现空引用。
                     {
 #pragma warning disable CS8602 // 解引用可能出现空引用。
@@ -151,7 +168,7 @@ namespace MusicConverterTest
 #pragma warning restore CS8602 // 解引用可能出现空引用。
                     }
 #pragma warning disable CS8602 // 解引用可能出现空引用。
-                    else if (candidate["file"]["path"].InnerText.Contains("01.ma2"))
+                    else if (candidate["file"]["path"].InnerText.Contains("01.ma2") && candidate["isEnable"].InnerText.Equals("true"))
 #pragma warning restore CS8602 // 解引用可能出现空引用。
                     {
 #pragma warning disable CS8602 // 解引用可能出现空引用。
@@ -165,7 +182,7 @@ namespace MusicConverterTest
 #pragma warning restore CS8602 // 解引用可能出现空引用。
                     }
 #pragma warning disable CS8602 // 解引用可能出现空引用。
-                    else if (candidate["file"]["path"].InnerText.Contains("02.ma2"))
+                    else if (candidate["file"]["path"].InnerText.Contains("02.ma2") && candidate["isEnable"].InnerText.Equals("true"))
 #pragma warning restore CS8602 // 解引用可能出现空引用。
                     {
 #pragma warning disable CS8602 // 解引用可能出现空引用。
@@ -179,7 +196,7 @@ namespace MusicConverterTest
 #pragma warning restore CS8602 // 解引用可能出现空引用。
                     }
 #pragma warning disable CS8602 // 解引用可能出现空引用。
-                    else if (candidate["file"]["path"].InnerText.Contains("03.ma2"))
+                    else if (candidate["file"]["path"].InnerText.Contains("03.ma2") && candidate["isEnable"].InnerText.Equals("true"))
 #pragma warning restore CS8602 // 解引用可能出现空引用。
                     {
 #pragma warning disable CS8602 // 解引用可能出现空引用。
@@ -193,7 +210,7 @@ namespace MusicConverterTest
 #pragma warning restore CS8602 // 解引用可能出现空引用。
                     }
 #pragma warning disable CS8602 // 解引用可能出现空引用。
-                    else if (candidate["file"]["path"].InnerText.Contains("04.ma2"))
+                    else if (candidate["file"]["path"].InnerText.Contains("04.ma2") && candidate["isEnable"].InnerText.Equals("true"))
 #pragma warning restore CS8602 // 解引用可能出现空引用。
                     {
 #pragma warning disable CS8602 // 解引用可能出现空引用。
@@ -207,10 +224,11 @@ namespace MusicConverterTest
 #pragma warning restore CS8602 // 解引用可能出现空引用。
                     }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("There is no such chart: " + ex.Message);
-                }
+                //catch (Exception ex)
+                //{
+                //    Console.WriteLine("There is no such chart: " + ex.Message);
+                //    throw ex;
+                //}
             }
 
             foreach (XmlNode candidate in bpmCandidate)
@@ -219,6 +237,16 @@ namespace MusicConverterTest
                     if (!this.information.ContainsKey("BPM"))
                     {
                         this.information.Add("BPM", candidate.InnerText);
+                    }
+                }
+            }
+
+            foreach (XmlNode candidate in sortNameCandidate)
+            {
+                {
+                    if (!this.information.ContainsKey("Sort Name"))
+                    {
+                        this.information.Add("Sort Name", candidate.InnerText);
                     }
                 }
             }

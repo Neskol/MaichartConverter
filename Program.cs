@@ -11,7 +11,7 @@
         /// <param name="args">Parameters to takein</param>
         public static void Main(string[] args)
         {
-            //GoodBrother1 good = new GoodBrother1(@"C:\MUG\maimai\SDEZ1.17\Package\Sinmai_Data\StreamingAssets\A000\music\music011118\011118_03.ma2");
+            //GoodBrother1 good = new GoodBrother1(@"C:\MUG\maimai\SDEZ1.17\Package\Sinmai_Data\StreamingAssets\A000\music\music010706\010706_03.ma2");
             //MaidataCompiler compiler = new MaidataCompiler();
             //Console.WriteLine(good.Compose());
             //Console.WriteLine(compiler.Compose(good));
@@ -35,7 +35,7 @@
             if (audioLocation.Equals(""))
 #pragma warning restore CS8602 // 解引用可能出现空引用。
             {
-                audioLocation = @"D:\MaiAnalysis\Audio\";
+                audioLocation = @"F:\MaiAnalysis\Audio\";
             }
             Console.WriteLine("Specify Image location: *Be sure to add \\ in the end");
 #pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
@@ -45,14 +45,14 @@
             if (imageLocation.Equals(""))
 #pragma warning restore CS8602 // 解引用可能出现空引用。
             {
-                imageLocation = @"D:\MaiAnalysis\Image\Texture2D\";
+                imageLocation = @"F:\MaiAnalysis\Image\Texture2D\";
             }
             Console.WriteLine("Specify Output location: *Be sure to add \\ in the end");
             string outputLocation = Console.ReadLine();
             if (outputLocation.Equals(""))
             {
 #pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-                outputLocation = @"D:\MaimaiAnalysis\Output\";
+                outputLocation = @"F:\MaimaiAnalysis\Output\";
 #pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
             }
             string[] musicFolders = Directory.GetDirectories(musiclocation);
@@ -64,7 +64,7 @@
 #pragma warning disable CS8604 // “DirectoryInfo.DirectoryInfo(string path)”中的形参“path”可能传入 null 引用实参。
             DirectoryInfo output = new DirectoryInfo(outputLocation);
 #pragma warning restore CS8604 // “DirectoryInfo.DirectoryInfo(string path)”中的形参“path”可能传入 null 引用实参。
-            //XmlInformation test = new XmlInformation(@"D:\MaiAnalysis\music\music000835\");
+            XmlInformation test = new XmlInformation(a000Location+"music\\music010706\\");
             //string shortID = ComponsateZero(test.TrackID).Substring(2);
             //Console.WriteLine(shortID);
             //Console.ReadLine();
@@ -76,41 +76,50 @@
             //Iterate music folders
             foreach (string track in musicFolders)
             {
-                try
+                //try
                 {
-                    XmlInformation trackInfo = new XmlInformation(track + "\\");
-                    Console.WriteLine("There is Music.xml in " + track);
-                    string shortID = ComponsateZero(trackInfo.TrackID).Substring(2);
-                    Console.WriteLine("Name"+trackInfo.TrackName);
-                    Console.WriteLine("ID:"+ trackInfo.TrackID);
-                    string trackNameSubtitude = trackInfo.TrackName.Replace("\\","of");
-                    trackNameSubtitude = trackInfo.TrackName.Replace("/", "of");
-                    if (!Directory.Exists(outputLocation + trackInfo.TrackGenre))
+                    if (File.Exists(track+"\\Music.xml"))
                     {
-                        Directory.CreateDirectory(outputLocation + trackInfo.TrackGenre);
-                    }
-                    if (!Directory.Exists(outputLocation + trackInfo.TrackGenre + "\\" + trackNameSubtitude + trackInfo.DXChart))
-                    {
-                        Directory.CreateDirectory(outputLocation + trackInfo.TrackGenre + "\\" + trackNameSubtitude + trackInfo.DXChart);
-                    }
-                    MaidataCompiler compiler = new MaidataCompiler(track + "\\", outputLocation + trackInfo.TrackGenre + "\\" + trackNameSubtitude + trackInfo.DXChart);
+                        XmlInformation trackInfo = new XmlInformation(track + "\\");
+                        Console.WriteLine("There is Music.xml in " + track);
+                        string shortID = ComponsateZero(trackInfo.TrackID).Substring(2);
+                        Console.WriteLine("Name: " + trackInfo.TrackName);
+                        Console.WriteLine("ID:" + trackInfo.TrackID);
+                        string trackNameSubtitude = trackInfo.TrackSortName.Replace("\\", "of");
+                        trackNameSubtitude = trackInfo.TrackSortName.Replace("/", "of");
+                        if (!Directory.Exists(outputLocation + trackInfo.TrackGenre))
+                        {
+                            Directory.CreateDirectory(outputLocation + trackInfo.TrackGenre);
+                        }
+                        if (!Directory.Exists(outputLocation + trackInfo.TrackGenre + "\\" + trackNameSubtitude + trackInfo.DXChart))
+                        {
+                            Directory.CreateDirectory(outputLocation + trackInfo.TrackGenre + "\\" + trackNameSubtitude + trackInfo.DXChart);
+                        }
+                        MaidataCompiler compiler = new MaidataCompiler(track + "\\", outputLocation + trackInfo.TrackGenre + "\\" + trackNameSubtitude + trackInfo.DXChart);
 
-                    string originalMusicLocation = audioLocation;
-                    originalMusicLocation += "music00" + shortID + ".mp3";
-                    string newMusicLocation = outputLocation + trackInfo.TrackGenre + "\\" + trackNameSubtitude + trackInfo.DXChart + "\\track.mp3";
-                    File.Copy(originalMusicLocation, newMusicLocation);
+                        string originalMusicLocation = audioLocation;
+                        originalMusicLocation += "music00" + shortID + ".mp3";
+                        string newMusicLocation = outputLocation + trackInfo.TrackGenre + "\\" + trackNameSubtitude + trackInfo.DXChart + "\\track.mp3";
+                        if (!File.Exists(newMusicLocation))
+                        {
+                            File.Copy(originalMusicLocation, newMusicLocation);
+                        }
 
-                    string originalImageLocation = imageLocation;
-                    originalImageLocation += "UI_Jacket_00" + shortID + ".png";
-                    string newImageLocation = outputLocation + trackInfo.TrackGenre + "\\" + trackNameSubtitude + trackInfo.DXChart + "\\bg.png";
-                    File.Copy(originalImageLocation, newImageLocation);
-                    Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + "\\" + trackNameSubtitude + trackInfo.DXChart);
+                        string originalImageLocation = imageLocation;
+                        originalImageLocation += "UI_Jacket_00" + shortID + ".png";
+                        string newImageLocation = outputLocation + trackInfo.TrackGenre + "\\" + trackNameSubtitude + trackInfo.DXChart + "\\bg.png";
+                        if (!File.Exists(newImageLocation))
+                        {
+                            File.Copy(originalImageLocation, newImageLocation);
+                        }
+                        Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + "\\" + trackNameSubtitude + trackInfo.DXChart);
+                    }
 
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("There might not be Music.xml in " + track + ", Original message: " + ex.Message);
-                }
+                //catch (Exception ex)
+                //{
+                //    Console.WriteLine("There might not be Music.xml in " + track + ", Original message: " + ex.Message);
+                //}
             }
         }
         /// <summary>
@@ -120,12 +129,19 @@
         /// <returns>0..+#Music ID and |Music ID|==6</returns>
         public static string ComponsateZero(string intake)
         {
-            string result = intake;
-            while (result.Length < 6)
+            try
             {
-                result = "0" + result;
+                string result = intake;
+                while (result.Length < 6 && intake != null)
+                {
+                    result = "0" + result;
+                }
+                return result;
             }
-            return result;
+            catch (NullReferenceException ex)
+            {
+                return "";
+            }
         }
     }
 }

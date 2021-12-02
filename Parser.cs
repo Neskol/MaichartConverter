@@ -135,7 +135,7 @@
         public Hold HoldOfToken(string token)
         {
             string[] candidate = token.Split('\t');
-            if (candidate[0].Equals("THO"))
+            if (candidate[0].Equals("THO")&&candidate.Count()>7)
             {
                 return new Hold(candidate[0],
                 Int32.Parse(candidate[1]),
@@ -143,6 +143,16 @@
                 candidate[3] + candidate[5], Int32.Parse(candidate[4]),
                 Int32.Parse(candidate[6]),
                 candidate[7]); //candidate[6] is special effect
+            }
+            else if (candidate[0].Equals("THO") && candidate.Count() <=7)
+            {
+                //Console.ReadLine();
+                return new Hold(candidate[0],
+                Int32.Parse(candidate[1]),
+                Int32.Parse(candidate[2]),
+                candidate[3] + candidate[5], Int32.Parse(candidate[4]),
+                Int32.Parse(candidate[6]),
+                "M1"); //candidate[6] is special effect
             }
             else
                 return new Hold(candidate[0],
@@ -167,7 +177,7 @@
         public Tap TapOfToken(string token)
         {
             string[] candidate = token.Split('\t');
-            if (candidate[0].Equals("TTP"))
+            if (candidate[0].Equals("TTP")&&(candidate.Count())>=7)
             {
                 return new Tap(candidate[0],
                 Int32.Parse(candidate[1]),
@@ -175,6 +185,16 @@
                 candidate[3] + candidate[4],
                 Int32.Parse(candidate[5]),
                 candidate[6]);
+            }
+            else if (candidate[0].Equals("TTP") && (candidate.Count()) < 7)
+            {
+                //Console.ReadLine();
+                return new Tap(candidate[0],
+                Int32.Parse(candidate[1]),
+                Int32.Parse(candidate[2]),
+                candidate[3] + candidate[4],
+                Int32.Parse(candidate[5]),
+                "M1");
             }
             else
                 return new Tap(candidate[0],
