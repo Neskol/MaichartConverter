@@ -16,7 +16,10 @@
             //Console.WriteLine(good.Compose());
             //Console.WriteLine(compiler.Compose(good));
 
-            Console.WriteLine("Specify A000 location: *Be sure to add \\ in the end");
+            const string windowsPathSep = "\\";
+            const string macPathSep = "/";
+            string sep = macPathSep;
+            Console.WriteLine("Specify A000 location: *Be sure to add "+sep+" in the end");
 #pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
             string a000Location = Console.ReadLine();
 #pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
@@ -27,7 +30,7 @@
                 a000Location = @"C:\MUG\maimai\SDEZ1.17\Package\Sinmai_Data\StreamingAssets\A000\";
             }
             string musiclocation = a000Location + @"music\";
-            Console.WriteLine("Specify Audio location: *Be sure to add \\ in the end");
+            Console.WriteLine("Specify Audio location: *Be sure to add " + sep + " in the end");
 #pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
             string audioLocation = Console.ReadLine();
 #pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
@@ -37,7 +40,7 @@
             {
                 audioLocation = @"F:\MaiAnalysis\Audio\";
             }
-            Console.WriteLine("Specify Image location: *Be sure to add \\ in the end");
+            Console.WriteLine("Specify Image location: *Be sure to add " + sep + "in the end");
 #pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
             string imageLocation = Console.ReadLine();
 #pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
@@ -47,7 +50,7 @@
             {
                 imageLocation = @"F:\MaiAnalysis\Image\Texture2D\";
             }
-            Console.WriteLine("Specify Output location: *Be sure to add \\ in the end");
+            Console.WriteLine("Specify Output location: *Be sure to add " + sep + " in the end");
             string outputLocation = Console.ReadLine();
             if (outputLocation.Equals(""))
             {
@@ -64,7 +67,7 @@
 #pragma warning disable CS8604 // “DirectoryInfo.DirectoryInfo(string path)”中的形参“path”可能传入 null 引用实参。
             DirectoryInfo output = new DirectoryInfo(outputLocation);
 #pragma warning restore CS8604 // “DirectoryInfo.DirectoryInfo(string path)”中的形参“path”可能传入 null 引用实参。
-            XmlInformation test = new XmlInformation(a000Location+"music\\music010706\\");
+            XmlInformation test = new XmlInformation(a000Location+ "music" + sep + "music010706" + sep + "");
             //string shortID = ComponsateZero(test.TrackID).Substring(2);
             //Console.WriteLine(shortID);
             //Console.ReadLine();
@@ -78,28 +81,28 @@
             {
                 //try
                 {
-                    if (File.Exists(track+"\\Music.xml"))
+                    if (File.Exists(track+ "" + sep + "Music.xml"))
                     {
-                        XmlInformation trackInfo = new XmlInformation(track + "\\");
+                        XmlInformation trackInfo = new XmlInformation(track + "" + sep + "");
                         Console.WriteLine("There is Music.xml in " + track);
                         string shortID = ComponsateZero(trackInfo.TrackID).Substring(2);
                         Console.WriteLine("Name: " + trackInfo.TrackName);
                         Console.WriteLine("ID:" + trackInfo.TrackID);
-                        string trackNameSubtitude = trackInfo.TrackSortName.Replace("\\", "of");
+                        string trackNameSubtitude = trackInfo.TrackSortName.Replace("" + sep + "", "of");
                         trackNameSubtitude = trackInfo.TrackSortName.Replace("/", "of");
                         if (!Directory.Exists(outputLocation + trackInfo.TrackGenre))
                         {
                             Directory.CreateDirectory(outputLocation + trackInfo.TrackGenre);
                         }
-                        if (!Directory.Exists(outputLocation + trackInfo.TrackGenre + "\\" + trackNameSubtitude + trackInfo.DXChart))
+                        if (!Directory.Exists(outputLocation + trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart))
                         {
-                            Directory.CreateDirectory(outputLocation + trackInfo.TrackGenre + "\\" + trackNameSubtitude + trackInfo.DXChart);
+                            Directory.CreateDirectory(outputLocation + trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart);
                         }
-                        MaidataCompiler compiler = new MaidataCompiler(track + "\\", outputLocation + trackInfo.TrackGenre + "\\" + trackNameSubtitude + trackInfo.DXChart);
+                        MaidataCompiler compiler = new MaidataCompiler(track + "" + sep + "", outputLocation + trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart);
 
                         string originalMusicLocation = audioLocation;
                         originalMusicLocation += "music00" + shortID + ".mp3";
-                        string newMusicLocation = outputLocation + trackInfo.TrackGenre + "\\" + trackNameSubtitude + trackInfo.DXChart + "\\track.mp3";
+                        string newMusicLocation = outputLocation + trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart + "" + sep + "track.mp3";
                         if (!File.Exists(newMusicLocation))
                         {
                             File.Copy(originalMusicLocation, newMusicLocation);
@@ -107,12 +110,12 @@
 
                         string originalImageLocation = imageLocation;
                         originalImageLocation += "UI_Jacket_00" + shortID + ".png";
-                        string newImageLocation = outputLocation + trackInfo.TrackGenre + "\\" + trackNameSubtitude + trackInfo.DXChart + "\\bg.png";
+                        string newImageLocation = outputLocation + trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart + "" + sep + "bg.png";
                         if (!File.Exists(newImageLocation))
                         {
                             File.Copy(originalImageLocation, newImageLocation);
                         }
-                        Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + "\\" + trackNameSubtitude + trackInfo.DXChart);
+                        Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart);
                     }
 
                 }
