@@ -189,10 +189,10 @@ namespace MusicConverterTest
                     firstBpm.Add(bpm);
                 }
             }
-            if (firstBpm.Count > 1)
-            {
-                chart.Chart[0][0] = firstBpm[1];
-            }
+            // if (firstBpm.Count > 1)
+            // {
+            //     chart.Chart[0][0] = firstBpm[1];
+            // }
             foreach (List<Note> bar in chart.Chart)
             {
                 Note lastNote = new MeasureChange();

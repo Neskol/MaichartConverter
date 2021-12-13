@@ -639,11 +639,31 @@
             //    Console.WriteLine("There is no note at tick " + 0 + " of bar " + barNumber + ", Adding one");
             //    result.Add(new Rest("RST", barNumber,0));
             //}
-            if (result[1].NoteSpecificType().Equals("BPM"))
+            // if (result[1].NoteSpecificType().Equals("BPM"))
+            // {
+            //     Note temp = result[0];
+            //     result[0] = result[1];
+            //     result[1] = temp;
+            // }
+            bool hasFirstBPMChange=false;
+            List<Note> changedResult = new List<Note>();
+            Note potentialFirstChange = new Rest();
             {
-                Note temp = result[0];
-                result[0] = result[1];
-                result[1] = temp;
+                for(int i = 0;!hasFirstBPMChange&&i<result.Count();i++)
+                {
+                    if (result[i].NoteGenre().Equals("BPM")&&result[i].StartTime==0)
+                    {                    
+                        changedResult.Add(result[i]);
+                        potentialFirstChange = result[i];
+                        hasFirstBPMChange=true;
+                    }
+                }
+                if (hasFirstBPMChange)
+                {
+                    result.Remove(potentialFirstChange);
+                    changedResult.AddRange(result);
+                    result=changedResult;
+                }
             }
 
             return result;

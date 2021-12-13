@@ -14,10 +14,10 @@ namespace MusicConverterTest
         /// <param name="args">Parameters to takein</param>
         public static void Main(string[] args)
         {
-            //GoodBrother1 good = new GoodBrother1(@"C:\MUG\maimai\SDEZ1.17\Package\Sinmai_Data\StreamingAssets\A000\music\music010706\010706_03.ma2");
-            //MaidataCompiler compiler = new MaidataCompiler();
-            //Console.WriteLine(good.Compose());
-            //Console.WriteLine(compiler.Compose(good));
+            // GoodBrother1 good = new GoodBrother1(@"/Users/neskol/MUG/maimai/SDEZ1.17/Package/Sinmai_Data/StreamingAssets/A000/music/music000837/000837_03.ma2");
+            // MaidataCompiler compiler = new MaidataCompiler();
+            // Console.WriteLine(good.Compose());
+            // Console.WriteLine(compiler.Compose(good));
 
             const string windowsPathSep = "\\";
             const string macPathSep = "/";
@@ -86,8 +86,7 @@ namespace MusicConverterTest
                 {
                     if (File.Exists(track+ "" + sep + "Music.xml"))
                     {
-                        try{
-                            XmlInformation trackInfo = new XmlInformation(track + "" + sep + "");
+                        XmlInformation trackInfo = new XmlInformation(track + "" + sep + "");
                         Console.WriteLine("There is Music.xml in " + track);
                         string shortID = ComponsateZero(trackInfo.TrackID).Substring(2);
                         Console.WriteLine("Name: " + trackInfo.TrackName);
@@ -120,11 +119,6 @@ namespace MusicConverterTest
                             File.Copy(originalImageLocation, newImageLocation);
                         }
                         Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart);
-                        }
-                        catch(Exception ex)
-                        {
-                            Console.WriteLine("Error found in: "+ex.Message);
-                        }
                     }
 
                 }

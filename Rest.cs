@@ -46,9 +46,7 @@
 
         public override string Compose(int format)
         {
-            //string result = "r" + this.StartTime;
-            //return result;
-            //return "r_" + this.StartTime;
+            // return "r_" + this.StartTime;
             return "";
         }
 
