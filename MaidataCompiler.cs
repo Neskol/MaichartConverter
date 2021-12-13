@@ -48,7 +48,7 @@ namespace MusicConverterTest
             }
             string result = this.Compose();
             //Console.WriteLine(result);
-            StreamWriter sw = new StreamWriter(targetLocation + "\\maidata.txt", false);
+            StreamWriter sw = new StreamWriter(targetLocation + "/maidata.txt", false);
             {
                 sw.WriteLine(result);
             }

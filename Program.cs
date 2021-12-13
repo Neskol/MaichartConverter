@@ -1,4 +1,7 @@
-﻿namespace MusicConverterTest
+﻿using System;
+using System.IO;
+
+namespace MusicConverterTest
 {
     /// <summary>
     /// Main program of converter
@@ -27,9 +30,9 @@
             if (a000Location.Equals(""))
 #pragma warning restore CS8602 // 解引用可能出现空引用。
             {
-                a000Location = @"C:\MUG\maimai\SDEZ1.17\Package\Sinmai_Data\StreamingAssets\A000\";
+                a000Location = @"/Users/neskol/MUG/maimai/SDEZ1.17/Package/Sinmai_Data/StreamingAssets/A000/";
             }
-            string musiclocation = a000Location + @"music\";
+            string musiclocation = a000Location + @"music"+sep;
             Console.WriteLine("Specify Audio location: *Be sure to add " + sep + " in the end");
 #pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
             string audioLocation = Console.ReadLine();
@@ -38,7 +41,7 @@
             if (audioLocation.Equals(""))
 #pragma warning restore CS8602 // 解引用可能出现空引用。
             {
-                audioLocation = @"F:\MaiAnalysis\Audio\";
+                audioLocation = @"/Users/neskol/MaiAnalysis/Sound/";
             }
             Console.WriteLine("Specify Image location: *Be sure to add " + sep + "in the end");
 #pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
@@ -48,14 +51,14 @@
             if (imageLocation.Equals(""))
 #pragma warning restore CS8602 // 解引用可能出现空引用。
             {
-                imageLocation = @"F:\MaiAnalysis\Image\Texture2D\";
+                imageLocation = @"/Users/neskol/MaiAnalysis/Image/Texture2D/";
             }
             Console.WriteLine("Specify Output location: *Be sure to add " + sep + " in the end");
             string outputLocation = Console.ReadLine();
             if (outputLocation.Equals(""))
             {
 #pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-                outputLocation = @"F:\MaimaiAnalysis\Output\";
+                outputLocation = @"/Users/neskol/MaiAnalysis/Output/";
 #pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
             }
             string[] musicFolders = Directory.GetDirectories(musiclocation);
@@ -83,7 +86,8 @@
                 {
                     if (File.Exists(track+ "" + sep + "Music.xml"))
                     {
-                        XmlInformation trackInfo = new XmlInformation(track + "" + sep + "");
+                        try{
+                            XmlInformation trackInfo = new XmlInformation(track + "" + sep + "");
                         Console.WriteLine("There is Music.xml in " + track);
                         string shortID = ComponsateZero(trackInfo.TrackID).Substring(2);
                         Console.WriteLine("Name: " + trackInfo.TrackName);
@@ -116,6 +120,11 @@
                             File.Copy(originalImageLocation, newImageLocation);
                         }
                         Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart);
+                        }
+                        catch(Exception ex)
+                        {
+                            Console.WriteLine("Error found in: "+ex.Message);
+                        }
                     }
 
                 }
