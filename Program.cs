@@ -12,54 +12,39 @@ namespace MusicConverterTest
         /// Main method to process charts
         /// </summary>
         /// <param name="args">Parameters to takein</param>
+        public static string windowsPathSep = "\\";
+        public static string macPathSep = "/";
         public static void Main(string[] args)
         {
             // GoodBrother1 good = new GoodBrother1(@"/Users/neskol/MUG/maimai/SDEZ1.17/Package/Sinmai_Data/StreamingAssets/A000/music/music000837/000837_03.ma2");
             // MaidataCompiler compiler = new MaidataCompiler();
             // Console.WriteLine(good.Compose());
             // Console.WriteLine(compiler.Compose(good));
-
-            const string windowsPathSep = "\\";
-            const string macPathSep = "/";
             string sep = macPathSep;
             Console.WriteLine("Specify A000 location: *Be sure to add "+sep+" in the end");
-#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-            string a000Location = Console.ReadLine();
-#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-#pragma warning disable CS8602 // 解引用可能出现空引用。
+            string a000Location = Console.ReadLine()?? throw new NullReferenceException("Null For Console.ReadLine"); 
             if (a000Location.Equals(""))
-#pragma warning restore CS8602 // 解引用可能出现空引用。
             {
                 a000Location = @"/Users/neskol/MUG/maimai/SDEZ1.17/Package/Sinmai_Data/StreamingAssets/A000/";
             }
             string musiclocation = a000Location + @"music"+sep;
             Console.WriteLine("Specify Audio location: *Be sure to add " + sep + " in the end");
-#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-            string audioLocation = Console.ReadLine();
-#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-#pragma warning disable CS8602 // 解引用可能出现空引用。
+            string audioLocation = Console.ReadLine()?? throw new NullReferenceException("Null For Console.ReadLine"); 
             if (audioLocation.Equals(""))
-#pragma warning restore CS8602 // 解引用可能出现空引用。
             {
                 audioLocation = @"/Users/neskol/MaiAnalysis/Sound/";
             }
             Console.WriteLine("Specify Image location: *Be sure to add " + sep + "in the end");
-#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-            string imageLocation = Console.ReadLine();
-#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-#pragma warning disable CS8602 // 解引用可能出现空引用。
+            string imageLocation = Console.ReadLine()?? throw new NullReferenceException("Null For Console.ReadLine"); 
             if (imageLocation.Equals(""))
-#pragma warning restore CS8602 // 解引用可能出现空引用。
             {
                 imageLocation = @"/Users/neskol/MaiAnalysis/Image/Texture2D/";
             }
             Console.WriteLine("Specify Output location: *Be sure to add " + sep + " in the end");
-            string outputLocation = Console.ReadLine();
+            string outputLocation = Console.ReadLine()?? throw new NullReferenceException("Null For Console.ReadLine"); 
             if (outputLocation.Equals(""))
             {
-#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
                 outputLocation = @"/Users/neskol/MaiAnalysis/Output/";
-#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
             }
             string[] musicFolders = Directory.GetDirectories(musiclocation);
             //GoodBrother1 test = new GoodBrother1(@"D:\MaiAnalysis\music\music000834\000834_04.ma2");
@@ -67,9 +52,7 @@ namespace MusicConverterTest
             //Console.WriteLine(compiler.Compose(test));
 
             //Create output drectory
-#pragma warning disable CS8604 // “DirectoryInfo.DirectoryInfo(string path)”中的形参“path”可能传入 null 引用实参。
             DirectoryInfo output = new DirectoryInfo(outputLocation);
-#pragma warning restore CS8604 // “DirectoryInfo.DirectoryInfo(string path)”中的形参“path”可能传入 null 引用实参。
             XmlInformation test = new XmlInformation(a000Location+ "music" + sep + "music010706" + sep + "");
             //string shortID = ComponsateZero(test.TrackID).Substring(2);
             //Console.WriteLine(shortID);
@@ -146,7 +129,7 @@ namespace MusicConverterTest
             }
             catch (NullReferenceException ex)
             {
-                return "";
+                return "Exception raised: "+ex.Message;
             }
         }
     }

@@ -95,51 +95,51 @@ namespace MusicConverterTest
                 beginning += "&version=" + this.musicXml.Version + "\n";
                 beginning += "&chartconverter=Neskol\n";
                 beginning += "\n";
-#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-                if (this.information.TryGetValue("Basic", out string basic) && this.information.TryGetValue("Basic Chart Maker", out string basicMaker))
-#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
+
+
+                if (this.information.TryGetValue("Basic", out string? basic) && this.information.TryGetValue("Basic Chart Maker", out string? basicMaker))
+
+
                 {
                     beginning += "&lv_2=" + basic + "\n";
                     beginning += "&des_2=" + basicMaker + "\n";
                     beginning += "\n";
                 }
-#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-                if (this.information.TryGetValue("Advanced", out string advance) && this.information.TryGetValue("Advanced Chart Maker", out string advanceMaker))
-#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
+
+
+                if (this.information.TryGetValue("Advanced", out string? advance) && this.information.TryGetValue("Advanced Chart Maker", out string? advanceMaker))
+
+
                 {
                     beginning += "&lv_3=" + advance + "\n";
                     beginning += "&des_3=" + advanceMaker + "\n";
                     beginning += "\n";
                 }
-#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-                if (this.information.TryGetValue("Expert", out string expert) && this.information.TryGetValue("Expert Chart Maker", out string expertMaker))
-#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
+
+
+                if (this.information.TryGetValue("Expert", out string? expert) && this.information.TryGetValue("Expert Chart Maker", out string? expertMaker))
+
+
                 {
                     beginning += "&lv_4=" + expert + "\n";
                     beginning += "&des_4=" + expertMaker + "\n";
                     beginning += "\n";
                 }
-#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-                if (this.information.TryGetValue("Master", out string master) && this.information.TryGetValue("Master Chart Maker", out string masterMaker))
-#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
+
+
+                if (this.information.TryGetValue("Master", out string? master) && this.information.TryGetValue("Master Chart Maker", out string? masterMaker))
+
+
                 {
                     beginning += "&lv_5=" + master + "\n";
                     beginning += "&des_5=" + masterMaker + "\n";
                     beginning += "\n";
                 }
-#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-                if (this.information.TryGetValue("Remaster", out string remaster) && this.information.TryGetValue("Remaster Chart Maker", out string remasterMaker))
-#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
+
+
+                if (this.information.TryGetValue("Remaster", out string? remaster) && this.information.TryGetValue("Remaster Chart Maker", out string? remasterMaker))
+
+
                 {
                     beginning += "&lv_6=" + remaster + "\n";
                     beginning += "&des_6=" + remasterMaker; beginning += "\n";

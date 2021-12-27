@@ -192,9 +192,9 @@
         public int CompareTo(Object? obj)
         {
             int result = 0;
-#pragma warning disable CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
-            Note another = obj as Note;
-#pragma warning restore CS8600 // 将 null 文本或可能的 null 值转换为不可为 null 类型。
+
+            Note another = obj as Note??throw new NullReferenceException("Note is not defined");
+
             //else if (this.NoteSpecificType().Equals("SLIDE")&&(this.NoteSpecificType().Equals("TAP")|| this.NoteSpecificType().Equals("HOLD")) && this.startTime == another.StartTime && this.bar == another.Bar)
             //{
             //    result = -1;

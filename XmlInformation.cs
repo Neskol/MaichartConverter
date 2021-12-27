@@ -42,39 +42,30 @@ namespace MusicConverterTest
 
         public string TrackName
         {
-#pragma warning disable CS8603 // 可能返回 null 引用。
-            get { return this.Information.GetValueOrDefault("Name"); }
-#pragma warning restore CS8603 // 可能返回 null 引用。
+            get { return this.Information.GetValueOrDefault("Name")??throw new NullReferenceException("Name is not defined");}
         }
 
         public string TrackSortName
         {
-#pragma warning disable CS8603 // 可能返回 null 引用。
-            get { return this.Information.GetValueOrDefault("Sort Name"); }
-#pragma warning restore CS8603 // 可能返回 null 引用。
+            get { return this.Information.GetValueOrDefault("Sort Name")??throw new NullReferenceException("Sort Name is not defined"); }
         }
 
         public string TrackID
         {
-#pragma warning disable CS8603 // 可能返回 null 引用。
-            get { return this.Information.GetValueOrDefault("Music ID"); }
-#pragma warning restore CS8603 // 可能返回 null 引用。
+            get { return this.Information.GetValueOrDefault("Music ID")??throw new NullReferenceException("Music ID is not defined"); }
         }
 
         public string TrackGenre
         {
-#pragma warning disable CS8603 // 可能返回 null 引用。
-            get { return this.Information.GetValueOrDefault("Genre"); }
-#pragma warning restore CS8603 // 可能返回 null 引用。
+            get { return this.Information.GetValueOrDefault("Genre")??throw new NullReferenceException("Genre is not defined"); }
         }
 
         public string DXChart
         {
             get
             {
-#pragma warning disable CS8602 // 解引用可能出现空引用。
-                if (this.Information.GetValueOrDefault("Music ID").Length > 3)
-#pragma warning restore CS8602 // 解引用可能出现空引用。
+                string musicID = this.Information.GetValueOrDefault("Music ID")??throw new NullReferenceException("Music ID is not Defined");
+                if (musicID.Length > 3)
                     return "_DX";
                 else return "";
             }
@@ -84,9 +75,8 @@ namespace MusicConverterTest
         {
             get
             {
-#pragma warning disable CS8602 // 解引用可能出现空引用。
-                return this.Information.GetValueOrDefault("Music ID").Length > 3;
-#pragma warning restore CS8602 // 解引用可能出现空引用。
+                string musicID = this.Information.GetValueOrDefault("Music ID")??throw new NullReferenceException("Music ID is not Defined");
+                return musicID.Length > 3;
             }
         }
 
@@ -98,7 +88,9 @@ namespace MusicConverterTest
 
         public string Version
         {
-            get {return this.information.GetValueOrDefault("Version"); }
+            
+            get { string version = this.Information.GetValueOrDefault("Version")??throw new NullReferenceException("Version is not Defined");
+                return version; }
         }
 
         public XmlDocument TakeinValue
@@ -141,94 +133,50 @@ namespace MusicConverterTest
             {
                 if (!this.information.ContainsKey("Music ID"))
                 {
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                     this.information.Add("Music ID", candidate["id"].InnerText);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                     this.information.Add("Name", candidate["str"].InnerText);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
                 }
             }
             foreach (XmlNode candidate in chartCandidate)
             {
-                //try
+                try
                 {
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                     if (candidate["file"]["path"].InnerText.Contains("00.ma2")&&candidate["isEnable"].InnerText.Equals("true"))
-#pragma warning restore CS8602 // 解引用可能出现空引用。
                     {
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                         this.information.Add("Basic", level[Int32.Parse(candidate["musicLevelID"].InnerText) - 1]);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                         this.information.Add("Basic Chart Maker", candidate["notesDesigner"]["str"].InnerText);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                         this.information.Add("Basic Chart Path", candidate["file"]["path"].InnerText);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
                     }
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                     else if (candidate["file"]["path"].InnerText.Contains("01.ma2") && candidate["isEnable"].InnerText.Equals("true"))
-#pragma warning restore CS8602 // 解引用可能出现空引用。
                     {
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                         this.information.Add("Advanced", level[Int32.Parse(candidate["musicLevelID"].InnerText) - 1]);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                         this.information.Add("Advanced Chart Maker", candidate["notesDesigner"]["str"].InnerText);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                         this.information.Add("Advanced Chart Path", candidate["file"]["path"].InnerText);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
                     }
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                     else if (candidate["file"]["path"].InnerText.Contains("02.ma2") && candidate["isEnable"].InnerText.Equals("true"))
-#pragma warning restore CS8602 // 解引用可能出现空引用。
                     {
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                         this.information.Add("Expert", level[Int32.Parse(candidate["musicLevelID"].InnerText) - 1]);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                         this.information.Add("Expert Chart Maker", candidate["notesDesigner"]["str"].InnerText);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                         this.information.Add("Expert Chart Path", candidate["file"]["path"].InnerText);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
                     }
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                     else if (candidate["file"]["path"].InnerText.Contains("03.ma2") && candidate["isEnable"].InnerText.Equals("true"))
-#pragma warning restore CS8602 // 解引用可能出现空引用。
                     {
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                         this.information.Add("Master", level[Int32.Parse(candidate["musicLevelID"].InnerText) - 1]);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                         this.information.Add("Master Chart Maker", candidate["notesDesigner"]["str"].InnerText);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                         this.information.Add("Master Chart Path", candidate["file"]["path"].InnerText);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
                     }
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                     else if (candidate["file"]["path"].InnerText.Contains("04.ma2") && candidate["isEnable"].InnerText.Equals("true"))
-#pragma warning restore CS8602 // 解引用可能出现空引用。
                     {
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                         this.information.Add("Remaster", level[Int32.Parse(candidate["musicLevelID"].InnerText) - 1]);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                         this.information.Add("Remaster Chart Maker", candidate["notesDesigner"]["str"].InnerText);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                         this.information.Add("Remaster Chart Path", candidate["file"]["path"].InnerText);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
                     }
                 }
-                //catch (Exception ex)
-                //{
-                //    Console.WriteLine("There is no such chart: " + ex.Message);
-                //    throw ex;
-                //}
+                catch (Exception ex)
+                {
+                   Console.WriteLine("There is no such chart: " + ex.Message);
+                   throw ex;
+                }
             }
 
             foreach (XmlNode candidate in bpmCandidate)
@@ -256,9 +204,7 @@ namespace MusicConverterTest
                 {
                     if (!this.information.ContainsKey("Composer"))
                     {
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                         this.information.Add("Composer", candidate["str"].InnerText);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
                     }
                 }
             }
@@ -268,9 +214,7 @@ namespace MusicConverterTest
                 {
                     if (!this.information.ContainsKey("Genre"))
                     {
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                         this.information.Add("Genre", candidate["str"].InnerText);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
                     }
                 }
             }
@@ -280,9 +224,7 @@ namespace MusicConverterTest
                 {
                     if (!this.information.ContainsKey("AddVersion"))
                     {
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                         this.information.Add("Version", version[Int32.Parse(candidate["id"].InnerText)]);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
                     }
                 }
             }
