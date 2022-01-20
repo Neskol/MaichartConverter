@@ -1,4 +1,4 @@
-﻿namespace MusicConverterTest
+﻿namespace MaidataConverter
 {
     /// <summary>
     /// Construct a Slide note (With START!)

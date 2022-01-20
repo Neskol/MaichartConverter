@@ -1,6 +1,6 @@
 ﻿using System.Xml;
 
-namespace MusicConverterTest
+namespace MaidataConverter
 {
     /// <summary>
     /// Provide handful methods for Xml

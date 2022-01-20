@@ -1,4 +1,4 @@
-﻿namespace MusicConverterTest
+﻿namespace MaidataConverter
 {
     public class Simai : IGoodBrother, ICompiler
     {

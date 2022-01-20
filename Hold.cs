@@ -1,4 +1,4 @@
-﻿namespace MusicConverterTest
+﻿namespace MaidataConverter
 {
     public class Hold : Note
     {

@@ -1,8 +1,8 @@
-﻿namespace MusicConverterTest
+﻿namespace MaidataConverter
 {
-    public class Parser : IParser
+    public class Ma2parser : IParser
     {
-        public Parser()
+        public Ma2parser()
         {
 
         }

@@ -1,4 +1,4 @@
-﻿namespace MusicConverterTest
+﻿namespace MaidataConverter
 {
     /// <summary>
     /// Good Brother Implementation.
@@ -188,7 +188,7 @@
         public GoodBrother1(string location)
         {
             string[] tokens = new Tokenizer().Tokens(location);
-            GoodBrother1 takenIn = new Parser().GoodBrotherOfToken(tokens);
+            GoodBrother1 takenIn = new Ma2parser().GoodBrotherOfToken(tokens);
             this.notes = takenIn.Notes;
             this.bpmChanges = takenIn.BPMChanges;
             this.measureChanges = takenIn.MeasureChanges;
@@ -203,7 +203,7 @@
         /// <param name="tokens">Tokens given</param>
         public GoodBrother1(string[] tokens)
         {
-            GoodBrother1 takenIn = new Parser().GoodBrotherOfToken(tokens);
+            GoodBrother1 takenIn = new Ma2parser().GoodBrotherOfToken(tokens);
             this.notes = takenIn.Notes;
             this.bpmChanges = takenIn.BPMChanges;
             this.measureChanges = takenIn.MeasureChanges;

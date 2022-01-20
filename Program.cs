@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace MusicConverterTest
+namespace MaidataConverter
 {
     /// <summary>
     /// Main program of converter

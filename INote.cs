@@ -1,4 +1,4 @@
-﻿namespace MusicConverterTest
+﻿namespace MaidataConverter
 {
     /// <summary>
     /// Provide interface and basic functions for Notes

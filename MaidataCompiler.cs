@@ -1,6 +1,6 @@
 ﻿using System.Xml;
 
-namespace MusicConverterTest
+namespace MaidataConverter
 {
     internal class MaidataCompiler : ICompiler
     {

@@ -5,4 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Build", "CA2200:再次引发捕获到的异常会更改堆栈信息", Justification = "<挂起>", Scope = "member", Target = "~M:MusicConverterTest.XmlInformation.#ctor(System.String)")]
+[assembly: SuppressMessage("Build", "CA2200:再次引发捕获到的异常会更改堆栈信息", Justification = "<挂起>", Scope = "member", Target = "~M:MaidataConverter.XmlInformation.#ctor(System.String)")]
