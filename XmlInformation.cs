@@ -18,7 +18,6 @@ namespace MusicConverterTest
 
         public XmlInformation(string location)
         {
-            //try
             {
                 this.takeinValue = new XmlDocument();
                 if (File.Exists(location+"Music.xml"))
@@ -33,11 +32,6 @@ namespace MusicConverterTest
                 }
                 
             }
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine(location);
-            //    throw ex;
-            //}
         }
 
         public string TrackName
@@ -103,13 +97,6 @@ namespace MusicConverterTest
             get { return information; }
         }
 
-        //public void Load(string location)
-        //{
-        //    this.takeinValue = new XmlDocument();
-        //    this.takeinValue.LoadXml(location);
-        //    this.information = new Dictionary<string, string>();
-        //}
-
         public void Save(string location)
         {
             this.takeinValue.Save(location);
@@ -117,8 +104,6 @@ namespace MusicConverterTest
 
         public void Update()
         {
-            //try
-            //{
             XmlNodeList nameCandidate = takeinValue.GetElementsByTagName("name");
             XmlNodeList bpmCandidate = takeinValue.GetElementsByTagName("bpm");
             XmlNodeList chartCandidate = takeinValue.GetElementsByTagName("Notes");
@@ -228,12 +213,6 @@ namespace MusicConverterTest
                     }
                 }
             }
-
-            //}catch (Exception e)
-            //{
-            //    throw e;
-            //    Console.WriteLine(e.Message);
-            //}
         }
     }
 }
