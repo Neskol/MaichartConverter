@@ -2,6 +2,13 @@ namespace MaidataConverter;
 
 public class Simaiparser : IParser
 {
+    /// <summary>
+    /// Constructer of simaiparser
+    /// </summary>
+    public Simaiparser()
+    {
+    }
+
     public BPMChanges BPMChangesOfToken(string token)
     {
         throw new NotImplementedException();
@@ -9,6 +16,7 @@ public class Simaiparser : IParser
 
     public GoodBrother1 GoodBrotherOfToken(string[] token)
     {
+
         throw new NotImplementedException();
     }
 

@@ -25,7 +25,7 @@ namespace MaidataConverter
             string a000Location = Console.ReadLine()?? throw new NullReferenceException("Null For Console.ReadLine"); 
             if (a000Location.Equals(""))
             {
-                a000Location = @"/Users/neskol/MUG/maimai/SDEZ1.17/Package/Sinmai_Data/StreamingAssets/A000/";
+                a000Location = @"/Users/neskol/MaiAnalysis/A000/";
             }
             string musiclocation = a000Location + @"music"+sep;
             Console.WriteLine("Specify Audio location: *Be sure to add " + sep + " in the end");
@@ -40,13 +40,33 @@ namespace MaidataConverter
             {
                 imageLocation = @"/Users/neskol/MaiAnalysis/Image/Texture2D/";
             }
+            Console.WriteLine("Specify BGA location: *Be sure to add "+sep+" in the end");
+            string bgaLocation = Console.ReadLine()?? throw new NullReferenceException("Null For Console.ReadLine"); 
+            if (bgaLocation.Equals(""))
+            {
+                bgaLocation = @"/Users/neskol/MaiAnalysis/Video/";
+            }
             Console.WriteLine("Specify Output location: *Be sure to add " + sep + " in the end");
             string outputLocation = Console.ReadLine()?? throw new NullReferenceException("Null For Console.ReadLine"); 
             if (outputLocation.Equals(""))
             {
                 outputLocation = @"/Users/neskol/MaiAnalysis/Output/";
             }
+
+            string[] bgaFiles = Directory.GetFiles(bgaLocation);
+            Dictionary<string, string> bgaMap = new Dictionary<string,string>();
+            foreach (string bgaFile in bgaFiles)
+            {
+                string musicID =bgaFile.Substring(bgaLocation.Length).Substring(0,3);
+                if (!bgaFile.Substring(bgaLocation.Length).Substring(0,3).Equals("mmv"))
+                {
+                    bgaMap.Add(musicID,bgaFile);
+                }
+            }
+
             string[] musicFolders = Directory.GetDirectories(musiclocation);
+            
+
             //GoodBrother1 test = new GoodBrother1(@"D:\MaiAnalysis\music\music000834\000834_04.ma2");
             //MaidataCompiler compiler = new MaidataCompiler(musiclocation + @"music000834\", @"D:\MaiAnalysis\Output\");
             //Console.WriteLine(compiler.Compose(test));
@@ -60,7 +80,6 @@ namespace MaidataConverter
             //string oldName = imageLocation + "UI_Jacket_00" + shortID + ".png";
             //string newName = @"D:\bg.png";
             //File.Copy(oldName, newName);
-
 
             //Iterate music folders
             foreach (string track in musicFolders)
@@ -101,7 +120,30 @@ namespace MaidataConverter
                         {
                             File.Copy(originalImageLocation, newImageLocation);
                         }
+                        // Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart);
+
+                        string? originalBGALocation = "";
+                        bool bgaExists = bgaMap.TryGetValue(trackInfo.TrackID,out originalBGALocation);
+                        if (!bgaExists)
+                        {
+                            if (trackInfo.TrackID.Length==5)
+                            {
+                                bgaExists = bgaMap.TryGetValue(trackInfo.TrackID.Substring(1,3),out originalBGALocation);
+                            }
+                            else if (trackInfo.TrackID.Length<3)
+                            {
+                                bgaExists = bgaMap.TryGetValue(ComponsateShortZero(trackInfo.TrackID),out originalBGALocation);
+                            }
+                            
+                        }
+                        string? newBGALocation = outputLocation+trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart + "" + sep +"pv.mp4";
+                        if (bgaExists&&!File.Exists(newBGALocation))
+                        {
+                            Console.WriteLine("A BGA file was found in "+originalBGALocation);
+                            File.Copy(originalBGALocation,newBGALocation);
+                        }
                         Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart);
+
                     }
 
                 }
@@ -122,6 +164,28 @@ namespace MaidataConverter
             {
                 string result = intake;
                 while (result.Length < 6 && intake != null)
+                {
+                    result = "0" + result;
+                }
+                return result;
+            }
+            catch (NullReferenceException ex)
+            {
+                return "Exception raised: "+ex.Message;
+            }
+        }
+
+        /// <summary>
+        /// Componsate 0 for short music IDs
+        /// </summary>
+        /// <param name="intake">Music ID</param>
+        /// <returns>0..+#Music ID and |Music ID|==3</returns>
+        public static string ComponsateShortZero(string intake)
+        {
+            try
+            {
+                string result = intake;
+                while (result.Length < 3 && intake != null)
                 {
                     result = "0" + result;
                 }
