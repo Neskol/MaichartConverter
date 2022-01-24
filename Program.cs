@@ -44,7 +44,7 @@ namespace MaidataConverter
             string bgaLocation = Console.ReadLine()?? throw new NullReferenceException("Null For Console.ReadLine"); 
             if (bgaLocation.Equals(""))
             {
-                bgaLocation = @"/Users/neskol/MaiAnalysis/Video/";
+                bgaLocation = @"/Users/neskol/MaiAnalysis/DXBGA/";
             }
             Console.WriteLine("Specify Output location: *Be sure to add " + sep + " in the end");
             string outputLocation = Console.ReadLine()?? throw new NullReferenceException("Null For Console.ReadLine"); 
@@ -53,17 +53,18 @@ namespace MaidataConverter
                 outputLocation = @"/Users/neskol/MaiAnalysis/Output/";
             }
 
-            string[] bgaFiles = Directory.GetFiles(bgaLocation);
+            string[] bgaFiles = Directory.GetFiles(bgaLocation,"*.mp4");
             Dictionary<string, string> bgaMap = new Dictionary<string,string>();
             foreach (string bgaFile in bgaFiles)
             {
-                string musicID =bgaFile.Substring(bgaLocation.Length).Substring(0,3);
-                if (!bgaFile.Substring(bgaLocation.Length).Substring(0,3).Equals("mmv"))
-                {
-                    bgaMap.Add(musicID,bgaFile);
-                }
+                string musicID =bgaFile.Substring(bgaLocation.Length).Substring(0,6).Substring(2,4);
+                Console.WriteLine(musicID);
+                // if (!bgaFile.Substring(bgaLocation.Length).Substring(0,3).Equals("mmv"))
+                // {
+                bgaMap.Add(musicID,bgaFile);
+                // }
             }
-
+            Console.ReadLine();
             string[] musicFolders = Directory.GetDirectories(musiclocation);
             
 
@@ -123,12 +124,12 @@ namespace MaidataConverter
                         // Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart);
 
                         string? originalBGALocation = "";
-                        bool bgaExists = bgaMap.TryGetValue(trackInfo.TrackID,out originalBGALocation);
+                        bool bgaExists = bgaMap.TryGetValue(ComponsateZero(trackInfo.TrackID),out originalBGALocation);
                         if (!bgaExists)
                         {
                             if (trackInfo.TrackID.Length==5)
                             {
-                                bgaExists = bgaMap.TryGetValue(trackInfo.TrackID.Substring(1,3),out originalBGALocation);
+                                bgaExists = bgaMap.TryGetValue(trackInfo.TrackID.Substring(1,4),out originalBGALocation);
                             }
                             else if (trackInfo.TrackID.Length<3)
                             {
