@@ -7,7 +7,7 @@
 
         }
 
-        public GoodBrother1 GoodBrotherOfToken(string[] token)
+        public Ma2 GoodBrotherOfToken(string[] token)
         {
             BPMChanges bpmChanges = new BPMChanges();
             MeasureChanges measureChanges = new MeasureChanges();
@@ -73,7 +73,7 @@
                     }
                 }
             }
-            GoodBrother1 result = new GoodBrother1(notes, bpmChanges, measureChanges);
+            Ma2 result = new Ma2(notes, bpmChanges, measureChanges);
             return result;
         }
 

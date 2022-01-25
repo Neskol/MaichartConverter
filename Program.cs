@@ -87,9 +87,9 @@ namespace MaidataConverter
             {
                 //try
                 {
-                    if (File.Exists(track+ "" + sep + "Music.xml"))
+                    if (File.Exists(track+ sep + "Music.xml"))
                     {
-                        XmlInformation trackInfo = new XmlInformation(track + "" + sep + "");
+                        XmlInformation trackInfo = new XmlInformation(track + sep + "");
                         Console.WriteLine("There is Music.xml in " + track);
                         string shortID = ComponsateZero(trackInfo.TrackID).Substring(2);
                         Console.WriteLine("Name: " + trackInfo.TrackName);
@@ -100,15 +100,15 @@ namespace MaidataConverter
                         {
                             Directory.CreateDirectory(outputLocation + trackInfo.TrackGenre);
                         }
-                        if (!Directory.Exists(outputLocation + trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart))
+                        if (!Directory.Exists(outputLocation + trackInfo.TrackGenre + sep + trackNameSubtitude + trackInfo.DXChart))
                         {
-                            Directory.CreateDirectory(outputLocation + trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart);
+                            Directory.CreateDirectory(outputLocation + trackInfo.TrackGenre + sep + trackNameSubtitude + trackInfo.DXChart);
                         }
-                        MaidataCompiler compiler = new MaidataCompiler(track + "" + sep + "", outputLocation + trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart);
+                        MaidataCompiler compiler = new MaidataCompiler(track + sep + "", outputLocation + trackInfo.TrackGenre + sep + trackNameSubtitude + trackInfo.DXChart);
 
                         string originalMusicLocation = audioLocation;
                         originalMusicLocation += "music00" + shortID + ".mp3";
-                        string newMusicLocation = outputLocation + trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart + "" + sep + "track.mp3";
+                        string newMusicLocation = outputLocation + trackInfo.TrackGenre + sep + trackNameSubtitude + trackInfo.DXChart + sep + "track.mp3";
                         if (!File.Exists(newMusicLocation))
                         {
                             File.Copy(originalMusicLocation, newMusicLocation);
@@ -116,12 +116,12 @@ namespace MaidataConverter
 
                         string originalImageLocation = imageLocation;
                         originalImageLocation += "UI_Jacket_00" + shortID + ".png";
-                        string newImageLocation = outputLocation + trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart + "" + sep + "bg.png";
+                        string newImageLocation = outputLocation + trackInfo.TrackGenre + sep + trackNameSubtitude + trackInfo.DXChart + sep + "bg.png";
                         if (!File.Exists(newImageLocation))
                         {
                             File.Copy(originalImageLocation, newImageLocation);
                         }
-                        // Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart);
+                        // Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubtitude + trackInfo.DXChart);
 
                         string? originalBGALocation = "";
                         bool bgaExists = bgaMap.TryGetValue(ComponsateZero(trackInfo.TrackID),out originalBGALocation);
@@ -137,14 +137,13 @@ namespace MaidataConverter
                             }
                             
                         }
-                        string? newBGALocation = outputLocation+trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart + "" + sep +"pv.mp4";
+                        string? newBGALocation = outputLocation+trackInfo.TrackGenre + sep + trackNameSubtitude + trackInfo.DXChart + sep +"pv.mp4";
                         if (bgaExists&&!File.Exists(newBGALocation))
                         {
                             Console.WriteLine("A BGA file was found in "+originalBGALocation);
                             File.Copy(originalBGALocation,newBGALocation);
                         }
-                        Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + "" + sep + "" + trackNameSubtitude + trackInfo.DXChart);
-
+                        Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubtitude + trackInfo.DXChart);
                     }
 
                 }

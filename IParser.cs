@@ -7,7 +7,7 @@
         /// </summary>
         /// <param name="token">Token to intake</param>
         /// <returns>Corresponding GoodBrother</returns>
-        public GoodBrother1 GoodBrotherOfToken(string[] token);
+        public Ma2 GoodBrotherOfToken(string[] token);
 
         /// <summary>
         /// Return correct BPMChanges of given Token.

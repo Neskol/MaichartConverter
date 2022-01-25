@@ -14,7 +14,7 @@ public class Simaiparser : IParser
         throw new NotImplementedException();
     }
 
-    public GoodBrother1 GoodBrotherOfToken(string[] token)
+    public Ma2 GoodBrotherOfToken(string[] token)
     {
 
         throw new NotImplementedException();

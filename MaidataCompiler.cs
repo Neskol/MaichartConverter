@@ -5,7 +5,7 @@ namespace MaidataConverter
     internal class MaidataCompiler : ICompiler
     {
         public static readonly string[] difficulty = { "Basic", "Advanced", "Expert", "Master", "Remaster" };
-        private List<GoodBrother1> charts;
+        private List<Ma2> charts;
         private Dictionary<string, string> information;
         private XmlInformation musicXml;
         /// <summary>
@@ -15,10 +15,10 @@ namespace MaidataConverter
         /// <param name="targetLocation">Output folder</param>
         public MaidataCompiler(string location, string targetLocation)
         {
-            charts = new List<GoodBrother1>();
+            charts = new List<Ma2>();
             for (int i = 0; i < 5; i++)
             {
-                charts.Add(new GoodBrother1());
+                charts.Add(new Ma2());
             }
             this.musicXml = new XmlInformation(location);
             this.information = musicXml.Information;
@@ -27,23 +27,23 @@ namespace MaidataConverter
                 if (this.information.ContainsKey("Basic"))
                 {
                     //Console.WriteLine("Have basic: "+ location + this.information.GetValueOrDefault("Basic Chart Path"));
-                    charts[0] = new GoodBrother1(location + this.information.GetValueOrDefault("Basic Chart Path"));
+                    charts[0] = new Ma2(location + this.information.GetValueOrDefault("Basic Chart Path"));
                 }
                 if (this.information.ContainsKey("Advanced"))
                 {
-                    charts[1] = new GoodBrother1(location + this.information.GetValueOrDefault("Advanced Chart Path"));
+                    charts[1] = new Ma2(location + this.information.GetValueOrDefault("Advanced Chart Path"));
                 }
                 if (this.information.ContainsKey("Expert"))
                 {
-                    charts[2] = new GoodBrother1(location + this.information.GetValueOrDefault("Expert Chart Path"));
+                    charts[2] = new Ma2(location + this.information.GetValueOrDefault("Expert Chart Path"));
                 }
                 if (this.information.ContainsKey("Master"))
                 {
-                    charts[3] = new GoodBrother1(location + this.information.GetValueOrDefault("Master Chart Path"));
+                    charts[3] = new Ma2(location + this.information.GetValueOrDefault("Master Chart Path"));
                 }
                 if (this.information.ContainsKey("Remaster"))
                 {
-                    charts[4] = new GoodBrother1(location + this.information.GetValueOrDefault("Remaster Chart Path"));
+                    charts[4] = new Ma2(location + this.information.GetValueOrDefault("Remaster Chart Path"));
                 }
             }
             string result = this.Compose();
@@ -57,7 +57,7 @@ namespace MaidataConverter
 
         public MaidataCompiler()
         {
-            charts = new List<GoodBrother1>();
+            charts = new List<Ma2>();
             information = new Dictionary<string, string>();
             this.musicXml = new XmlInformation();
         }
@@ -65,7 +65,7 @@ namespace MaidataConverter
         public bool CheckValidity()
         {
             bool result = true;
-            foreach (GoodBrother1 x in charts)
+            foreach (Ma2 x in charts)
             {
                 result = result && x.CheckValidity();
             }
@@ -172,7 +172,7 @@ namespace MaidataConverter
         /// </summary>
         /// <param name="chart">Chart to compose</param>
         /// <returns>Maidata of specified chart WITHOUT headers</returns>
-        public string Compose(GoodBrother1 chart)
+        public string Compose(Ma2 chart)
         {
             string result = "";
             int delayBar = (chart.TotalDelay) / 384 + 2;

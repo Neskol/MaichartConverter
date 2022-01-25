@@ -1,12 +1,12 @@
 ﻿namespace MaidataConverter
 {
-    public class Simai : IGoodBrother, ICompiler
+    public class Simai : IChart, ICompiler
     {
         private string title;
         private List<double> difficulty;
         private List<string> noteDesigner;
         private double wholeBPM;
-        private List<GoodBrother1> maps;
+        private List<Ma2> maps;
         public const int Resolution = 384; //Maximum tick of a bar;
         public const string BreakNote = "b", HoldNote = "h", SI_Note = "-", SV_Note = "v", SC_Note = "<>", SL_Note = "V", SX_Note = "p";
         public const string TouchPrefix = "ABCDEF";
@@ -16,7 +16,7 @@
             title = "";
             difficulty = new List<double>();
             noteDesigner = new List<string>();
-            maps = new List<GoodBrother1>();
+            maps = new List<Ma2>();
             wholeBPM = 0.00;
             string[] processing = maidata.Split('&');
             foreach (string x in processing)
@@ -78,7 +78,7 @@
         /// <param name="maiNotes">string to take in</param>
         /// <param name="Difficulty">difficulty to mark</param>
         /// <returns></returns>
-        public GoodBrother1 Read(string maiNotes, int Difficulty)
+        public Ma2 Read(string maiNotes, int Difficulty)
         {
             List<Note> notes = new List<Note>();
             List<int> changedBars = new List<int>(), changedTicks = new List<int>(), changedQuavers = new List<int>(), changedBeats = new List<int>();
@@ -119,7 +119,7 @@
             }
             BPMChanges bpmChanges = new BPMChanges(changedBars, changedTicks, changedBPMs);
             MeasureChanges measureChanges = new MeasureChanges(changedBars, changedTicks, changedQuavers, changedBeats);
-            GoodBrother1 result = new GoodBrother1(notes, bpmChanges, measureChanges);
+            Ma2 result = new Ma2(notes, bpmChanges, measureChanges);
             return result;
         }
 

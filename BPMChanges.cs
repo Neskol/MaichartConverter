@@ -1,6 +1,6 @@
 ﻿namespace MaidataConverter
 {
-    public class BPMChanges : IGoodBrother
+    public class BPMChanges : IChart
     {
         private List<int> bar;
         private List<int> tick;

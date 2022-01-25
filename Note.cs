@@ -231,9 +231,7 @@
             //    }
             //    else result = this.startTime.CompareTo(another.StartTime);
             //}
-#pragma warning disable CS8602 // 解引用可能出现空引用。
             if (this.Bar != another.Bar)
-#pragma warning restore CS8602 // 解引用可能出现空引用。
             {
                 result = this.Bar.CompareTo(another.Bar);
             }

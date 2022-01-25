@@ -1,6 +1,6 @@
 ﻿namespace MaidataConverter
 {
-    public class MeasureChanges : IGoodBrother
+    public class MeasureChanges : IChart
     {
         private List<int> bar;
         private List<int> tick;
