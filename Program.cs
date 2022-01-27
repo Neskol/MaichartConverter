@@ -58,13 +58,13 @@ namespace MaidataConverter
             foreach (string bgaFile in bgaFiles)
             {
                 string musicID =bgaFile.Substring(bgaLocation.Length).Substring(0,6).Substring(2,4);
-                Console.WriteLine(musicID);
+                // Console.WriteLine(musicID);
                 // if (!bgaFile.Substring(bgaLocation.Length).Substring(0,3).Equals("mmv"))
                 // {
                 bgaMap.Add(musicID,bgaFile);
                 // }
             }
-            Console.ReadLine();
+            // Console.ReadLine();
             string[] musicFolders = Directory.GetDirectories(musiclocation);
             
 
@@ -99,12 +99,21 @@ namespace MaidataConverter
                         if (!Directory.Exists(outputLocation + trackInfo.TrackGenre))
                         {
                             Directory.CreateDirectory(outputLocation + trackInfo.TrackGenre);
+                            Console.WriteLine("Created folder: "+outputLocation+trackInfo.TrackGenre);
+                        }
+                        else{
+                            Console.WriteLine("Already exist folder: "+outputLocation+trackInfo.TrackGenre);
                         }
                         if (!Directory.Exists(outputLocation + trackInfo.TrackGenre + sep + trackNameSubtitude + trackInfo.DXChart))
                         {
                             Directory.CreateDirectory(outputLocation + trackInfo.TrackGenre + sep + trackNameSubtitude + trackInfo.DXChart);
+                            Console.WriteLine("Created song folder: "+outputLocation+trackInfo.TrackGenre+sep+trackNameSubtitude+trackInfo.DXChart);
+                        }
+                        else{
+                            Console.WriteLine("Already exist song folder: "+outputLocation+trackInfo.TrackGenre+sep+trackNameSubtitude+trackInfo.DXChart);
                         }
                         MaidataCompiler compiler = new MaidataCompiler(track + sep + "", outputLocation + trackInfo.TrackGenre + sep + trackNameSubtitude + trackInfo.DXChart);
+                        Console.WriteLine("Finished compiling maidata "+trackInfo.TrackName+" to: "+outputLocation+trackInfo.TrackGenre+sep+trackNameSubtitude+trackInfo.DXChart+sep+"maidata.txt");
 
                         string originalMusicLocation = audioLocation;
                         originalMusicLocation += "music00" + shortID + ".mp3";
@@ -112,6 +121,10 @@ namespace MaidataConverter
                         if (!File.Exists(newMusicLocation))
                         {
                             File.Copy(originalMusicLocation, newMusicLocation);
+                            Console.WriteLine("Exported music to: "+newMusicLocation);
+                        }
+                        else{
+                            Console.WriteLine("Audio already found in: "+newMusicLocation);
                         }
 
                         string originalImageLocation = imageLocation;
@@ -120,6 +133,10 @@ namespace MaidataConverter
                         if (!File.Exists(newImageLocation))
                         {
                             File.Copy(originalImageLocation, newImageLocation);
+                            Console.WriteLine("Image exported to: "+newImageLocation);
+                        }
+                        else{
+                            Console.WriteLine("Image already found in: "+newImageLocation);
                         }
                         // Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubtitude + trackInfo.DXChart);
 
@@ -142,8 +159,13 @@ namespace MaidataConverter
                         {
                             Console.WriteLine("A BGA file was found in "+originalBGALocation);
                             File.Copy(originalBGALocation,newBGALocation);
+                            Console.WriteLine("Exported BGA file to: "+newBGALocation);
+                        }
+                        else if(bgaExists){
+                            Console.WriteLine("BGA already found in "+newBGALocation);
                         }
                         Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubtitude + trackInfo.DXChart);
+                        Console.WriteLine();
                     }
 
                 }
