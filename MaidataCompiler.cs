@@ -5,7 +5,7 @@ namespace MaidataConverter
     internal class MaidataCompiler : ICompiler
     {
         public static readonly string[] difficulty = { "Basic", "Advanced", "Expert", "Master", "Remaster" };
-        private List<Ma2> charts;
+        private List<Chart> charts;
         private Dictionary<string, string> information;
         private XmlInformation musicXml;
         /// <summary>
@@ -15,7 +15,7 @@ namespace MaidataConverter
         /// <param name="targetLocation">Output folder</param>
         public MaidataCompiler(string location, string targetLocation)
         {
-            charts = new List<Ma2>();
+            charts = new List<Chart>();
             for (int i = 0; i < 5; i++)
             {
                 charts.Add(new Ma2());
@@ -57,7 +57,7 @@ namespace MaidataConverter
 
         public MaidataCompiler()
         {
-            charts = new List<Ma2>();
+            charts = new List<Chart>();
             information = new Dictionary<string, string>();
             this.musicXml = new XmlInformation();
         }
@@ -65,7 +65,7 @@ namespace MaidataConverter
         public bool CheckValidity()
         {
             bool result = true;
-            foreach (Ma2 x in charts)
+            foreach (Chart x in charts)
             {
                 result = result && x.CheckValidity();
             }
@@ -172,7 +172,7 @@ namespace MaidataConverter
         /// </summary>
         /// <param name="chart">Chart to compose</param>
         /// <returns>Maidata of specified chart WITHOUT headers</returns>
-        public string Compose(Ma2 chart)
+        public string Compose(Chart chart)
         {
             string result = "";
             int delayBar = (chart.TotalDelay) / 384 + 2;
@@ -182,7 +182,7 @@ namespace MaidataConverter
             //    Console.WriteLine("BPM Change verified in " + x.Bar + " " + x.StartTime + " of BPM" + x.BPM);
             //}
             List<Note> firstBpm = new List<Note>();
-            foreach (Note bpm in chart.Chart[0])
+            foreach (Note bpm in chart.StoredChart[0])
             {
                 if (bpm.NoteSpecificType().Equals("BPM"))
                 {
@@ -193,7 +193,7 @@ namespace MaidataConverter
             // {
             //     chart.Chart[0][0] = firstBpm[1];
             // }
-            foreach (List<Note> bar in chart.Chart)
+            foreach (List<Note> bar in chart.StoredChart)
             {
                 Note lastNote = new MeasureChange();
                 //result += bar[1].Bar;

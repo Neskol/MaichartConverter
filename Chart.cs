@@ -91,6 +91,10 @@ namespace MaidataConverter
             {
                 return this.measureChanges;
             }
+            set
+            {
+                this.measureChanges = value;
+            }
         }
 
         /// <summary>
@@ -101,6 +105,10 @@ namespace MaidataConverter
             get
             {
                 return this.tapNumber;
+            }
+            set
+            {
+                this.tapNumber = value;
             }
         }
 
@@ -113,6 +121,10 @@ namespace MaidataConverter
             {
                 return this.breakNumber;
             }
+            set
+            {
+                this.breakNumber = value;
+            }
         }
 
         /// <summary>
@@ -123,6 +135,10 @@ namespace MaidataConverter
             get
             {
                 return this.holdNumber;
+            }
+            set
+            {
+                this.holdNumber = value;
             }
         }
 
@@ -135,6 +151,10 @@ namespace MaidataConverter
             {
                 return this.slideNumber;
             }
+            set
+            {
+                this.slideNumber = value;
+            }
         }
 
         /// <summary>
@@ -146,6 +166,10 @@ namespace MaidataConverter
             {
                 return this.touchNumber;
             }
+            set
+            {
+                this.touchNumber = value;
+            }
         }
 
         /// <summary>
@@ -156,6 +180,10 @@ namespace MaidataConverter
             get
             {
                 return this.thoNumber;
+            }
+            set
+            {
+                this.thoNumber = value;
             }
         }
 
@@ -179,11 +207,34 @@ namespace MaidataConverter
             {
                 return this.achievement;
             }
+            set
+            {
+                this.achievement = value;
+            }
         }
 
         public int TotalDelay
         {
-            get => this.totalDelay;
+            get
+            {
+                return this.totalDelay;
+            }
+            set
+            {
+                this.totalDelay = value;
+            }
+        }
+
+        public Dictionary<string,string> Information
+        {
+            get
+            {
+                return this.information;
+            }
+            set
+            {
+                this.information = value;
+            }
         }
 
         public Chart()
@@ -368,28 +419,11 @@ namespace MaidataConverter
             }
         }
 
-        public string Compose()
-        {
-            string result = "";
-            const string header1 = "VERSION\t0.00.00\t1.03.00\nFES_MODE\t0\n";
-            const string header2 = "RESOLUTION\t384\nCLK_DEF\t384\nCOMPATIBLE_CODE\tMA2\n";
-            result += header1;
-            result += bpmChanges.InitialChange;
-            result += measureChanges.InitialChange;
-            result += header2;
-            result += "\n";
-
-            result += bpmChanges.Compose();
-            result += measureChanges.Compose();
-            result += "\n";
-
-            foreach (Note x in notes)
-            {
-                result += x.Compose(1) + "\n";
-            }
-            result += "\n";
-            return result;
-        }
+        /// <summary>
+        /// Compose chart in appropriate result.
+        /// </summary>
+        /// <returns>String of chart compiled</returns>
+        public abstract string Compose();
 
         /// <summary>
         /// Override and compose with given arrays
@@ -397,28 +431,7 @@ namespace MaidataConverter
         /// <param name="bpm">Override BPM array</param>
         /// <param name="measure">Override Measure array</param>
         /// <returns>Good Brother with override array</returns>
-        public string Compose(BPMChanges bpm, MeasureChanges measure)
-        {
-            string result = "";
-            const string header1 = "VERSION\t0.00.00\t1.03.00\nFES_MODE\t0\n";
-            const string header2 = "RESOLUTION\t384\nCLK_DEF\t384\nCOMPATIBLE_CODE\tMA2\n";
-            result += header1;
-            result += bpm.InitialChange;
-            result += measure.InitialChange;
-            result += header2;
-            result += "\n";
-
-            result += bpm.Compose();
-            result += measure.Compose();
-            result += "\n";
-
-            foreach (Note y in notes)
-            {
-                result += y.Compose(1) + "\n";
-            }
-            result += "\n";
-            return result;
-        }
+        public abstract string Compose(BPMChanges bpm, MeasureChanges measure);
 
         /// <summary>
         /// Return the least none 0 measure of bar.
@@ -705,7 +718,7 @@ namespace MaidataConverter
         /// <param name="a">A</param>
         /// <param name="b">B</param>
         /// <returns>GCD of A and B</returns>
-        static int GCD(int a, int b)
+        public static int GCD(int a, int b)
         {
             return b == 0 ? a : GCD(b, a % b);
         }
