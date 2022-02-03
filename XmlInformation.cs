@@ -1,6 +1,6 @@
 ﻿using System.Xml;
 
-namespace MaidataConverter
+namespace MaichartConverter
 {
     internal class XmlInformation : IXmlUtility
     {

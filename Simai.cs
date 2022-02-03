@@ -1,6 +1,6 @@
-﻿namespace MaidataConverter
+﻿namespace MaichartConverter
 {
-    public class Simai : IChart, ICompiler
+    public class Simai : Chart, ICompiler
     {
         private string title;
         private List<double> difficulty;
@@ -236,17 +236,22 @@
             throw new NotImplementedException();
         }
 
-        public string Compose()
-        {
-            throw new NotImplementedException();
-        }
-
         public void Update()
         {
             throw new NotImplementedException();
         }
 
         public void TakeInformation(Dictionary<string, string> information)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string Compose()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string Compose(BPMChanges bpm, MeasureChanges measure)
         {
             throw new NotImplementedException();
         }

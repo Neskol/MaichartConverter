@@ -1,4 +1,4 @@
-﻿namespace MaidataConverter
+﻿namespace MaichartConverter
 {
     /// <summary>
     /// Intake files and tokenize.

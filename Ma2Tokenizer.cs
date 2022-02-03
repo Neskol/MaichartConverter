@@ -1,8 +1,8 @@
-﻿namespace MaidataConverter
+﻿namespace MaichartConverter
 {
-    public class Tokenizer : ITokenizer
+    public class Ma2Tokenizer : ITokenizer
     {
-        public Tokenizer()
+        public Ma2Tokenizer()
         {
         }
 

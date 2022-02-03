@@ -1,7 +1,9 @@
-namespace MaidataConverter;
+namespace MaichartConverter;
 
 public class Simaiparser : IParser
 {
+    public readonly string[] State = { "Note","Tap","Break","Touch","EXTap","Slide","Hold","EXHold","TouchHold","BPM","Quaver","Information" };
+    public readonly string[] Status = { "Ready","Submit"};
     /// <summary>
     /// Constructer of simaiparser
     /// </summary>
@@ -14,10 +16,34 @@ public class Simaiparser : IParser
         throw new NotImplementedException();
     }
 
-    public Ma2 GoodBrotherOfToken(string[] token)
+    public Chart ChartOfToken(string[] token)
     {
-
         throw new NotImplementedException();
+        int bar = 0;
+        int tick = 0;
+        int multiplier = 1;
+        double bpm = 0.0;
+        string status = "";
+        string storage = "";
+        Chart result;
+
+        foreach (string symbol in token)
+        {
+            switch (symbol)
+            {
+                case "&":
+                    status = "Information";
+                    break;
+                case "=":
+                    break;
+                default:
+                    storage += symbol;
+                    break;
+                
+            }
+        }
+
+        return result;
     }
 
     public Hold HoldOfToken(string token)

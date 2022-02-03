@@ -1,6 +1,6 @@
 ﻿using System.Xml;
 
-namespace MaidataConverter
+namespace MaichartConverter
 {
     /// <summary>
     /// Provide handful methods for Xml

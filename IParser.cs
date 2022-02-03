@@ -1,4 +1,4 @@
-﻿namespace MaidataConverter
+﻿namespace MaichartConverter
 {
     public interface IParser
     {
@@ -7,7 +7,7 @@
         /// </summary>
         /// <param name="token">Token to intake</param>
         /// <returns>Corresponding GoodBrother</returns>
-        public Ma2 GoodBrotherOfToken(string[] token);
+        public Chart ChartOfToken(string[] token);
 
         /// <summary>
         /// Return correct BPMChanges of given Token.

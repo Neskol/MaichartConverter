@@ -1,6 +1,6 @@
 ﻿using System.Xml;
 
-namespace MaidataConverter
+namespace MaichartConverter
 {
     internal class MaidataCompiler : ICompiler
     {
@@ -8,6 +8,7 @@ namespace MaidataConverter
         private List<Chart> charts;
         private Dictionary<string, string> information;
         private XmlInformation musicXml;
+
         /// <summary>
         /// Construct compiler of a single song.
         /// </summary>
@@ -55,6 +56,9 @@ namespace MaidataConverter
             sw.Close();
         }
 
+        /// <summary>
+        /// Empty constructor.
+        /// </summary>
         public MaidataCompiler()
         {
             charts = new List<Chart>();

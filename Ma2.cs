@@ -1,4 +1,4 @@
-﻿namespace MaidataConverter
+﻿namespace MaichartConverter
 {
     /// <summary>
     /// Good Brother Implementation.
@@ -37,8 +37,8 @@
         /// <param name="location">MA2 location</param>
         public Ma2(string location)
         {
-            string[] tokens = new Tokenizer().Tokens(location);
-            Ma2 takenIn = new Ma2parser().GoodBrotherOfToken(tokens);
+            string[] tokens = new Ma2Tokenizer().Tokens(location);
+            Chart takenIn = new Ma2parser().ChartOfToken(tokens);
             this.Notes = takenIn.Notes;
             this.BPMChanges = takenIn.BPMChanges;
             this.MeasureChanges = takenIn.MeasureChanges;
@@ -53,7 +53,7 @@
         /// <param name="tokens">Tokens given</param>
         public Ma2(string[] tokens)
         {
-            Ma2 takenIn = new Ma2parser().GoodBrotherOfToken(tokens);
+            Chart takenIn = new Ma2parser().ChartOfToken(tokens);
             this.Notes = takenIn.Notes;
             this.BPMChanges = takenIn.BPMChanges;
             this.MeasureChanges = takenIn.MeasureChanges;

@@ -1,4 +1,4 @@
-﻿namespace MaidataConverter
+﻿namespace MaichartConverter
 {
     /// <summary>
     /// Construct a Slide note (With START!)

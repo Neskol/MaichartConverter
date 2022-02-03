@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace MaidataConverter
+namespace MaichartConverter
 {
     /// <summary>
     /// Main program of converter
@@ -94,6 +94,7 @@ namespace MaidataConverter
                         string shortID = ComponsateZero(trackInfo.TrackID).Substring(2);
                         Console.WriteLine("Name: " + trackInfo.TrackName);
                         Console.WriteLine("ID:" + trackInfo.TrackID);
+                        // Console.ReadLine();
                         string trackNameSubtitude = trackInfo.TrackSortName.Replace("" + sep + "", "of");
                         trackNameSubtitude = trackInfo.TrackSortName.Replace("/", "of");
                         if (!Directory.Exists(outputLocation + trackInfo.TrackGenre))
@@ -148,7 +149,7 @@ namespace MaidataConverter
                             {
                                 bgaExists = bgaMap.TryGetValue(trackInfo.TrackID.Substring(1,4),out originalBGALocation);
                             }
-                            else if (trackInfo.TrackID.Length<3)
+                            else if (trackInfo.TrackID.Length==3)
                             {
                                 bgaExists = bgaMap.TryGetValue(ComponsateShortZero(trackInfo.TrackID),out originalBGALocation);
                             }
@@ -161,7 +162,8 @@ namespace MaidataConverter
                             File.Copy(originalBGALocation,newBGALocation);
                             Console.WriteLine("Exported BGA file to: "+newBGALocation);
                         }
-                        else if(bgaExists){
+                        else if(bgaExists&& File.Exists(newBGALocation))
+                        {
                             Console.WriteLine("BGA already found in "+newBGALocation);
                         }
                         Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubtitude + trackInfo.DXChart);
@@ -201,13 +203,13 @@ namespace MaidataConverter
         /// Componsate 0 for short music IDs
         /// </summary>
         /// <param name="intake">Music ID</param>
-        /// <returns>0..+#Music ID and |Music ID|==3</returns>
+        /// <returns>0..+#Music ID and |Music ID|==4</returns>
         public static string ComponsateShortZero(string intake)
         {
             try
             {
                 string result = intake;
-                while (result.Length < 3 && intake != null)
+                while (result.Length < 4 && intake != null)
                 {
                     result = "0" + result;
                 }

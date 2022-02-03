@@ -1,13 +1,15 @@
-﻿namespace MaidataConverter
+﻿namespace MaichartConverter
 {
     public class Ma2parser : IParser
     {
+        /// <summary>
+        /// Empty constructor
+        /// </summary>
         public Ma2parser()
         {
-
         }
 
-        public Ma2 GoodBrotherOfToken(string[] token)
+        public Chart ChartOfToken(string[] token)
         {
             BPMChanges bpmChanges = new BPMChanges();
             MeasureChanges measureChanges = new MeasureChanges();
@@ -73,7 +75,7 @@
                     }
                 }
             }
-            Ma2 result = new Ma2(notes, bpmChanges, measureChanges);
+            Chart result = new Ma2(notes, bpmChanges, measureChanges);
             return result;
         }
 

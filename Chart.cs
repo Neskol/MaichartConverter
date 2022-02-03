@@ -1,4 +1,4 @@
-namespace MaidataConverter
+namespace MaichartConverter
 {
     public abstract class Chart : IChart
     {
@@ -237,6 +237,9 @@ namespace MaidataConverter
             }
         }
 
+        /// <summary>
+        /// Empty constructor
+        /// </summary>
         public Chart()
         {
             this.notes = new List<Note>();
@@ -244,67 +247,6 @@ namespace MaidataConverter
             this.measureChanges = new MeasureChanges();
             this.chart = new List<List<Note>>();
             this.information = new Dictionary<string, string>();
-        }
-
-        /// <summary>
-        /// Construct Good Brother with given notes, bpm change definitions and measure change definitions.
-        /// </summary>
-        /// <param name="notes">Notes in Good Brother</param>
-        /// <param name="bpmChanges">BPM Changes: Initial BPM is NEEDED!</param>
-        /// <param name="measureChanges">Measure Changes: Initial Measure is NEEDED!</param>
-        public Chart(List<Note> notes, BPMChanges bpmChanges, MeasureChanges measureChanges)
-        {
-            this.notes = notes;
-            this.bpmChanges = bpmChanges;
-            this.measureChanges = measureChanges;
-            this.chart = new List<List<Note>>();
-            this.information = new Dictionary<string, string>();
-            this.Update();
-        }
-
-        /// <summary>
-        /// Construct GoodBrother from location specified
-        /// </summary>
-        /// <param name="location">MA2 location</param>
-        public Chart(string location)
-        {
-            string[] tokens = new Tokenizer().Tokens(location);
-            Ma2 takenIn = new Ma2parser().GoodBrotherOfToken(tokens);
-            this.notes = takenIn.Notes;
-            this.bpmChanges = takenIn.BPMChanges;
-            this.measureChanges = takenIn.MeasureChanges;
-            this.chart = new List<List<Note>>();
-            this.information = new Dictionary<string, string>();
-            this.Update();
-        }
-
-        /// <summary>
-        /// Construct GoodBrother with tokens given
-        /// </summary>
-        /// <param name="tokens">Tokens given</param>
-        public Chart(string[] tokens)
-        {
-            Ma2 takenIn = new Ma2parser().GoodBrotherOfToken(tokens);
-            this.notes = takenIn.Notes;
-            this.bpmChanges = takenIn.BPMChanges;
-            this.measureChanges = takenIn.MeasureChanges;
-            this.chart = new List<List<Note>>();
-            this.information = new Dictionary<string, string>();
-            this.Update();
-        }
-
-        /// <summary>
-        /// Construct GoodBrother with existing values
-        /// </summary>
-        /// <param name="takenIn">Existing good brother</param>
-        public Chart(Ma2 takenIn)
-        {
-            this.notes = takenIn.Notes;
-            this.bpmChanges = takenIn.BPMChanges;
-            this.measureChanges = takenIn.MeasureChanges;
-            this.chart = new List<List<Note>>();
-            this.information = new Dictionary<string, string>();
-            this.Update();
         }
 
         /// <summary>
@@ -463,46 +405,7 @@ namespace MaidataConverter
             {
                 minimalInterval = GCD(minimalInterval, startTimeList[i]);
             }
-            //if (intervalCandidates.Min() == 0)
-            //{
-            //    throw new Exception("Error: Least interval was 0");
-            //}
-            //int minimalInterval = intervalCandidates.Min();
-            //if (minimalInterval == 0)
-            //{
-            //    throw new Exception("Error: Note number does not match in bar " + bar[0].Bar);
-            //}
-            //bool primeInterval = false;
-            //bool notAllDivisible = true;
-            //foreach (int num in intervalCandidates)
-            //{
-            //    notAllDivisible = notAllDivisible || num % minimalInterval != 0;
-            //    if (IsPrime(num))
-            //    {
-            //        minimalInterval = 1;
-            //        primeInterval = true;
-            //        notAllDivisible = false;
-            //    }
-            //    else if (!primeInterval)
-            //    {
-            //        if (minimalInterval != 0 && (num % minimalInterval) != 0)
-            //        {
-            //            if (GCD(num, minimalInterval) != 1)
-            //            {
-            //                minimalInterval /=minimalInterval% GCD(minimalInterval, num);
-            //            }
-            //            else
-            //            {
-            //                minimalInterval = 1;
-            //                primeInterval = true;
-            //                notAllDivisible = false;
-            //            }
-            //        }
-            //    }
-            //}
-            //Console.WriteLine("Minimal Interval: "+minimalInterval);
             return minimalInterval;
-            //return 1;
         }
 
         /// <summary>
@@ -560,15 +463,6 @@ namespace MaidataConverter
         public static List<Note> FinishBar(List<Note> bar, List<BPMChange> bpmChanges, int barNumber, int minimalQuaver)
         {
             List<Note> result = new List<Note>();
-            //Console.WriteLine("The taken in minimal interval is "+minimalQuaver);
-            //foreach (BPMChange x in bpmChanges)
-            //{
-            //    if (x.Bar == barNumber && x.NoteGenre().Equals("BPM"))
-            //    {
-            //        result.Add(x);
-            //        Console.WriteLine("A BPMChange was found and locate in bar" + x.Bar + " in tick " + x.StartTime);
-            //    }
-            //} 
             bool writeRest = true;
             result.Add(bar[0]);
             for (int i = 0; i < 384; i += 384 / minimalQuaver)
@@ -578,11 +472,6 @@ namespace MaidataConverter
                 writeRest = true;
                 foreach (Note x in bar)
                 {
-                    //Console.Write("c1: " + (x.StartTime == i));
-                    //Console.Write("; c2: " + (x.IsNote()));
-                    //Console.Write("; c3: " + (x.NoteSpecificType().Equals("MEASURE")));
-                    //Console.Write("; FINAL: " + ((x.StartTime == i && x.IsNote()) || x.NoteSpecificType().Equals("MEASURE")));
-
                     if ((x.StartTime == i) && x.IsNote() && !(x.NoteType.Equals("TTP")|| x.NoteType.Equals("THO")))
                     {
                         if (x.NoteSpecificType().Equals("BPM"))
@@ -611,13 +500,6 @@ namespace MaidataConverter
                             writeRest = false;
                         }
                     }
-
-                    //if ((x.StartTime == i) && x.IsNote())
-                    //{
-                    //    eachSet.Add(x);
-                    //    //Console.WriteLine("A note was found at tick " + i + " of bar " + barNumber + ", it is "+x.NoteType);
-                    //    writeRest = false;
-                    //}
                 }
                 bool addedTouch = false;
                 foreach (BPMChange x in bpmChanges)
@@ -641,17 +523,6 @@ namespace MaidataConverter
                         addedTouch= true;
                     }
                 }
-                //for (int index = 0;index<eachSet.Count;index++)
-                //{
-                //    if (eachSet[index].NoteSpecificType().Equals("BPM"))
-                //    {
-                //        List<Note> adjusted = new List<Note>();
-                //        adjusted.Add(eachSet[index]);
-                //        eachSet.RemoveAt(index);
-                //        adjusted.AddRange(eachSet);
-                //        eachSet = adjusted;
-                //    }
-                //}
                 if (writeRest)
                 {
                     //Console.WriteLine("There is no note at tick " + i + " of bar " + barNumber + ", Adding one");
