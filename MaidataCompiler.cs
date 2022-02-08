@@ -25,24 +25,24 @@ namespace MaichartConverter
             this.information = musicXml.Information;
             //Construct charts
             {
-                if (this.information.ContainsKey("Basic"))
+                if (!this.information["Basic"].Equals(""))
                 {
                     //Console.WriteLine("Have basic: "+ location + this.information.GetValueOrDefault("Basic Chart Path"));
                     charts[0] = new Ma2(location + this.information.GetValueOrDefault("Basic Chart Path"));
                 }
-                if (this.information.ContainsKey("Advanced"))
+                if (!this.information["Advanced"].Equals(""))
                 {
                     charts[1] = new Ma2(location + this.information.GetValueOrDefault("Advanced Chart Path"));
                 }
-                if (this.information.ContainsKey("Expert"))
+                if (!this.information["Expert"].Equals(""))
                 {
                     charts[2] = new Ma2(location + this.information.GetValueOrDefault("Expert Chart Path"));
                 }
-                if (this.information.ContainsKey("Master"))
+                if (!this.information["Master"].Equals(""))
                 {
                     charts[3] = new Ma2(location + this.information.GetValueOrDefault("Master Chart Path"));
                 }
-                if (this.information.ContainsKey("Remaster"))
+                if (!this.information["Remaster"].Equals(""))
                 {
                     charts[4] = new Ma2(location + this.information.GetValueOrDefault("Remaster Chart Path"));
                 }
@@ -96,7 +96,7 @@ namespace MaichartConverter
                 {
                     beginning += "SD\n";
                 }
-                beginning += "&version=" + this.musicXml.Version + "\n";
+                beginning += "&version=" + this.musicXml.TrackVersion + "\n";
                 beginning += "&chartconverter=Neskol\n";
                 beginning += "\n";
 
@@ -186,7 +186,7 @@ namespace MaichartConverter
             //    Console.WriteLine("BPM Change verified in " + x.Bar + " " + x.StartTime + " of BPM" + x.BPM);
             //}
             List<Note> firstBpm = new List<Note>();
-            foreach (Note bpm in chart.StoredChart[0])
+            foreach (Note bpm in chart.Notes)
             {
                 if (bpm.NoteSpecificType().Equals("BPM"))
                 {

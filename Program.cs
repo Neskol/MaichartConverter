@@ -22,6 +22,7 @@ namespace MaichartConverter
             // Console.WriteLine(compiler.Compose(good));
             string sep = macPathSep;
             Console.WriteLine("Specify A000 location: *Be sure to add "+sep+" in the end");
+            bool exportBGA = true;
             string a000Location = Console.ReadLine()?? throw new NullReferenceException("Null For Console.ReadLine"); 
             if (a000Location.Equals(""))
             {
@@ -46,6 +47,10 @@ namespace MaichartConverter
             {
                 bgaLocation = @"/Users/neskol/MaiAnalysis/DXBGA/";
             }
+            else if (bgaLocation.Equals("0"))
+            {
+                exportBGA=false;
+            }
             Console.WriteLine("Specify Output location: *Be sure to add " + sep + " in the end");
             string outputLocation = Console.ReadLine()?? throw new NullReferenceException("Null For Console.ReadLine"); 
             if (outputLocation.Equals(""))
@@ -53,16 +58,19 @@ namespace MaichartConverter
                 outputLocation = @"/Users/neskol/MaiAnalysis/Output/";
             }
 
-            string[] bgaFiles = Directory.GetFiles(bgaLocation,"*.mp4");
             Dictionary<string, string> bgaMap = new Dictionary<string,string>();
-            foreach (string bgaFile in bgaFiles)
+            if (exportBGA)
             {
-                string musicID =bgaFile.Substring(bgaLocation.Length).Substring(0,6).Substring(2,4);
-                // Console.WriteLine(musicID);
-                // if (!bgaFile.Substring(bgaLocation.Length).Substring(0,3).Equals("mmv"))
-                // {
-                bgaMap.Add(musicID,bgaFile);
-                // }
+                string[] bgaFiles = Directory.GetFiles(bgaLocation,"*.mp4");               
+                foreach (string bgaFile in bgaFiles)
+                {
+                   string musicID =bgaFile.Substring(bgaLocation.Length).Substring(0,6).Substring(2,4);
+                  // Console.WriteLine(musicID);
+                    // if (!bgaFile.Substring(bgaLocation.Length).Substring(0,3).Equals("mmv"))
+                   // {
+                  bgaMap.Add(musicID,bgaFile);
+                   // }
+                }
             }
             // Console.ReadLine();
             string[] musicFolders = Directory.GetDirectories(musiclocation);
@@ -94,6 +102,7 @@ namespace MaichartConverter
                         string shortID = ComponsateZero(trackInfo.TrackID).Substring(2);
                         Console.WriteLine("Name: " + trackInfo.TrackName);
                         Console.WriteLine("ID:" + trackInfo.TrackID);
+                        Console.WriteLine("Genre: "+trackInfo.TrackGenre);
                         // Console.ReadLine();
                         string trackNameSubtitude = trackInfo.TrackSortName.Replace("" + sep + "", "of");
                         trackNameSubtitude = trackInfo.TrackSortName.Replace("/", "of");
@@ -155,16 +164,20 @@ namespace MaichartConverter
                             }
                             
                         }
-                        string? newBGALocation = outputLocation+trackInfo.TrackGenre + sep + trackNameSubtitude + trackInfo.DXChart + sep +"pv.mp4";
-                        if (bgaExists&&!File.Exists(newBGALocation))
+                        if (exportBGA)
                         {
+                            string? newBGALocation = outputLocation+trackInfo.TrackGenre + sep + trackNameSubtitude + trackInfo.DXChart + sep +"pv.mp4";
+                            if (bgaExists&&!File.Exists(newBGALocation))
+                            {
                             Console.WriteLine("A BGA file was found in "+originalBGALocation);
-                            File.Copy(originalBGALocation,newBGALocation);
+                            var originalBGALocationCandidate = originalBGALocation ?? throw new NullReferenceException();
+                            File.Copy(originalBGALocationCandidate,newBGALocation);
                             Console.WriteLine("Exported BGA file to: "+newBGALocation);
-                        }
-                        else if(bgaExists&& File.Exists(newBGALocation))
-                        {
-                            Console.WriteLine("BGA already found in "+newBGALocation);
+                            }
+                            else if(bgaExists&& File.Exists(newBGALocation))
+                            {
+                                Console.WriteLine("BGA already found in "+newBGALocation);
+                            }
                         }
                         Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubtitude + trackInfo.DXChart);
                         Console.WriteLine();
