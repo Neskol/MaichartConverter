@@ -158,7 +158,7 @@ namespace MaichartConverter
                 for (int i = 0; i < this.charts.Count; i++)
                 {
                     //Console.WriteLine("Processing: " + i);
-                    if (this.information.ContainsKey(difficulty[i]))
+                    if (!this.information[difficulty[i]].Equals(""))
                     {
                         result += "&inote_" + (i + 2) + "=\n";
                         result += this.Compose(charts[i]);
