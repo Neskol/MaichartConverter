@@ -117,32 +117,29 @@
             return b == 0 ? a : GCD(b, a % b);
         }
 
-        public override string NoteGenre()
-        {
-            return "HOLD";
-        }
+        public override string NoteGenre => "HOLD";
 
-        public override bool IsNote()
-        {
-            return true;
-        }
+        public override bool IsNote => true;
 
-        public override string NoteSpecificType()
+        public override string NoteSpecificType
         {
-            string result = "HOLD";
-            //switch (this.NoteType)
-            //{
-            //    case "HLD":
-            //        result += "HOLD";
-            //        break;
-            //    case "XHO":
-            //        result += "HOLD";
-            //        break;
-            //    case "THO":
-            //        result += "HOLD_TOUCH";
-            //        break;
-            //}
-            return result;
+            get
+            {
+                string result = "HOLD";
+                //switch (this.NoteType)
+                //{
+                //    case "HLD":
+                //        result += "HOLD";
+                //        break;
+                //    case "XHO":
+                //        result += "HOLD";
+                //        break;
+                //    case "THO":
+                //        result += "HOLD_TOUCH";
+                //        break;
+                //}
+                return result;
+            }
         }
     }
 }

@@ -50,18 +50,9 @@
             return "";
         }
 
-        public override string NoteGenre()
-        {
-            return "REST";
-        }
-        public override bool IsNote()
-        {
-            return false;
-        }
+        public override string NoteGenre => "REST";
+        public override bool IsNote => false;
 
-        public override string NoteSpecificType()
-        {
-            return "REST";
-        }
+        public override string NoteSpecificType => "REST";
     }
 }

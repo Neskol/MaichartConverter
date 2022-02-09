@@ -62,19 +62,10 @@
             return result;
         }
 
-        public override string NoteGenre()
-        {
-            return "MEASURE";
-        }
+        public override string NoteGenre => "MEASURE";
 
-        public override bool IsNote()
-        {
-            return false;
-        }
+        public override bool IsNote => false;
 
-        public override string NoteSpecificType()
-        {
-            return "MEASURE";
-        }
+        public override string NoteSpecificType => "MEASURE";
     }
 }

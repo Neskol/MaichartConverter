@@ -32,14 +32,14 @@
         }
 
         /// <summary>
-        /// Construct BPMChange with takein value
+        /// Construct BPMChange with take in value
         /// </summary>
-        /// <param name="takein">Take in BPMChange</param>
-        public BPMChange(BPMChange takein)
+        /// <param name="takeIn">Take in BPMChange</param>
+        public BPMChange(BPMChange takeIn)
         {
-            this.Bar = takein.Bar;
-            this.StartTime = takein.StartTime;
-            this.BPM = takein.BPM;
+            this.Bar = takeIn.Bar;
+            this.StartTime = takeIn.StartTime;
+            this.BPM = takeIn.BPM;
         }
 
 
@@ -60,19 +60,10 @@
             return result;
         }
 
-        public override string NoteGenre()
-        {
-            return "BPM";
-        }
+        public override string NoteGenre => "BPM";
 
-        public override bool IsNote()
-        {
-            return true;
-        }
+        public override bool IsNote => true;
 
-        public override string NoteSpecificType()
-        {
-            return "BPM";
-        }
+        public override string NoteSpecificType => "BPM";
     }
 }

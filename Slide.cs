@@ -183,20 +183,11 @@
             return result;
         }
 
-        public override string NoteGenre()
-        {
-            return "SLIDE";
-        }
+        public override string NoteGenre => "SLIDE";
 
-        public override bool IsNote()
-        {
-            return true;
-        }
+        public override bool IsNote => true;
 
-        public override string NoteSpecificType()
-        {
-            return "SLIDE";
-        }
+        public override string NoteSpecificType => "SLIDE";
 
     }
 }

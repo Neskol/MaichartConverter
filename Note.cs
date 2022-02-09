@@ -172,19 +172,20 @@
             get { return this.next; }
             set { this.next = value; }
         }
-        public abstract string NoteSpecificType();
+        public abstract string NoteSpecificType { get; }
 
         /// <summary>
         /// Return this.noteGenre
         /// </summary>
         /// <returns>string of note genre</returns>
-        public abstract string NoteGenre();
+        public abstract string NoteGenre { get; }
 
         /// <summary>
         /// Return if this is a true note
         /// </summary>
         /// <returns>True if is TAP,HOLD or SLIDE, false elsewise</returns>
-        public abstract bool IsNote();
+        public abstract bool IsNote { get; }
+
         public abstract bool CheckValidity();
 
         public abstract string Compose(int format);
@@ -241,7 +242,7 @@
             }
             else
             {
-                if (this.NoteSpecificType().Equals("BPM"))
+                if (this.NoteSpecificType.Equals("BPM"))
                 {
                     result = -1;
                 }

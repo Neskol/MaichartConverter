@@ -39,7 +39,7 @@ namespace MaichartConverter
         private readonly string[] HoldTypes = { "HLD", "THO", "XHO" };
         private readonly string[] SlideTypes = { "SI_", "SV_", "SF_", "SCL", "SCR", "SUL", "SUR", "SLL", "SLR", "SXL", "SXR", "SSL", "SSR" };
 
-        ///Theoritical Rating = (Difference in 100-down and Max score)/100-down
+        ///Theoretical Rating = (Difference in 100-down and Max score)/100-down
         /// <summary>
         /// Access to Notes
         /// </summary>
@@ -199,7 +199,7 @@ namespace MaichartConverter
         }
 
         /// <summary>
-        /// Access to theoritical Achievement
+        /// Access to theoretical Achievement
         /// </summary>
         public int Achievement
         {
@@ -282,7 +282,7 @@ namespace MaichartConverter
                     if (x.Bar == i)
                     {
                         int delay = x.Bar * 384 + x.StartTime + x.WaitTime + x.LastTime;
-                        switch (x.NoteSpecificType())
+                        switch (x.NoteSpecificType)
                         {
                             case "BPM":
                                 currentBPM = x.BPM;
@@ -335,7 +335,7 @@ namespace MaichartConverter
                         x.Prev = lastNote;
                         lastNote.Next = x;
                         bar.Add(x);
-                        if (!x.NoteSpecificType().Equals("SLIDE"))
+                        if (!x.NoteSpecificType.Equals("SLIDE"))
                         {
                             lastNote = x;
                         }
@@ -418,7 +418,7 @@ namespace MaichartConverter
             int result = 0;
             foreach (Note x in Bar)
             {
-                if (x.IsNote())
+                if (x.IsNote)
                 {
                     result++;
                 }
@@ -432,7 +432,7 @@ namespace MaichartConverter
             bool result = false;
             foreach (Note x in Bar)
             {
-                result = result || x.IsNote();
+                result = result || x.IsNote;
             }
             return result;
         }
@@ -472,9 +472,9 @@ namespace MaichartConverter
                 writeRest = true;
                 foreach (Note x in bar)
                 {
-                    if ((x.StartTime == i) && x.IsNote() && !(x.NoteType.Equals("TTP")|| x.NoteType.Equals("THO")))
+                    if ((x.StartTime == i) && x.IsNote&& !(x.NoteType.Equals("TTP")|| x.NoteType.Equals("THO")))
                     {
-                        if (x.NoteSpecificType().Equals("BPM"))
+                        if (x.NoteSpecificType.Equals("BPM"))
                         {
                             eachSet.Add(x);
                             //Console.WriteLine("A note was found at tick " + i + " of bar " + barNumber + ", it is "+x.NoteType);
@@ -486,9 +486,9 @@ namespace MaichartConverter
                             writeRest = false;
                         }                      
                     }
-                    else if ((x.StartTime == i) && x.IsNote() && (x.NoteType.Equals("TTP") || x.NoteType.Equals("THO")))
+                    else if ((x.StartTime == i) && x.IsNote&& (x.NoteType.Equals("TTP") || x.NoteType.Equals("THO")))
                     {
-                        if (x.NoteSpecificType().Equals("BPM"))
+                        if (x.NoteSpecificType.Equals("BPM"))
                         {
                             touchEachSet.Add(x);
                             //Console.WriteLine("A note was found at tick " + i + " of bar " + barNumber + ", it is "+x.NoteType);
@@ -539,7 +539,7 @@ namespace MaichartConverter
                 {
                     error += (x.Compose(1)) + "\n";
                 }
-                error += ("\nActrual: " + RealNoteNumber(result)) + "\n";
+                error += ("\nActual: " + RealNoteNumber(result)) + "\n";
                 foreach (Note y in result)
                 {
                     error += (y.Compose(1)) + "\n";
@@ -565,7 +565,7 @@ namespace MaichartConverter
             {
                 for(int i = 0;!hasFirstBPMChange&&i<result.Count();i++)
                 {
-                    if (result[i].NoteGenre().Equals("BPM")&&result[i].StartTime==0)
+                    if (result[i].NoteGenre.Equals("BPM")&&result[i].StartTime==0)
                     {                    
                         changedResult.Add(result[i]);
                         potentialFirstChange = result[i];
@@ -617,7 +617,7 @@ namespace MaichartConverter
         /// <summary>
         /// Take in and replace the current information.
         /// </summary>
-        /// <param name="information">Dicitionary containing information needed</param>
+        /// <param name="information">Dictionary containing information needed</param>
         public void TakeInformation(Dictionary<string, string> information)
         {
             foreach (KeyValuePair<string, string> x in information)

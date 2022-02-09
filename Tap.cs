@@ -125,45 +125,42 @@
             return result;
         }
 
-        public override string NoteGenre()
-        {
-            return "TAP";
-        }
+        public override string NoteGenre => "TAP";
 
-        public override bool IsNote()
-        {
-            return true;
-        }
+        public override bool IsNote => true;
 
-        public override string NoteSpecificType()
+        public override string NoteSpecificType
         {
-            string result = "";
-            switch (this.NoteType)
+            get
             {
-                case "TAP":
-                    result += "TAP";
-                    break;
-                case "STR":
-                    result += "SLIDE_START";
-                    break;
-                case "BRK":
-                    result += "TAP";
-                    break;
-                case "BST":
-                    result += "SLIDE_START";
-                    break;
-                case "XTP":
-                    result += "TAP";
-                    break;
-                case "XST":
-                    result += "SLIDE_START";
-                    break;
-                case "TTP":
-                    result += "TAP";
-                    break;
-            }
+                string result = "";
+                switch (this.NoteType)
+                {
+                    case "TAP":
+                        result += "TAP";
+                        break;
+                    case "STR":
+                        result += "SLIDE_START";
+                        break;
+                    case "BRK":
+                        result += "TAP";
+                        break;
+                    case "BST":
+                        result += "SLIDE_START";
+                        break;
+                    case "XTP":
+                        result += "TAP";
+                        break;
+                    case "XST":
+                        result += "SLIDE_START";
+                        break;
+                    case "TTP":
+                        result += "TAP";
+                        break;
+                }
 
-            return result;
+                return result;
+            }
         }
     }
 }
