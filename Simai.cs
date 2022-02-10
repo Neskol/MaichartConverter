@@ -231,20 +231,6 @@
             }
             return result;
         }
-        public bool CheckValidity()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void TakeInformation(Dictionary<string, string> information)
-        {
-            throw new NotImplementedException();
-        }
 
         public override string Compose()
         {

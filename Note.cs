@@ -14,14 +14,9 @@
         private int lastTime;
         private bool delayed;
         private double bpm;
-        private Note prev;
-        private Note next;
-
-#pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的 字段“prev”必须包含非 null 值。请考虑将 字段 声明为可以为 null。
-#pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的 字段“next”必须包含非 null 值。请考虑将 字段 声明为可以为 null。
+        private Note? prev;
+        private Note? next;
         public Note()
-#pragma warning restore CS8618 // 在退出构造函数时，不可为 null 的 字段“next”必须包含非 null 值。请考虑将 字段 声明为可以为 null。
-#pragma warning restore CS8618 // 在退出构造函数时，不可为 null 的 字段“prev”必须包含非 null 值。请考虑将 字段 声明为可以为 null。
         {
             noteType = "";
             key = "";

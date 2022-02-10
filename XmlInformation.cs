@@ -2,8 +2,14 @@
 
 namespace MaichartConverter
 {
+    /// <summary>
+    /// Using Xml to store trackInformation
+    /// </summary>
     public class XmlInformation :TrackInformation, IXmlUtility
     {
+        /// <summary>
+        /// Using take in Xml to store trackInformation:
+        /// </summary>
         public XmlInformation()
         {
             this.Update();

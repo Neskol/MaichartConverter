@@ -1,13 +1,13 @@
 namespace MaichartConverter;
 
-public class Simaiparser : IParser
+public class SimaiParser : IParser
 {
     public readonly string[] State = { "Note","Tap","Break","Touch","EXTap","Slide","Hold","EXHold","TouchHold","BPM","Quaver","Information" };
     public readonly string[] Status = { "Ready","Submit"};
     /// <summary>
-    /// Constructer of simaiparser
+    /// Constructor of simaiparser
     /// </summary>
-    public Simaiparser()
+    public SimaiParser()
     {
     }
 

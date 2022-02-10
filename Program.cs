@@ -15,7 +15,8 @@ namespace MaichartConverter
         public static string windowsPathSep = "\\";
         public static string macPathSep = "/";
 
-        public static readonly string sep = windowsPathSep;
+        public static readonly string sep = macPathSep;
+        public static readonly string[] categorize = {"Genre","Level","Cabinet"};
         public static void Main(string[] args)
         {
             // GoodBrother1 good = new GoodBrother1(@"/Users/neskol/MUG/maimai/SDEZ1.17/Package/Sinmai_Data/StreamingAssets/A000/music/music000837/000837_03.ma2");
@@ -109,7 +110,7 @@ namespace MaichartConverter
                 {
                     if (File.Exists(track + sep + "Music.xml"))
                     {
-                        XmlInformation trackInfo = new XmlInformation(track + sep + "");
+                        TrackInformation trackInfo = new XmlInformation(track + sep + "");
                         Console.WriteLine("There is Music.xml in " + track);
                         string shortID = ComponsateZero(trackInfo.TrackID).Substring(2);
                         Console.WriteLine("Name: " + trackInfo.TrackName);
@@ -170,7 +171,7 @@ namespace MaichartConverter
                                 Console.WriteLine("Image already found in: " + newImageLocation);
                             }
                         }
-                        // Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubtitude + trackInfo.DXChart);
+                        // Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart);
 
                         string? originalBGALocation = "";
                         bool bgaExists = bgaMap.TryGetValue(ComponsateZero(trackInfo.TrackID), out originalBGALocation);
