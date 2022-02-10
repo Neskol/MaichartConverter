@@ -88,7 +88,7 @@
         }
 
         /// <summary>
-        /// Acceess wait time
+        /// Access wait time
         /// </summary>
         public int WaitTime
         {
@@ -153,7 +153,7 @@
         /// <summary>
         /// Access this.prev;
         /// </summary>
-        public Note Prev
+        public Note? Prev
         {
             get { return this.prev; }
             set { this.prev = value; }
@@ -162,7 +162,7 @@
         /// <summary>
         /// Access this.next
         /// </summary>
-        public Note Next
+        public Note? Next
         {
             get { return this.next; }
             set { this.next = value; }
