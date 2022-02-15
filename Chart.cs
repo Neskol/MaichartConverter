@@ -467,16 +467,24 @@ namespace MaichartConverter
             result.Add(bar[0]);
             for (int i = 0; i < 384; i += 384 / minimalQuaver)
             {
+                //Seperate Touch and others to prevent ordering issue
+                Note bpm = new Rest();
                 List<Note> eachSet = new List<Note>();
                 List<Note> touchEachSet = new List<Note>();
+                //Set condition to write rest if appropriate
                 writeRest = true;
+                //Add Appropiate note into each set
                 foreach (Note x in bar)
                 {
                     if ((x.StartTime == i) && x.IsNote&& !(x.NoteType.Equals("TTP")|| x.NoteType.Equals("THO")))
                     {
                         if (x.NoteSpecificType.Equals("BPM"))
                         {
-                            eachSet.Add(x);
+                            bpm = x;
+                            //List<Note> tempSet = new List<Note>();
+                            //tempSet.Add(x);
+                            //tempSet.AddRange(eachSet);
+                            //eachSet=tempSet;
                             //Console.WriteLine("A note was found at tick " + i + " of bar " + barNumber + ", it is "+x.NoteType);
                         }
                         else
@@ -490,7 +498,11 @@ namespace MaichartConverter
                     {
                         if (x.NoteSpecificType.Equals("BPM"))
                         {
-                            touchEachSet.Add(x);
+                            bpm = x;
+                            //List<Note> tempSet = new List<Note>();
+                            //tempSet.Add(x);
+                            //tempSet.AddRange(touchEachSet);
+                            //touchEachSet=tempSet;
                             //Console.WriteLine("A note was found at tick " + i + " of bar " + barNumber + ", it is "+x.NoteType);
                         }
                         else
@@ -501,28 +513,64 @@ namespace MaichartConverter
                         }
                     }
                 }
-                bool addedTouch = false;
-                foreach (BPMChange x in bpmChanges)
+                //Searching for BPM change. If find one, get into front.
+                if (bpm.BPM!=0)
                 {
-                    if (eachSet.Contains(x)&&!addedTouch)
-                    {
-                        eachSet.Remove(x);
-                        List<Note> adjusted = new List<Note>();
-                        adjusted.Add(x);
-                        adjusted.AddRange(touchEachSet);
-                        adjusted.AddRange(eachSet);
-                        eachSet = adjusted;
-                        addedTouch = true;
-                    }
-                    else if (!addedTouch)
-                    {
-                        List<Note> adjusted = new List<Note>();
-                        adjusted.AddRange(touchEachSet);
-                        adjusted.AddRange(eachSet);
-                        eachSet = adjusted;
-                        addedTouch= true;
-                    }
+                    List<Note> adjusted = new List<Note>();
+                    adjusted.Add(bpm);
+                    adjusted.AddRange(touchEachSet);
+                    adjusted.AddRange(eachSet);
+                    eachSet = adjusted;
                 }
+                else
+                {
+                    List<Note> adjusted = new List<Note>();
+                    adjusted.AddRange(touchEachSet);
+                    adjusted.AddRange(eachSet);
+                    eachSet = adjusted;
+                }
+                //foreach (BPMChange x in bpmChanges)
+                //{
+                //    if (x.Bar == barNumber && x.StartTime == i)
+                //    {
+                //        List<Note> adjusted = new List<Note>();
+                //        eachSet.Remove(x);
+                //        touchEachSet.Remove(x);
+                //        adjusted.Add(x);
+                //        adjusted.AddRange(touchEachSet);
+                //        adjusted.AddRange(eachSet);
+                //        eachSet = adjusted;
+                //        addedTouch = true;
+                //    }
+                //    //if (eachSet.Contains(x) && !addedTouch)
+                //    //{
+                //    //    eachSet.Remove(x);
+                //    //    List<Note> adjusted = new List<Note>();
+                //    //    adjusted.Add(x);
+                //    //    adjusted.AddRange(touchEachSet);
+                //    //    adjusted.AddRange(eachSet);
+                //    //    eachSet = adjusted;
+                //    //    addedTouch = true;
+                //    //}
+                //    //else if (touchEachSet.Contains(x)&&!addedTouch)
+                //    //{
+                //    //    touchEachSet.Remove(x);
+                //    //    List<Note> adjusted = new List<Note>();
+                //    //    adjusted.Add(x);
+                //    //    adjusted.AddRange(touchEachSet);
+                //    //    adjusted.AddRange(eachSet);
+                //    //    eachSet = adjusted;
+                //    //    addedTouch = true;
+                //    //}
+                //    //else if (!addedTouch)
+                //    //{
+                //    //    List<Note> adjusted = new List<Note>();
+                //    //    adjusted.AddRange(touchEachSet);
+                //    //    adjusted.AddRange(eachSet);
+                //    //    eachSet = adjusted;
+                //    //    addedTouch = true;
+                //    //}
+                //}
                 if (writeRest)
                 {
                     //Console.WriteLine("There is no note at tick " + i + " of bar " + barNumber + ", Adding one");

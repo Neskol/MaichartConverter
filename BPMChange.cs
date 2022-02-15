@@ -54,7 +54,7 @@
             if (format == 0)
             {
                 result += "(" + this.BPM + ")";
-                // result += "(" + this.BPM + "_" + this.Bar + "_" + this.StartTime + ")";
+                //result += "(" + this.BPM + "_" + this.Bar + "_" + this.StartTime + ")";
             }
             else result += "(" + this.BPM + "_" + this.Bar + "_" + this.StartTime + ")";
             return result;

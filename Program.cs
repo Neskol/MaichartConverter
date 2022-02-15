@@ -9,20 +9,49 @@ namespace MaichartConverter
     class Program
     {
         /// <summary>
-        /// Main method to process charts
+        /// Defines Windows path seperator
         /// </summary>
-        /// <param name="args">Parameters to take in</param>
         public static string windowsPathSep = "\\";
+
+        /// <summary>
+        /// Defines MacOS path seperator
+        /// </summary>
         public static string macPathSep = "/";
 
+        /// <summary>
+        /// Defines which seperator is using in programs
+        /// </summary>
         public static readonly string sep = macPathSep;
+
+        /// <summary>
+        /// Defines possible sorting scheme
+        /// </summary>
+        /// <value>Sorting scheme</value>
         public static readonly string[] categorize = {"Genre","Level","Cabinet"};
+
+        /// <summary>
+        /// Main method to process charts
+        /// </summary>
+        /// <param name="args">Parameters to take in</param>     
         public static void Main(string[] args)
         {
-            // GoodBrother1 good = new GoodBrother1(@"/Users/neskol/MUG/maimai/SDEZ1.17/Package/Sinmai_Data/StreamingAssets/A000/music/music000837/000837_03.ma2");
-            // MaidataCompiler compiler = new MaidataCompiler();
-            // Console.WriteLine(good.Compose());
-            // Console.WriteLine(compiler.Compose(good));
+            TestSpecificChart();
+            // CompileChartDatabase();
+        }
+
+        public static void TestSpecificChart()
+        {
+            Chart good = new Ma2(@"/Users/neskol/MaiAnalysis/A000/music/music011085/011085_03.ma2");
+            MaidataCompiler compiler = new MaidataCompiler();
+            Console.WriteLine(good.Compose());
+            Console.WriteLine(compiler.Compose(good));
+        }
+
+        /// <summary>
+        /// Compile all maidata using value provided
+        /// </summary>
+        public static void CompileChartDatabase()
+        {
             string sep = Program.sep;
             Console.WriteLine("Specify A000 location: *Be sure to add " + sep + " in the end");
             bool exportBGA = true;
