@@ -27,7 +27,7 @@ namespace MaichartConverter
         /// Defines possible sorting scheme
         /// </summary>
         /// <value>Sorting scheme</value>
-        public static readonly string[] categorize = {"Genre","Level","Cabinet"};
+        public static readonly string[] categorize = { "Genre", "Level", "Cabinet" };
 
         /// <summary>
         /// Main method to process charts
@@ -35,16 +35,17 @@ namespace MaichartConverter
         /// <param name="args">Parameters to take in</param>     
         public static void Main(string[] args)
         {
-            TestSpecificChart();
-            // CompileChartDatabase();
+            // TestSpecificChart("000834","4");
+            CompileChartDatabase();
         }
 
-        public static void TestSpecificChart()
+        public static void TestSpecificChart(string musicID, string difficulty)
         {
-            Chart good = new Ma2(@"/Users/neskol/MaiAnalysis/A000/music/music011085/011085_03.ma2");
+            Chart good = new Ma2(@"/Users/neskol/MaiAnalysis/A000/music/music" + musicID + "/" + musicID + "_0" + difficulty + ".ma2");
             MaidataCompiler compiler = new MaidataCompiler();
             Console.WriteLine(good.Compose());
             Console.WriteLine(compiler.Compose(good));
+            Console.WriteLine(good.Information);
         }
 
         /// <summary>

@@ -13,9 +13,10 @@
                 string[] result = System.IO.File.ReadAllLines(location);
                 return result;
             }
-            catch (DirectoryNotFoundException)
+            catch (DirectoryNotFoundException ex)
             {
-                throw new DirectoryNotFoundException(location);
+                Console.WriteLine("Exception raised: "+ex.Message);
+                throw ex;
             }
         }
     }

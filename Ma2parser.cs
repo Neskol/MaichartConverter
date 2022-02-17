@@ -1,11 +1,11 @@
 ﻿namespace MaichartConverter
 {
-    public class Ma2parser : IParser
+    public class Ma2Parser : IParser
     {
         /// <summary>
         /// Empty constructor
         /// </summary>
-        public Ma2parser()
+        public Ma2Parser()
         {
         }
 
@@ -57,9 +57,11 @@
                     else if (isBPM)
                     {
                         string[] bpmCandidate = x.Split('\t');
-                        bpmChanges.Add(Int32.Parse(bpmCandidate[1]),
+                        BPMChange candidate = new BPMChange(Int32.Parse(bpmCandidate[1]),
                             Int32.Parse(bpmCandidate[2]),
                             Double.Parse(bpmCandidate[3]));
+                        bpmChanges.Add(candidate);
+                        bpmChanges.Update();
                     }
                     else if (isMET)
                     {

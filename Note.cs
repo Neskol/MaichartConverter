@@ -3,7 +3,7 @@
     /// <summary>
     /// Basic
     /// </summary>
-    public abstract class Note : INote, IComparable
+    public abstract class Note : IEquatable<Note>, INote, IComparable
     {
         private string noteType;
         private string key;
@@ -189,7 +189,7 @@
         {
             int result = 0;
 
-            Note another = obj as Note??throw new NullReferenceException("Note is not defined");
+            Note another = obj as Note ?? throw new NullReferenceException("Note is not defined");
 
             //else if (this.NoteSpecificType().Equals("SLIDE")&&(this.NoteSpecificType().Equals("TAP")|| this.NoteSpecificType().Equals("HOLD")) && this.startTime == another.StartTime && this.bar == another.Bar)
             //{
@@ -246,6 +246,23 @@
                 //    result = 1;
                 //}
                 else result = 0;
+            }
+            return result;
+        }
+
+        public bool Equals(Note? other)
+        {
+            bool result = false;
+            if (other != null && 
+            this.NoteType.Equals(other.NoteType) && 
+            this.Key.Equals(other.Key) && 
+            this.EndKey.Equals(other.EndKey) && 
+            this.Bar == other.Bar && 
+            this.StartTime == other.StartTime && 
+            this.LastTime == other.LastTime && 
+            this.BPM == other.BPM)
+            {
+                result = true;
             }
             return result;
         }

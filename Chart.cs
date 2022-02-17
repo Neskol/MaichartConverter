@@ -467,13 +467,13 @@ namespace MaichartConverter
             result.Add(bar[0]);
             for (int i = 0; i < 384; i += 384 / minimalQuaver)
             {
-                //Seperate Touch and others to prevent ordering issue
+                //Separate Touch and others to prevent ordering issue
                 Note bpm = new Rest();
                 List<Note> eachSet = new List<Note>();
                 List<Note> touchEachSet = new List<Note>();
                 //Set condition to write rest if appropriate
                 writeRest = true;
-                //Add Appropiate note into each set
+                //Add Appropriate note into each set
                 foreach (Note x in bar)
                 {
                     if ((x.StartTime == i) && x.IsNote&& !(x.NoteType.Equals("TTP")|| x.NoteType.Equals("THO")))

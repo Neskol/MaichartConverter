@@ -38,7 +38,7 @@
         public Ma2(string location)
         {
             string[] tokens = new Ma2Tokenizer().Tokens(location);
-            Chart takenIn = new Ma2parser().ChartOfToken(tokens);
+            Chart takenIn = new Ma2Parser().ChartOfToken(tokens);
             this.Notes = takenIn.Notes;
             this.BPMChanges = takenIn.BPMChanges;
             this.MeasureChanges = takenIn.MeasureChanges;
@@ -53,7 +53,7 @@
         /// <param name="tokens">Tokens given</param>
         public Ma2(string[] tokens)
         {
-            Chart takenIn = new Ma2parser().ChartOfToken(tokens);
+            Chart takenIn = new Ma2Parser().ChartOfToken(tokens);
             this.Notes = takenIn.Notes;
             this.BPMChanges = takenIn.BPMChanges;
             this.MeasureChanges = takenIn.MeasureChanges;

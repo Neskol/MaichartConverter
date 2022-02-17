@@ -49,7 +49,7 @@ namespace MaichartConverter
             }
             string result = this.Compose();
             //Console.WriteLine(result);
-            StreamWriter sw = new StreamWriter(targetLocation + Program.sep+ "maidata.txt", false);
+            StreamWriter sw = new StreamWriter(targetLocation + Program.sep + "maidata.txt", false);
             {
                 sw.WriteLine(result);
             }
@@ -84,7 +84,8 @@ namespace MaichartConverter
                 string beginning = "";
                 beginning += "&title=" + this.information.GetValueOrDefault("Name") + "\n";
                 beginning += "&wholebpm=" + this.information.GetValueOrDefault("BPM") + "\n";
-                beginning += "&freemsg=" + this.information.GetValueOrDefault("Composer") + "\n";
+                beginning += "&artist=" + this.information.GetValueOrDefault("Composer") + "\n";
+                beginning += "&des=" + this.information.GetValueOrDefault("Master Chart Maker")+"\n";
                 beginning += "&shortid=" + this.information.GetValueOrDefault("Music ID") + "\n";
                 beginning += "&genre=" + this.information.GetValueOrDefault("Genre") + "\n";
                 beginning += "&cabinate=";
@@ -112,8 +113,6 @@ namespace MaichartConverter
 
 
                 if (this.information.TryGetValue("Advanced", out string? advance) && this.information.TryGetValue("Advanced Chart Maker", out string? advanceMaker))
-
-
                 {
                     beginning += "&lv_3=" + advance + "\n";
                     beginning += "&des_3=" + advanceMaker + "\n";
@@ -122,8 +121,6 @@ namespace MaichartConverter
 
 
                 if (this.information.TryGetValue("Expert", out string? expert) && this.information.TryGetValue("Expert Chart Maker", out string? expertMaker))
-
-
                 {
                     beginning += "&lv_4=" + expert + "\n";
                     beginning += "&des_4=" + expertMaker + "\n";
@@ -132,8 +129,6 @@ namespace MaichartConverter
 
 
                 if (this.information.TryGetValue("Master", out string? master) && this.information.TryGetValue("Master Chart Maker", out string? masterMaker))
-
-
                 {
                     beginning += "&lv_5=" + master + "\n";
                     beginning += "&des_5=" + masterMaker + "\n";
@@ -142,8 +137,6 @@ namespace MaichartConverter
 
 
                 if (this.information.TryGetValue("Remaster", out string? remaster) && this.information.TryGetValue("Remaster Chart Maker", out string? remasterMaker))
-
-
                 {
                     beginning += "&lv_6=" + remaster + "\n";
                     beginning += "&des_6=" + remasterMaker; beginning += "\n";
@@ -157,12 +150,11 @@ namespace MaichartConverter
             {
                 for (int i = 0; i < this.charts.Count; i++)
                 {
-                    //Console.WriteLine("Processing: " + i);
+                    // Console.WriteLine("Processing chart: " + i);
                     if (!this.information[difficulty[i]].Equals(""))
                     {
                         result += "&inote_" + (i + 2) + "=\n";
                         result += this.Compose(charts[i]);
-                        //result += charts[i].Compose();
                     }
                     result += "\n";
                 }
@@ -210,14 +202,14 @@ namespace MaichartConverter
                         case "BPM":
                             break;
                         case "TAP":
-                            if (x.IsNote&& ((!x.NoteSpecificType.Equals("SLIDE")) && x.StartTime == lastNote.StartTime && !x.NoteGenre.Equals("BPM")))
+                            if (x.IsNote && ((!x.NoteSpecificType.Equals("SLIDE")) && x.StartTime == lastNote.StartTime && !x.NoteGenre.Equals("BPM")))
                             {
                                 result += "/";
                             }
                             else result += ",";
                             break;
                         case "HOLD":
-                            if (x.IsNote&& (!x.NoteSpecificType.Equals("SLIDE")) && x.StartTime == lastNote.StartTime && !x.NoteGenre.Equals("BPM"))
+                            if (x.IsNote && (!x.NoteSpecificType.Equals("SLIDE")) && x.StartTime == lastNote.StartTime && !x.NoteGenre.Equals("BPM"))
                             {
                                 result += "/";
                             }
@@ -230,11 +222,11 @@ namespace MaichartConverter
                             //}
                             break;
                         case "SLIDE":
-                            if (x.IsNote&& (!x.NoteSpecificType.Equals("SLIDE")) && x.StartTime == lastNote.StartTime && !x.NoteGenre.Equals("BPM"))
+                            if (x.IsNote && (!x.NoteSpecificType.Equals("SLIDE")) && x.StartTime == lastNote.StartTime && !x.NoteGenre.Equals("BPM"))
                             {
                                 result += "/";
                             }
-                            else if (x.IsNote&& x.NoteSpecificType.Equals("SLIDE") && x.StartTime == lastNote.StartTime && !x.NoteGenre.Equals("BPM"))
+                            else if (x.IsNote && x.NoteSpecificType.Equals("SLIDE") && x.StartTime == lastNote.StartTime && !x.NoteGenre.Equals("BPM"))
                             {
                                 result += "*";
                             }
@@ -257,7 +249,7 @@ namespace MaichartConverter
             //{
             //    Console.WriteLine("TOTAL DELAYED BAR: "+delayBar);
             //}
-            for (int i = 0; i < delayBar+1; i++)
+            for (int i = 0; i < delayBar + 1; i++)
             {
                 result += "{1},\n";
             }

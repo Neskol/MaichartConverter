@@ -111,7 +111,7 @@ namespace MaichartConverter
                         notesDesignerCandidate = notesDesignerCandidate["str"] ?? throw new NullReferenceException();
                         var fileCandidate = candidate["file"] ?? throw new NullReferenceException();
                         fileCandidate = fileCandidate["path"] ?? throw new NullReferenceException();
-                        this.Information["ReRemaster"]= level[Int32.Parse(musicLevelIDCandidate.InnerText) - 1];
+                        this.Information["Remaster"]= level[Int32.Parse(musicLevelIDCandidate.InnerText) - 1];
                         this.Information["Remaster Chart Maker"]= notesDesignerCandidate.InnerText;
                         this.Information["Remaster Chart Path"]= fileCandidate.InnerText;
                     }
