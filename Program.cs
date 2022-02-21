@@ -30,6 +30,11 @@ namespace MaichartConverter
         public static readonly string[] categorize = { "Genre", "Level", "Cabinet" };
 
         /// <summary>
+        /// Program will sort output according to this
+        /// </summary>
+        public static string category = categorize[0];
+
+        /// <summary>
         /// Main method to process charts
         /// </summary>
         /// <param name="args">Parameters to take in</param>     
@@ -54,6 +59,13 @@ namespace MaichartConverter
         public static void CompileChartDatabase()
         {
             string sep = Program.sep;
+            Console.WriteLine("Specify the path seperator this script is running on");
+            sep = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
+            if (sep.Equals(""))
+            {
+                sep = Program.sep;
+            }
+
             Console.WriteLine("Specify A000 location: *Be sure to add " + sep + " in the end");
             bool exportBGA = true;
             bool exportImage = true;
@@ -63,6 +75,7 @@ namespace MaichartConverter
             {
                 a000Location = @"/Users/neskol/MaiAnalysis/A000/";
             }
+
             string musiclocation = a000Location + @"music" + sep;
             Console.WriteLine("Specify Audio location: *Be sure to add " + sep + " in the end or type n if have not");
             string audioLocation = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
@@ -74,6 +87,7 @@ namespace MaichartConverter
             {
                 exportAudio = false;
             }
+
             Console.WriteLine("Specify Image location: *Be sure to add " + sep + "in the end or type n if have not");
             string imageLocation = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
             if (imageLocation.Equals(""))
@@ -84,21 +98,46 @@ namespace MaichartConverter
             {
                 exportImage = false;
             }
+
             Console.WriteLine("Specify BGA location: *Be sure to add " + sep + " in the end or type n if have not");
             string bgaLocation = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
             if (bgaLocation.Equals(""))
             {
-                bgaLocation = @"/Users/neskol/MaiAnalysis/DXBGA/";
+                bgaLocation = @"/Users/neskol/MaiAnalysis/DXBGA_HEVC/";
             }
             else if (bgaLocation.Equals("n"))
             {
                 exportBGA = false;
             }
+
             Console.WriteLine("Specify Output location: *Be sure to add " + sep + " in the end");
             string outputLocation = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
             if (outputLocation.Equals(""))
             {
                 outputLocation = @"/Users/neskol/MaiAnalysis/Output/";
+            }
+
+            int categorizeIndex = 0;
+            Console.WriteLine("Specify the sorting method number the script will be used: ");
+            for (int i = 0; i < Program.categorize.Length; i++)
+            {
+                Console.WriteLine("[" + i + "]" + " " + categorize[i]);
+            }
+            category = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
+            try
+            {
+                if (0 <= Int32.Parse(category) && Int32.Parse(category) < categorize.Length)
+                {
+                    categorizeIndex = Int32.Parse(category);
+                    category = categorize[Int32.Parse(category)];      
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message + " The program will use Genre as default method. Press any key to continue.");
+                category = categorize[0];
+                categorizeIndex = 0;
+                Console.ReadKey();
             }
 
             Dictionary<string, string> bgaMap = new Dictionary<string, string>();
@@ -146,35 +185,39 @@ namespace MaichartConverter
                         Console.WriteLine("Name: " + trackInfo.TrackName);
                         Console.WriteLine("ID:" + trackInfo.TrackID);
                         Console.WriteLine("Genre: " + trackInfo.TrackGenre);
-                        // Console.ReadLine();
+                        string[] categorizeScheme = { trackInfo.TrackGenre, trackInfo.TrackSymbolicLevel, trackInfo.TrackVersion };
+                        string defaultCategorizedPath = outputLocation + categorizeScheme[categorizeIndex];
+
+                        //Deal with special characters in path
                         string trackNameSubstitute = trackInfo.TrackSortName.Replace("" + sep + "", "of");
                         trackNameSubstitute = trackInfo.TrackSortName.Replace("/", "of");
-                        if (!Directory.Exists(outputLocation + trackInfo.TrackGenre))
+                        trackNameSubstitute = trackInfo.TrackID + "_" + trackNameSubstitute;
+                        if (!Directory.Exists(defaultCategorizedPath))
                         {
-                            Directory.CreateDirectory(outputLocation + trackInfo.TrackGenre);
-                            Console.WriteLine("Created folder: " + outputLocation + trackInfo.TrackGenre);
+                            Directory.CreateDirectory(defaultCategorizedPath);
+                            Console.WriteLine("Created folder: " + defaultCategorizedPath);
                         }
                         else
                         {
-                            Console.WriteLine("Already exist folder: " + outputLocation + trackInfo.TrackGenre);
+                            Console.WriteLine("Already exist folder: " + defaultCategorizedPath);
                         }
-                        if (!Directory.Exists(outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart))
+                        if (!Directory.Exists(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart))
                         {
-                            Directory.CreateDirectory(outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart);
-                            Console.WriteLine("Created song folder: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart);
+                            Directory.CreateDirectory(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart);
+                            Console.WriteLine("Created song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart);
                         }
                         else
                         {
-                            Console.WriteLine("Already exist song folder: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart);
+                            Console.WriteLine("Already exist song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart);
                         }
-                        MaidataCompiler compiler = new MaidataCompiler(track + sep + "", outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart);
-                        Console.WriteLine("Finished compiling maidata " + trackInfo.TrackName + " to: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart + sep + "maidata.txt");
+                        MaidataCompiler compiler = new MaidataCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart);
+                        Console.WriteLine("Finished compiling maidata " + trackInfo.TrackName + " to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart + sep + "maidata.txt");
 
                         if (exportAudio)
                         {
                             string originalMusicLocation = audioLocation;
                             originalMusicLocation += "music00" + shortID + ".mp3";
-                            string newMusicLocation = outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart + sep + "track.mp3";
+                            string newMusicLocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart + sep + "track.mp3";
                             if (!File.Exists(newMusicLocation))
                             {
                                 File.Copy(originalMusicLocation, newMusicLocation);
@@ -190,7 +233,7 @@ namespace MaichartConverter
                         {
                             string originalImageLocation = imageLocation;
                             originalImageLocation += "UI_Jacket_00" + shortID + ".png";
-                            string newImageLocation = outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart + sep + "bg.png";
+                            string newImageLocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart + sep + "bg.png";
                             if (!File.Exists(newImageLocation))
                             {
                                 File.Copy(originalImageLocation, newImageLocation);
@@ -219,7 +262,7 @@ namespace MaichartConverter
                         }
                         if (exportBGA)
                         {
-                            string? newBGALocation = outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart + sep + "pv.mp4";
+                            string? newBGALocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart + sep + "pv.mp4";
                             if (bgaExists && !File.Exists(newBGALocation))
                             {
                                 Console.WriteLine("A BGA file was found in " + originalBGALocation);
@@ -232,7 +275,7 @@ namespace MaichartConverter
                                 Console.WriteLine("BGA already found in " + newBGALocation);
                             }
                         }
-                        Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart);
+                        Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart);
                         Console.WriteLine();
                     }
 

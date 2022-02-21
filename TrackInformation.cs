@@ -150,6 +150,13 @@ namespace MaichartConverter
             set { this.information["Composer"] = value; }
         }
 
+        public string TrackSymbolicLevel
+        {
+            get { return this.Information.GetValueOrDefault("Master") ?? throw new NullReferenceException("Master level is not defined"); }
+            set { this.information["Master"] = value; }
+        }
+        
+
         public string DXChart
         {
             get
