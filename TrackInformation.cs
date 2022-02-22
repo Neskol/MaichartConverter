@@ -168,6 +168,17 @@ namespace MaichartConverter
             }
         }
 
+        public string StandardDeluxePrefix
+        {
+            get
+            {
+                string musicID = this.Information.GetValueOrDefault("Music ID") ?? throw new NullReferenceException("Music ID is not Defined");
+                if (musicID.Length > 3)
+                    return "DX";
+                else return "SD";
+            }
+        }
+
         public bool IsDXChart
         {
             get

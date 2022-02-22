@@ -27,7 +27,7 @@ namespace MaichartConverter
         /// Defines possible sorting scheme
         /// </summary>
         /// <value>Sorting scheme</value>
-        public static readonly string[] categorize = { "Genre", "Level", "Cabinet" };
+        public static readonly string[] categorize = { "Genre", "Level", "Cabinet","Composer","BPM","SD//DX Chart","No Separate Folder" };
 
         /// <summary>
         /// Program will sort output according to this
@@ -185,7 +185,7 @@ namespace MaichartConverter
                         Console.WriteLine("Name: " + trackInfo.TrackName);
                         Console.WriteLine("ID:" + trackInfo.TrackID);
                         Console.WriteLine("Genre: " + trackInfo.TrackGenre);
-                        string[] categorizeScheme = { trackInfo.TrackGenre, trackInfo.TrackSymbolicLevel, trackInfo.TrackVersion };
+                        string[] categorizeScheme = { trackInfo.TrackGenre, trackInfo.TrackSymbolicLevel, trackInfo.TrackVersion,trackInfo.TrackComposer,trackInfo.TrackBPM,trackInfo.StandardDeluxePrefix,"" };
                         string defaultCategorizedPath = outputLocation + categorizeScheme[categorizeIndex];
 
                         //Deal with special characters in path
@@ -262,7 +262,7 @@ namespace MaichartConverter
                         }
                         if (exportBGA)
                         {
-                            string? newBGALocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart + sep + "pv.mp4";
+                            string? newBGALocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart + sep + "mv.mp4";
                             if (bgaExists && !File.Exists(newBGALocation))
                             {
                                 Console.WriteLine("A BGA file was found in " + originalBGALocation);
