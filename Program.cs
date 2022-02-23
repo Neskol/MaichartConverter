@@ -144,17 +144,21 @@ namespace MaichartConverter
             if (exportBGA)
             {
                 string[] bgaFiles = Directory.GetFiles(bgaLocation, "*.mp4");
+                Array.Sort(bgaFiles);
+
                 foreach (string bgaFile in bgaFiles)
                 {
                     string musicID = bgaFile.Substring(bgaLocation.Length).Substring(0, 6).Substring(2, 4);
                     // Console.WriteLine(musicID);
                     // if (!bgaFile.Substring(bgaLocation.Length).Substring(0,3).Equals("mmv"))
                     // {
-                    bgaMap.Add(musicID, bgaFile);
+                    Console.WriteLine(musicID+" "+bgaFile);
+                    bgaMap.Add(ComponsateZero(musicID), bgaFile);
+                    bgaMap.Add("01"+musicID,bgaFile);
                     // }
                 }
             }
-            // Console.ReadLine();
+            Console.ReadLine();
             string[] musicFolders = Directory.GetDirectories(musiclocation);
 
 
@@ -227,6 +231,12 @@ namespace MaichartConverter
                             {
                                 Console.WriteLine("Audio already found in: " + newMusicLocation);
                             }
+                            //See if image is existing
+                            if (exportAudio&&!File.Exists(newMusicLocation))
+                            {
+                                Console.WriteLine("Audio exists at "+originalMusicLocation+": "+File.Exists(originalMusicLocation));
+                                throw new FileNotFoundException("MUSIC NOT FOUND IN:"+newMusicLocation);
+                            }
                         }
 
                         if (exportImage)
@@ -243,6 +253,12 @@ namespace MaichartConverter
                             {
                                 Console.WriteLine("Image already found in: " + newImageLocation);
                             }
+                            //Check if Image exists
+                            if (exportImage&&!File.Exists(newImageLocation))
+                            {
+                                Console.WriteLine("Image exists at "+originalImageLocation+": "+File.Exists(originalImageLocation));
+                                throw new FileNotFoundException("IMAGE NOT FOUND IN: "+newImageLocation);
+                            }
                         }
                         // Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart);
 
@@ -258,11 +274,18 @@ namespace MaichartConverter
                             {
                                 bgaExists = bgaMap.TryGetValue(ComponsateShortZero(trackInfo.TrackID), out originalBGALocation);
                             }
-
+                        }
+                        if (!bgaExists)
+                        {
+                            Console.WriteLine("BGA NOT FOUND");
+                            Console.WriteLine(trackInfo.TrackID);
+                            Console.WriteLine(ComponsateZero(trackInfo.TrackID));
+                            Console.WriteLine(originalBGALocation);
+                            Console.ReadKey();
                         }
                         if (exportBGA)
                         {
-                            string? newBGALocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart + sep + "mv.mp4";
+                            string? newBGALocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart + sep + "pv.mp4";
                             if (bgaExists && !File.Exists(newBGALocation))
                             {
                                 Console.WriteLine("A BGA file was found in " + originalBGALocation);
@@ -273,6 +296,12 @@ namespace MaichartConverter
                             else if (bgaExists && File.Exists(newBGALocation))
                             {
                                 Console.WriteLine("BGA already found in " + newBGALocation);
+                            }
+                            //Check if BGA exists
+                            if (exportBGA&&bgaExists&&!File.Exists(newBGALocation))
+                            {
+                                Console.WriteLine("BGA exists at "+originalBGALocation+": "+File.Exists(originalBGALocation));
+                                throw new FileNotFoundException("BGA NOT FOUND IN: "+newBGALocation);
                             }
                         }
                         Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart);
