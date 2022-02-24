@@ -175,6 +175,7 @@ namespace MaichartConverter
                     }
                 }
             }
+            this.Information["SDDX Suffix"]=this.StandardDeluxeSuffix;
         }
     }
 }

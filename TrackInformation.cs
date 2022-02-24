@@ -98,7 +98,8 @@ namespace MaichartConverter
                         { "Remaster Chart Path", "" },
                         { "Utage", "" },
                         { "Utage Chart Maker", "" },
-                        { "Utage Chart Path", "" }
+                        { "Utage Chart Path", "" },
+                        {"SDDX Suffix",""}
                     };
         }
 
@@ -176,6 +177,17 @@ namespace MaichartConverter
                 if (musicID.Length > 3)
                     return "DX";
                 else return "SD";
+            }
+        }
+
+        public string StandardDeluxeSuffix
+        {
+            get
+            {
+                string musicID = this.Information.GetValueOrDefault("Music ID") ?? throw new NullReferenceException("Music ID is not Defined");
+                if (musicID.Length > 3)
+                    return "[DX]";
+                else return "[SD]";
             }
         }
 
