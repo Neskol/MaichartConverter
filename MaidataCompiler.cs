@@ -82,7 +82,7 @@ namespace MaichartConverter
             //Add information
             {
                 string beginning = "";
-                beginning += "&title=" + this.information.GetValueOrDefault("Name") + "\n";
+                beginning += "&title=" + this.information.GetValueOrDefault("Name") + this.information.GetValueOrDefault("SDDX Suffix") + "\n";
                 beginning += "&wholebpm=" + this.information.GetValueOrDefault("BPM") + "\n";
                 beginning += "&artist=" + this.information.GetValueOrDefault("Composer") + "\n";
                 beginning += "&des=" + this.information.GetValueOrDefault("Master Chart Maker")+"\n";

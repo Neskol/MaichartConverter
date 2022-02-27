@@ -194,7 +194,10 @@ namespace MaichartConverter
                         Console.WriteLine("ID:" + trackInfo.TrackID);
                         Console.WriteLine("Genre: " + trackInfo.TrackGenre);
                         string[] categorizeScheme = { trackInfo.TrackGenre, trackInfo.TrackSymbolicLevel, trackInfo.TrackVersion, trackInfo.TrackComposer, trackInfo.TrackBPM, trackInfo.StandardDeluxePrefix, "" };
-                        string defaultCategorizedPath = outputLocation + categorizeScheme[categorizeIndex]+sep+categorizeScheme[0];
+                        string defaultCategorizedPath = outputLocation + categorizeScheme[categorizeIndex];
+
+                        //Cross out if not creating update packs
+                        //defaultCategorizedPath += sep + categorizeScheme[0];
 
                         //Deal with special characters in path
                         string trackNameSubstitute = trackInfo.TrackSortName.Replace("" + sep + "", "of");
