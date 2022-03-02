@@ -29,11 +29,11 @@
             this.quaver = quaver;
         }
 
-        public MeasureChange(MeasureChange takein)
+        public MeasureChange(MeasureChange takeIn)
         {
-            this.bar = takein.Bar;
-            this.tick = takein.Tick;
-            this.quaver = takein.Quaver;
+            this.bar = takeIn.Bar;
+            this.tick = takeIn.Tick;
+            this.quaver = takeIn.Quaver;
         }
 
         public int Tick

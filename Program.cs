@@ -10,28 +10,34 @@ namespace MaichartConverter
         /// <summary>
         /// Defines Windows path seperator
         /// </summary>
-        public static string windowsPathSep = "\\";
+        public static string WindowsPathSep = "\\";
 
         /// <summary>
         /// Defines MacOS path seperator
         /// </summary>
-        public static string macPathSep = "/";
+        public static string MacPathSep = "/";
 
         /// <summary>
         /// Defines which seperator is using in programs
         /// </summary>
-        public static readonly string sep = macPathSep;
+        public static string GlobalSep = MacPathSep;
 
         /// <summary>
         /// Defines possible sorting scheme
         /// </summary>
         /// <value>Sorting scheme</value>
-        public static readonly string[] categorize = { "Genre", "Level", "Cabinet", "Composer", "BPM", "SD//DX Chart", "No Separate Folder" };
+        public static readonly string[] TrackCategorizeMethodSet = { "Genre", "Level", "Cabinet", "Composer", "BPM", "SD//DX Chart", "No Separate Folder" };
 
         /// <summary>
         /// Program will sort output according to this
         /// </summary>
-        public static string category = categorize[0];
+        public static string GlobalTrackCategorizeMethod = TrackCategorizeMethodSet[0];
+
+        /// <summary>
+        /// Records total track number compiled by program
+        /// </summary>
+        public static int NumberTotalTrackCompiled;
+        public static Dictionary<string,string> ReMasterTracks=new Dictionary<string, string>();
 
         /// <summary>
         /// Main method to process charts
@@ -63,12 +69,12 @@ namespace MaichartConverter
         /// </summary>
         public static void CompileChartDatabase()
         {
-            string sep = Program.sep;
+            string sep = Program.GlobalSep;
             Console.WriteLine("Specify the path seperator this script is running on");
             sep = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
             if (sep.Equals(""))
             {
-                sep = Program.sep;
+                sep = Program.GlobalSep;
             }
 
             Console.WriteLine("Specify A000 location: *Be sure to add " + sep + " in the end");
@@ -124,23 +130,23 @@ namespace MaichartConverter
 
             int categorizeIndex = 0;
             Console.WriteLine("Specify the sorting method number the script will be used: ");
-            for (int i = 0; i < Program.categorize.Length; i++)
+            for (int i = 0; i < Program.TrackCategorizeMethodSet.Length; i++)
             {
-                Console.WriteLine("[" + i + "]" + " " + categorize[i]);
+                Console.WriteLine("[" + i + "]" + " " + TrackCategorizeMethodSet[i]);
             }
-            category = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
+            GlobalTrackCategorizeMethod = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
             try
             {
-                if (0 <= Int32.Parse(category) && Int32.Parse(category) < categorize.Length)
+                if (0 <= Int32.Parse(GlobalTrackCategorizeMethod) && Int32.Parse(GlobalTrackCategorizeMethod) < TrackCategorizeMethodSet.Length)
                 {
-                    categorizeIndex = Int32.Parse(category);
-                    category = categorize[Int32.Parse(category)];
+                    categorizeIndex = Int32.Parse(GlobalTrackCategorizeMethod);
+                    GlobalTrackCategorizeMethod = TrackCategorizeMethodSet[Int32.Parse(GlobalTrackCategorizeMethod)];
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message + " The program will use Genre as default method. Press any key to continue.");
-                category = categorize[0];
+                GlobalTrackCategorizeMethod = TrackCategorizeMethodSet[0];
                 categorizeIndex = 0;
                 Console.ReadKey();
             }
@@ -211,23 +217,23 @@ namespace MaichartConverter
                         {
                             Console.WriteLine("Already exist folder: " + defaultCategorizedPath);
                         }
-                        if (!Directory.Exists(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart))
+                        if (!Directory.Exists(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix))
                         {
-                            Directory.CreateDirectory(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart);
-                            Console.WriteLine("Created song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart);
+                            Directory.CreateDirectory(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                            Console.WriteLine("Created song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
                         }
                         else
                         {
-                            Console.WriteLine("Already exist song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart);
+                            Console.WriteLine("Already exist song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
                         }
-                        MaidataCompiler compiler = new MaidataCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart);
-                        Console.WriteLine("Finished compiling maidata " + trackInfo.TrackName + " to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart + sep + "maidata.txt");
+                        MaidataCompiler compiler = new MaidataCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                        Console.WriteLine("Finished compiling maidata " + trackInfo.TrackName + " to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "maidata.txt");
 
                         if (exportAudio)
                         {
                             string originalMusicLocation = audioLocation;
                             originalMusicLocation += "music00" + shortID + ".mp3";
-                            string newMusicLocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart + sep + "track.mp3";
+                            string newMusicLocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "track.mp3";
                             if (!File.Exists(newMusicLocation))
                             {
                                 File.Copy(originalMusicLocation, newMusicLocation);
@@ -249,7 +255,7 @@ namespace MaichartConverter
                         {
                             string originalImageLocation = imageLocation;
                             originalImageLocation += "UI_Jacket_00" + shortID + ".png";
-                            string newImageLocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart + sep + "bg.png";
+                            string newImageLocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "bg.png";
                             if (!File.Exists(newImageLocation))
                             {
                                 File.Copy(originalImageLocation, newImageLocation);
@@ -291,7 +297,7 @@ namespace MaichartConverter
                         }
                         if (exportBGA)
                         {
-                            string? newBGALocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart + sep + "pv.mp4";
+                            string? newBGALocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "pv.mp4";
                             if (bgaExists && !File.Exists(newBGALocation))
                             {
                                 Console.WriteLine("A BGA file was found in " + originalBGALocation);
@@ -310,7 +316,7 @@ namespace MaichartConverter
                                 throw new FileNotFoundException("BGA NOT FOUND IN: " + newBGALocation);
                             }
                         }
-                        Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart);
+                        Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
                         Console.WriteLine();
                     }
 
@@ -324,12 +330,12 @@ namespace MaichartConverter
 
         public static void CompileAssignedChartFromDatabase()
         {
-            string sep = Program.sep;
+            string sep = Program.GlobalSep;
             Console.WriteLine("Specify the path seperator this script is running on");
             sep = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
             if (sep.Equals(""))
             {
-                sep = Program.sep;
+                sep = Program.GlobalSep;
             }
 
             Console.WriteLine("Specify A000 location: *Be sure to add " + sep + " in the end");
@@ -386,23 +392,23 @@ namespace MaichartConverter
             //Set main sorting method
             int categorizeIndex = 0;
             Console.WriteLine("Specify the sorting method number the script will be used: ");
-            for (int i = 0; i < Program.categorize.Length; i++)
+            for (int i = 0; i < Program.TrackCategorizeMethodSet.Length; i++)
             {
-                Console.WriteLine("[" + i + "]" + " " + categorize[i]);
+                Console.WriteLine("[" + i + "]" + " " + TrackCategorizeMethodSet[i]);
             }
-            category = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
+            GlobalTrackCategorizeMethod = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
             try
             {
-                if (0 <= Int32.Parse(category) && Int32.Parse(category) < categorize.Length)
+                if (0 <= Int32.Parse(GlobalTrackCategorizeMethod) && Int32.Parse(GlobalTrackCategorizeMethod) < TrackCategorizeMethodSet.Length)
                 {
-                    categorizeIndex = Int32.Parse(category);
-                    category = categorize[Int32.Parse(category)];
+                    categorizeIndex = Int32.Parse(GlobalTrackCategorizeMethod);
+                    GlobalTrackCategorizeMethod = TrackCategorizeMethodSet[Int32.Parse(GlobalTrackCategorizeMethod)];
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message + " The program will use Genre as default method. Press any key to continue.");
-                category = categorize[0];
+                GlobalTrackCategorizeMethod = TrackCategorizeMethodSet[0];
                 categorizeIndex = 0;
                 Console.ReadKey();
             }
@@ -452,23 +458,23 @@ namespace MaichartConverter
                         {
                             Console.WriteLine("Already exist folder: " + defaultCategorizedPath);
                         }
-                        if (!Directory.Exists(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart))
+                        if (!Directory.Exists(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix))
                         {
-                            Directory.CreateDirectory(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart);
-                            Console.WriteLine("Created song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart);
+                            Directory.CreateDirectory(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                            Console.WriteLine("Created song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
                         }
                         else
                         {
-                            Console.WriteLine("Already exist song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart);
+                            Console.WriteLine("Already exist song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
                         }
-                        MaidataCompiler compiler = new MaidataCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart);
-                        Console.WriteLine("Finished compiling maidata " + trackInfo.TrackName + " to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart + sep + "maidata.txt");
+                        MaidataCompiler compiler = new MaidataCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                        Console.WriteLine("Finished compiling maidata " + trackInfo.TrackName + " to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "maidata.txt");
 
                         if (exportAudio)
                         {
                             string originalMusicLocation = audioLocation;
                             originalMusicLocation += "music00" + shortID + ".mp3";
-                            string newMusicLocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart + sep + "track.mp3";
+                            string newMusicLocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "track.mp3";
                             if (!File.Exists(newMusicLocation))
                             {
                                 File.Copy(originalMusicLocation, newMusicLocation);
@@ -490,7 +496,7 @@ namespace MaichartConverter
                         {
                             string originalImageLocation = imageLocation;
                             originalImageLocation += "UI_Jacket_00" + shortID + ".png";
-                            string newImageLocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart + sep + "bg.png";
+                            string newImageLocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "bg.png";
                             if (!File.Exists(newImageLocation))
                             {
                                 File.Copy(originalImageLocation, newImageLocation);
@@ -532,7 +538,7 @@ namespace MaichartConverter
                         }
                         if (exportBGA)
                         {
-                            string? newBGALocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart + sep + "pv.mp4";
+                            string? newBGALocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "pv.mp4";
                             if (bgaExists && !File.Exists(newBGALocation))
                             {
                                 Console.WriteLine("A BGA file was found in " + originalBGALocation);
@@ -551,7 +557,7 @@ namespace MaichartConverter
                                 throw new FileNotFoundException("BGA NOT FOUND IN: " + newBGALocation);
                             }
                         }
-                        Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChart);
+                        Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
                         Console.WriteLine();
                     }
 

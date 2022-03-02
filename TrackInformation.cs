@@ -1,4 +1,5 @@
 using System.Xml;
+using System.Xml.Linq;
 
 namespace MaichartConverter
 {
@@ -133,32 +134,51 @@ namespace MaichartConverter
             set { this.information["Music ID"] = value; }
         }
 
+        /// <summary>
+        /// Return the track genre (By default cabinet 6 categories)
+        /// </summary>
+        /// <value>this.TrackGenre</value>
         public string TrackGenre
         {
             get { return this.Information.GetValueOrDefault("Genre") ?? throw new NullReferenceException("Genre is not defined"); }
             set { this.information["Genre"] = value; }
         }
 
+        /// <summary>
+        /// Return the track global BPM
+        /// </summary>
+        /// <value>this.TrackBPM</value>
         public string TrackBPM
         {
             get { return this.Information.GetValueOrDefault("BPM") ?? throw new NullReferenceException("Genre is not defined"); }
             set { this.information["BPM"] = value; }
         }
 
+        /// <summary>
+        /// Return the track composer
+        /// </summary>
+        /// <value>this.TrackComposer</value>
         public string TrackComposer
         {
             get { return this.Information.GetValueOrDefault("Composer") ?? throw new NullReferenceException("Genre is not defined"); }
             set { this.information["Composer"] = value; }
         }
 
+        /// <summary>
+        /// Return the most representative level of the track = by default master
+        /// </summary>
+        /// <value>this.MasterTrackLevel</value>
         public string TrackSymbolicLevel
         {
             get { return this.Information.GetValueOrDefault("Master") ?? throw new NullReferenceException("Master level is not defined"); }
             set { this.information["Master"] = value; }
         }
         
-
-        public string DXChart
+        /// <summary>
+        /// Return the suffix of Track title for export
+        /// </summary>
+        /// <value>this.TrackSubstituteName"_DX" if is DX chart</value>
+        public string DXChartTrackPathSuffix
         {
             get
             {
@@ -169,6 +189,10 @@ namespace MaichartConverter
             }
         }
 
+        /// <summary>
+        /// Returns if the track is Standard or Deluxe
+        /// </summary>
+        /// <value>SD if standard, DX if deluxe</value>
         public string StandardDeluxePrefix
         {
             get
@@ -180,17 +204,22 @@ namespace MaichartConverter
             }
         }
 
+        /// <summary>
+        /// Title suffix for better distinguish
+        /// </summary>
+        /// <value>[SD] if Standard and [DX] if Deluxe</value>
         public string StandardDeluxeSuffix
         {
             get
             {
-                string musicID = this.Information.GetValueOrDefault("Music ID") ?? throw new NullReferenceException("Music ID is not Defined");
-                if (musicID.Length > 3)
-                    return "[DX]";
-                else return "[SD]";
+                return "["+this.StandardDeluxePrefix+"]";
             }
         }
 
+        /// <summary>
+        /// See if the chart is DX chart.
+        /// </summary>
+        /// <value>True if is DX, false if SD</value>
         public bool IsDXChart
         {
             get
@@ -200,12 +229,21 @@ namespace MaichartConverter
             }
         }
 
+        /// <summary>
+        /// Return the XML node that has same name with
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public XmlNodeList GetMatchNodes(string name)
         {
             XmlNodeList result = this.takeInValue.GetElementsByTagName(name);
             return result;
         }
 
+        /// <summary>
+        /// Return this.TrackVersion
+        /// </summary>
+        /// <value>this.TrackVersion</value>
         public string TrackVersion
         {
 
@@ -217,23 +255,38 @@ namespace MaichartConverter
             set { this.information["Version"] = value; }
         }
 
+        /// <summary>
+        /// Give access to TakeInValue if necessary
+        /// </summary>
+        /// <value>this.TakeInValue as XMLDocument</value>
         public XmlDocument TakeInValue
         {
             get { return takeInValue; }
             set { this.takeInValue = value; }
         }
 
+        /// <summary>
+        /// Give access to this.Information
+        /// </summary>
+        /// <value>this.Information as Dictionary</value>
         public Dictionary<string, string> Information
         {
             get { return information; }
             set { this.information = value; }
         }
 
+        /// <summary>
+        /// Save the information to given path
+        /// </summary>
+        /// <param name="location">Path to save the information</param>
         public void Save(string location)
         {
             this.takeInValue.Save(location);
         }
 
+        /// <summary>
+        /// Update information
+        /// </summary>
         public abstract void Update();
     }
 }
