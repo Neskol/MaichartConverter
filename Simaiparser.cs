@@ -19,28 +19,11 @@ public class SimaiParser : IParser
     public Chart ChartOfToken(string[] token)
     {
         throw new NotImplementedException();
-        int bar = 0;
-        int tick = 0;
-        int multiplier = 1;
-        double bpm = 0.0;
-        string status = "";
-        string storage = "";
         Chart result;
 
-        foreach (string symbol in token)
+        foreach (string block in token)
         {
-            switch (symbol)
-            {
-                case "&":
-                    status = "Information";
-                    break;
-                case "=":
-                    break;
-                default:
-                    storage += symbol;
-                    break;
-                
-            }
+            
         }
 
         return result;

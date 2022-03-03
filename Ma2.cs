@@ -1,7 +1,7 @@
 ﻿namespace MaichartConverter
 {
     /// <summary>
-    /// Good Brother Implementation.
+    /// Implementation of chart in ma2 format.
     /// </summary>
     public class Ma2 : Chart, ICompiler
     {

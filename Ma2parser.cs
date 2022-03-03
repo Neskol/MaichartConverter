@@ -1,5 +1,8 @@
 ﻿namespace MaichartConverter
 {
+    /// <summary>
+    /// Parses ma2 file into Ma2 chart format
+    /// </summary>
     public class Ma2Parser : IParser
     {
         /// <summary>

@@ -1,5 +1,8 @@
 ﻿namespace MaichartConverter
 {
+    /// <summary>
+    /// Provide interface for parsers
+    /// </summary>
     public interface IParser
     {
         /// <summary>

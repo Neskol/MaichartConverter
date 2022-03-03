@@ -1,5 +1,8 @@
 ﻿namespace MaichartConverter
 {
+    /// <summary>
+    /// Provide interface for charts
+    /// </summary>
     interface IChart
     {
         /// <summary>
@@ -8,7 +11,7 @@
         void Update();
 
         /// <summary>
-        /// Check if this Good Brother is valid
+        /// Check if this chart is valid
         /// </summary>
         /// <returns></returns>
         bool CheckValidity();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 namespace MaichartConverter
 {
 	public class SimaiTokenizer:ITokenizer
@@ -11,17 +12,13 @@ namespace MaichartConverter
         {
             try
             {
-                string[] takein = System.IO.File.ReadAllLines(location);
-                List<char> storage = new List<char>();
-                foreach (string line in takein)
+                string[] takeIn = File.ReadAllLines(location);
+                string storage = "";
+                foreach (string line in takeIn)
                 {
-                    storage.AddRange(line.ToCharArray());
+                    storage+=line;
                 }
-                string[] result = new string[storage.Count];
-                for (int i=0;i<storage.Count;i++)
-                {
-                    result[i] = storage[i].ToString();
-                }
+                string[] result = storage.Split('&');
                 return result;
             }
             catch (DirectoryNotFoundException)

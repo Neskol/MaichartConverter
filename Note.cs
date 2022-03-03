@@ -1,7 +1,7 @@
 ﻿namespace MaichartConverter
 {
     /// <summary>
-    /// Basic
+    /// Basic note
     /// </summary>
     public abstract class Note : IEquatable<Note>, INote, IComparable
     {

@@ -1,5 +1,8 @@
 ﻿namespace MaichartConverter
 {
+    /// <summary>
+    /// Provide interface for Compilers
+    /// </summary>
     public interface ICompiler
     {
         /// <summary>

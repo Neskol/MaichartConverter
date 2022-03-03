@@ -1,7 +1,13 @@
 ﻿namespace MaichartConverter
 {
+    /// <summary>
+    /// Tokenizer of ma2 file
+    /// </summary>
     public class Ma2Tokenizer : ITokenizer
     {
+        /// <summary>
+        /// Empty Constructor
+        /// </summary>
         public Ma2Tokenizer()
         {
         }

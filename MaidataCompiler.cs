@@ -2,11 +2,30 @@
 
 namespace MaichartConverter
 {
-    internal class MaidataCompiler : ICompiler
+    /// <summary>
+    /// Compile various Ma2 charts
+    /// </summary>
+    public class MaidataCompiler : ICompiler
     {
+        /// <summary>
+        /// Store difficulty keywords
+        /// </summary>
+        /// <value>Difficulty</value>
         public static readonly string[] difficulty = { "Basic", "Advanced", "Expert", "Master", "Remaster" };
+
+        /// <summary>
+        /// Store chart collections
+        /// </summary>
         private List<Chart> charts;
+
+        /// <summary>
+        /// Store global information
+        /// </summary>
         private Dictionary<string, string> information;
+
+        /// <summary>
+        /// Store read in music XML file
+        /// </summary>
         private XmlInformation musicXml;
 
         /// <summary>

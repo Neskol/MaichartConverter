@@ -1,5 +1,8 @@
 ﻿namespace MaichartConverter
 {
+    /// <summary>
+    /// Store measure change notes in a chart
+    /// </summary>
     public class MeasureChanges : IChart
     {
         private List<int> bar;
