@@ -327,7 +327,10 @@ namespace MaichartConverter
             }
         }
 
-        public static void CompileAssignedChartDatabase()
+        /// <summary>
+        /// Compile maidata with specified version
+        /// </summary>
+        public static async void CompileAssignedChartDatabase()
         {
             string sep = Program.GlobalSep;
             Console.WriteLine("Specify the path seperator this script is running on");
@@ -412,11 +415,20 @@ namespace MaichartConverter
             }
 
             Console.WriteLine("Specify version you will be used on choosing:");
-            string rule = Console.ReadLine() ?? throw new NullReferenceException("Null error for Console.ReadLine");
-            if (rule.Equals(""))
+            for (int i = 0; i<TrackInformation.version.Length; i++)
             {
-                Console.WriteLine("No version is specified. The program will compile all tracks.");
-                Console.ReadLine();
+                Console.WriteLine("["+i+"]: "+TrackInformation.version[i]);
+            }
+            Int32.TryParse(Console.ReadLine(),out int selection);
+            string rule = "";
+            try
+            {
+                rule = TrackInformation.version[selection];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Invalid input. The progran will automatically compile the latest version. "+ex.Message);
+                rule = TrackInformation.version[TrackInformation.version.Length-1];
             }
 
             Dictionary<string, string> bgaMap = new Dictionary<string, string>();
