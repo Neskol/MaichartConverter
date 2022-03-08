@@ -9,6 +9,7 @@ public abstract class ChartPack : IChart
 {
     /// <summary>
     /// Stores SD and DX chart
+    /// [0] SD [1] DX
     /// </summary>
     private Chart[] sddxCharts;
 

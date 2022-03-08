@@ -19,7 +19,7 @@ public class SimaiParser : IParser
     public Chart ChartOfToken(string[] token)
     {
         throw new NotImplementedException();
-        Chart result;
+        Chart result = new Simai2();
 
         foreach (string block in token)
         {

@@ -330,7 +330,7 @@ namespace MaichartConverter
         /// <summary>
         /// Compile maidata with specified version
         /// </summary>
-        public static async void CompileAssignedChartDatabase()
+        public static void CompileAssignedChartDatabase()
         {
             string sep = Program.GlobalSep;
             Console.WriteLine("Specify the path seperator this script is running on");
