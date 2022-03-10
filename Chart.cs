@@ -55,6 +55,10 @@ namespace MaichartConverter
             }
         }
 
+        /// <summary>
+        /// Returns this.Chart. aka List of bars
+        /// </summary>
+        /// <value>this.Chart</value>
         public List<List<Note>> StoredChart
         {
             get 
@@ -213,6 +217,10 @@ namespace MaichartConverter
             }
         }
 
+        /// <summary>
+        /// Return the total delayed value of this Chart.
+        /// </summary>
+        /// <value>this.TotalDelayedValue</value>
         public int TotalDelay
         {
             get
@@ -225,6 +233,10 @@ namespace MaichartConverter
             }
         }
 
+        /// <summary>
+        /// Return Information
+        /// </summary>
+        /// <value>this.Information</value>
         public Dictionary<string,string> Information
         {
             get
@@ -426,7 +438,11 @@ namespace MaichartConverter
             return result;
         }
 
-
+        /// <summary>
+        /// Judges if this bar contains notes
+        /// </summary>
+        /// <param name="Bar">Bar to analyze on</param>
+        /// <returns>True if contains, false elsewise</returns>
         public static bool ContainNotes(List<Note> Bar)
         {
             bool result = false;
