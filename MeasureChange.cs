@@ -5,7 +5,6 @@
     /// </summary>
     public class MeasureChange : Note
     {        
-        private int tick;
         private int quaver;
 
         /// <summary>
@@ -13,7 +12,7 @@
         /// </summary>
         public MeasureChange()
         {
-            this.tick = 0;
+            this.Tick = 0;
             this.quaver = 0;
         }
 
@@ -26,7 +25,7 @@
         public MeasureChange(int bar, int tick, int quaver)
         {
             this.Bar = bar;
-            this.tick = tick;
+            this.Tick = tick;
             this.quaver = quaver;
         }
         
@@ -37,18 +36,8 @@
         public MeasureChange(MeasureChange takeIn)
         {
             this.Bar = takeIn.Bar;
-            this.tick = takeIn.Tick;
+            this.Tick = takeIn.Tick;
             this.quaver = takeIn.Quaver;
-        }
-
-        /// <summary>
-        /// Return this.tick
-        /// </summary>
-        /// <value>Tick</value>
-        public int Tick
-        {
-            get
-            { return this.tick; }
         }
 
         /// <summary>

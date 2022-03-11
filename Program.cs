@@ -47,8 +47,8 @@ namespace MaichartConverter
         public static void Main(string[] args)
         {
             Console.WriteLine(ComposeHeader());
-            // TestSpecificChart("000834","4");
-            CompileChartDatabase();
+            TestSpecificChart("000834","4");
+            // CompileChartDatabase();
         }
 
         /// <summary>

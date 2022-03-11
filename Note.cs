@@ -4,32 +4,32 @@
     /// Basic note
     /// </summary>
     public abstract class Note : IEquatable<Note>, INote, IComparable
-    {        
+    {
         /// <summary>
         /// The note type
         /// </summary>
         private string noteType;
-        
+
         /// <summary>
         /// The key
         /// </summary>
         private string key;
-        
+
         /// <summary>
         /// The end key
         /// </summary>
         private string endKey;
-        
+
         /// <summary>
         /// The bar
         /// </summary>
         private int bar;
-        
+
         /// <summary>
         /// The start time
         /// </summary>
         private int tick;
-        
+
         /// <summary>
         /// The wait time
         /// </summary>
@@ -39,7 +39,7 @@
         /// The calculated wait time
         /// </summary>
         private double calculatedWaitTime;
-        
+
         /// <summary>
         /// The last time
         /// </summary>
@@ -49,22 +49,22 @@
         /// The calculated last time
         /// </summary>
         private double calculatedLastTime;
-        
+
         /// <summary>
         /// The delayed
         /// </summary>
         private bool delayed;
-        
+
         /// <summary>
         /// The BPM
         /// </summary>
         private double bpm;
-        
+
         /// <summary>
         /// The previous
         /// </summary>
         private Note? prev;
-        
+
         /// <summary>
         /// The next
         /// </summary>
@@ -79,7 +79,7 @@
             tick = 0;
             lastTime = 0;
             waitTime = 0;
-            calculatedLastTime= 0;
+            calculatedLastTime = 0;
             calculatedWaitTime = 0;
             bpm = 0;
         }
@@ -334,13 +334,13 @@
         public bool Equals(Note? other)
         {
             bool result = false;
-            if (other != null && 
-            this.NoteType.Equals(other.NoteType) && 
-            this.Key.Equals(other.Key) && 
-            this.EndKey.Equals(other.EndKey) && 
-            this.Bar == other.Bar && 
-            this.Tick == other.Tick && 
-            this.LastTime == other.LastTime && 
+            if (other != null &&
+            this.NoteType.Equals(other.NoteType) &&
+            this.Key.Equals(other.Key) &&
+            this.EndKey.Equals(other.EndKey) &&
+            this.Bar == other.Bar &&
+            this.Tick == other.Tick &&
+            this.LastTime == other.LastTime &&
             this.BPM == other.BPM)
             {
                 result = true;
@@ -348,6 +348,21 @@
             return result;
         }
 
-        public abstract bool Update();
+        public bool Update()
+        {
+            bool result = false;
+            double tickTime = 60 / this.bpm * 4 / 384;
+            this.calculatedWaitTime = this.waitTime * tickTime;
+            this.calculatedLastTime = this.lastTime * tickTime;
+            if (!(this.NoteType.Equals("SLIDE") || this.NoteType.Equals("HOLD")))
+            {
+                result = true;
+            }
+            else if (this.calculatedLastTime > 0 && this.calculatedWaitTime > 0)
+            {
+                result = true;
+            }
+            return result;
+        }
     }
 }

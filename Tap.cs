@@ -8,6 +8,15 @@
         private int specialEffect;
         private string touchSize;
         private readonly string[] allowedType = { "TAP", "STR", "BRK", "BST", "XTP", "XST", "TTP" };
+
+        /// <summary>
+        /// Empty Constructor Tap Note
+        /// </summary>
+        public Tap()
+        {
+            this.touchSize="";
+        }
+
         /// <summary>
         /// Construct a Tap note
         /// </summary>

@@ -6,10 +6,18 @@
     public class Slide : Note
     {
         private readonly string[] allowedType = { "SI_", "SV_", "SF_", "SCL", "SCR", "SUL", "SUR", "SLL", "SLR", "SXL", "SXR", "SSL", "SSR" };
+
+        /// <summary>
+        /// Empty Constructor
+        /// </summary>
+        public Slide()
+        {
+        }
+
         /// <summary>
         /// Construct a Slide Note (Valid only if Start Key matches a start!)
         /// </summary>
-        /// <param name="noteType">SI_(Straight),SCL,SCR,SV_(Line not intercecting Crossing Center),SUL,SUR,SF_(Wifi),SLL(Infecting Line),SLR(Infecting),SXL(Self winding),SXR(Self winding),SSL,SSR</param>
+        /// <param name="noteType">SI_(Straight),SCL,SCR,SV_(Line not intercepting Crossing Center),SUL,SUR,SF_(Wifi),SLL(Infecting Line),SLR(Infecting),SXL(Self winding),SXR(Self winding),SSL,SSR</param>
         /// <param name="key">0-7</param>
         /// <param name="bar">Bar in</param>
         /// <param name="startTime">Start Time</param>
