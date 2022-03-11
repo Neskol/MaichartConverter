@@ -13,7 +13,7 @@
         {
             this.NoteType = "RST";
             this.Bar = 0;
-            this.StartTime = 0;
+            this.Tick = 0;
         }
 
         /// <summary>
@@ -26,7 +26,7 @@
         {
             this.NoteType = noteType;
             this.Bar = bar;
-            this.StartTime = startTime;
+            this.Tick = startTime;
         }
 
         /// <summary>
@@ -37,7 +37,7 @@
         {
             this.NoteType = "RST";
             this.Bar = n.Bar;
-            this.StartTime = n.StartTime;
+            this.Tick = n.Tick;
         }
         public override bool CheckValidity()
         {
@@ -46,7 +46,7 @@
 
         public override string Compose(int format)
         {
-            //return "r_" + this.StartTime;
+            //return "r_" + this.Tick;
             return "";
         }
 

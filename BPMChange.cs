@@ -14,7 +14,7 @@
             this.NoteType = "BPM";
             this.Key = "";
             this.Bar = 0;
-            this.StartTime = 0;
+            this.Tick = 0;
             this.BPM = 0;
         }
 
@@ -22,12 +22,12 @@
         /// Construct BPMChange with given bar, tick, BPM
         /// </summary>
         /// <param name="bar">Bar</param>
-        /// <param name="startTime">startTime</param>
+        /// <param name="startTime">tick</param>
         /// <param name="BPM">BPM</param>
         public BPMChange(int bar, int startTime, double BPM)
         {
             this.Bar = bar;
-            this.StartTime = startTime;
+            this.Tick = startTime;
             this.BPM = BPM;
         }
 
@@ -38,7 +38,7 @@
         public BPMChange(BPMChange takeIn)
         {
             this.Bar = takeIn.Bar;
-            this.StartTime = takeIn.StartTime;
+            this.Tick = takeIn.Tick;
             this.BPM = takeIn.BPM;
         }
 
@@ -54,9 +54,9 @@
             if (format == 0)
             {
                 result += "(" + this.BPM + ")";
-                //result += "(" + this.BPM + "_" + this.Bar + "_" + this.StartTime + ")";
+                //result += "(" + this.BPM + "_" + this.Bar + "_" + this.Tick + ")";
             }
-            else result += "(" + this.BPM + "_" + this.Bar + "_" + this.StartTime + ")";
+            else result += "(" + this.BPM + "_" + this.Bar + "_" + this.Tick + ")";
             return result;
         }
 

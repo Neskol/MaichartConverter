@@ -20,7 +20,7 @@
             this.NoteType = noteType;
             this.Key = key;
             this.Bar = bar;
-            this.StartTime = startTime;
+            this.Tick = startTime;
             this.specialEffect = 0;
             this.touchSize = "M1";
         }
@@ -39,7 +39,7 @@
             this.NoteType = noteType;
             this.Key = key;
             this.Bar = bar;
-            this.StartTime = startTime;
+            this.Tick = startTime;
             this.specialEffect = specialEffect;
             this.touchSize = touchSize;
         }
@@ -78,13 +78,13 @@
             string result = "";
             if (format == 1 && !(this.NoteType.Equals("TTP")))
             {
-                result = this.NoteType + "\t" + this.Bar + "\t" + this.StartTime + "\t" + this.Key;
+                result = this.NoteType + "\t" + this.Bar + "\t" + this.Tick + "\t" + this.Key;
             }
             else if (format == 1 && this.NoteType.Equals("TTP"))
             {
                 result = this.NoteType + "\t" +
                     this.Bar + "\t" +
-                    this.StartTime + "\t" +
+                    this.Tick + "\t" +
                     this.Key.ToCharArray()[0] + "\t" +
                     this.Key.ToCharArray()[1] + "\t" +
                     this.specialEffect + "\t" +
@@ -120,7 +120,7 @@
                         }
                         break;
                 }
-                //result += "_" + this.StartTime;
+                //result += "_" + this.Tick;
             }
             return result;
         }

@@ -4,26 +4,83 @@
     /// Basic note
     /// </summary>
     public abstract class Note : IEquatable<Note>, INote, IComparable
-    {
+    {        
+        /// <summary>
+        /// The note type
+        /// </summary>
         private string noteType;
+        
+        /// <summary>
+        /// The key
+        /// </summary>
         private string key;
+        
+        /// <summary>
+        /// The end key
+        /// </summary>
         private string endKey;
+        
+        /// <summary>
+        /// The bar
+        /// </summary>
         private int bar;
-        private int startTime;
+        
+        /// <summary>
+        /// The start time
+        /// </summary>
+        private int tick;
+        
+        /// <summary>
+        /// The wait time
+        /// </summary>
         private int waitTime;
+
+        /// <summary>
+        /// The calculated wait time
+        /// </summary>
+        private double calculatedWaitTime;
+        
+        /// <summary>
+        /// The last time
+        /// </summary>
         private int lastTime;
+
+        /// <summary>
+        /// The calculated last time
+        /// </summary>
+        private double calculatedLastTime;
+        
+        /// <summary>
+        /// The delayed
+        /// </summary>
         private bool delayed;
+        
+        /// <summary>
+        /// The BPM
+        /// </summary>
         private double bpm;
+        
+        /// <summary>
+        /// The previous
+        /// </summary>
         private Note? prev;
+        
+        /// <summary>
+        /// The next
+        /// </summary>
         private Note? next;
+
         public Note()
         {
             noteType = "";
             key = "";
             endKey = "";
             bar = 0;
-            startTime = 0;
+            tick = 0;
             lastTime = 0;
+            waitTime = 0;
+            calculatedLastTime= 0;
+            calculatedWaitTime = 0;
             bpm = 0;
         }
 
@@ -73,17 +130,17 @@
         }
 
         /// <summary>
-        /// Access StartTime
+        /// Access Tick
         /// </summary>
-        public int StartTime
+        public int Tick
         {
             get
             {
-                return this.startTime;
+                return this.tick;
             }
             set
             {
-                this.startTime = value;
+                this.tick = value;
             }
         }
 
@@ -103,6 +160,18 @@
         }
 
         /// <summary>
+        /// Gets or sets the calculated wait time.
+        /// </summary>
+        /// <value>
+        /// The calculated wait time.
+        /// </value>
+        public double CalculatedWaitTime
+        {
+            get { return this.calculatedWaitTime; }
+            set { this.calculatedWaitTime = value; }
+        }
+
+        /// <summary>
         /// Access EndTime
         /// </summary>
         public int LastTime
@@ -115,6 +184,18 @@
             {
                 this.lastTime = value;
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the calculated last time.
+        /// </summary>
+        /// <value>
+        /// The calculated last time.
+        /// </value>
+        public double CalculatedLastTime
+        {
+            get => this.calculatedLastTime;
+            set { this.calculatedLastTime = value; }
         }
 
         /// <summary>
@@ -191,18 +272,18 @@
 
             Note another = obj as Note ?? throw new NullReferenceException("Note is not defined");
 
-            //else if (this.NoteSpecificType().Equals("SLIDE")&&(this.NoteSpecificType().Equals("TAP")|| this.NoteSpecificType().Equals("HOLD")) && this.startTime == another.StartTime && this.bar == another.Bar)
+            //else if (this.NoteSpecificType().Equals("SLIDE")&&(this.NoteSpecificType().Equals("TAP")|| this.NoteSpecificType().Equals("HOLD")) && this.tick == another.Tick && this.bar == another.Bar)
             //{
             //    result = -1;
             //}
-            //else if (this.NoteSpecificType().Equals("SLIDE_START") && (another.NoteSpecificType().Equals("TAP") || another.NoteSpecificType().Equals("HOLD")) && this.startTime == another.StartTime && this.bar == another.Bar)
+            //else if (this.NoteSpecificType().Equals("SLIDE_START") && (another.NoteSpecificType().Equals("TAP") || another.NoteSpecificType().Equals("HOLD")) && this.tick == another.Tick && this.bar == another.Bar)
             //{
             //    Console.WriteLine("STAR AND TAP");
             //    result = 1;
             //    Console.WriteLine(this.NoteSpecificType() + ".compareTo(" + another.NoteSpecificType() + ") is" + result);
             //    //Console.ReadKey();
             //}
-            //if (this.Bar==another.Bar&&this.StartTime==another.StartTime)
+            //if (this.Bar==another.Bar&&this.Tick==another.Tick)
             //{
             //    if (this.NoteGenre().Equals("BPM"))
             //    {
@@ -225,15 +306,15 @@
             //        //Console.WriteLine("this.compareTo(another) is" + result);
             //        //Console.ReadKey();
             //    }
-            //    else result = this.startTime.CompareTo(another.StartTime);
+            //    else result = this.tick.CompareTo(another.Tick);
             //}
             if (this.Bar != another.Bar)
             {
                 result = this.Bar.CompareTo(another.Bar);
             }
-            else if (this.Bar == another.Bar && (this.StartTime != another.StartTime))
+            else if (this.Bar == another.Bar && (this.Tick != another.Tick))
             {
-                result = this.StartTime.CompareTo(another.StartTime);
+                result = this.Tick.CompareTo(another.Tick);
             }
             else
             {
@@ -258,7 +339,7 @@
             this.Key.Equals(other.Key) && 
             this.EndKey.Equals(other.EndKey) && 
             this.Bar == other.Bar && 
-            this.StartTime == other.StartTime && 
+            this.Tick == other.Tick && 
             this.LastTime == other.LastTime && 
             this.BPM == other.BPM)
             {
@@ -266,5 +347,7 @@
             }
             return result;
         }
+
+        public abstract bool Update();
     }
 }

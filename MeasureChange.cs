@@ -71,7 +71,7 @@
             if (format == 0)
             {
                 result += "{" + this.Quaver + "}";
-                //result += "{" + this.Quaver+"_"+this.StartTime + "}";
+                //result += "{" + this.Quaver+"_"+this.Tick + "}";
             }
             return result;
         }

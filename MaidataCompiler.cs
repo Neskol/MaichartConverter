@@ -194,7 +194,7 @@ namespace MaichartConverter
             //Console.WriteLine(chart.Compose());
             //foreach (BPMChange x in chart.BPMChanges.ChangeNotes)
             //{
-            //    Console.WriteLine("BPM Change verified in " + x.Bar + " " + x.StartTime + " of BPM" + x.BPM);
+            //    Console.WriteLine("BPM Change verified in " + x.Bar + " " + x.Tick + " of BPM" + x.BPM);
             //}
             List<Note> firstBpm = new List<Note>();
             foreach (Note bpm in chart.Notes)
@@ -221,14 +221,14 @@ namespace MaichartConverter
                         case "BPM":
                             break;
                         case "TAP":
-                            if (x.IsNote && ((!x.NoteSpecificType.Equals("SLIDE")) && x.StartTime == lastNote.StartTime && !x.NoteGenre.Equals("BPM")))
+                            if (x.IsNote && ((!x.NoteSpecificType.Equals("SLIDE")) && x.Tick == lastNote.Tick && !x.NoteGenre.Equals("BPM")))
                             {
                                 result += "/";
                             }
                             else result += ",";
                             break;
                         case "HOLD":
-                            if (x.IsNote && (!x.NoteSpecificType.Equals("SLIDE")) && x.StartTime == lastNote.StartTime && !x.NoteGenre.Equals("BPM"))
+                            if (x.IsNote && (!x.NoteSpecificType.Equals("SLIDE")) && x.Tick == lastNote.Tick && !x.NoteGenre.Equals("BPM"))
                             {
                                 result += "/";
                             }
@@ -241,11 +241,11 @@ namespace MaichartConverter
                             //}
                             break;
                         case "SLIDE":
-                            if (x.IsNote && (!x.NoteSpecificType.Equals("SLIDE")) && x.StartTime == lastNote.StartTime && !x.NoteGenre.Equals("BPM"))
+                            if (x.IsNote && (!x.NoteSpecificType.Equals("SLIDE")) && x.Tick == lastNote.Tick && !x.NoteGenre.Equals("BPM"))
                             {
                                 result += "/";
                             }
-                            else if (x.IsNote && x.NoteSpecificType.Equals("SLIDE") && x.StartTime == lastNote.StartTime && !x.NoteGenre.Equals("BPM"))
+                            else if (x.IsNote && x.NoteSpecificType.Equals("SLIDE") && x.Tick == lastNote.Tick && !x.NoteGenre.Equals("BPM"))
                             {
                                 result += "*";
                             }
@@ -259,7 +259,7 @@ namespace MaichartConverter
                     lastNote = x;
                     //if (x.NoteGenre().Equals("BPM"))
                     //{
-                    //    result+="("+ x.Bar + "_" + x.StartTime + ")";
+                    //    result+="("+ x.Bar + "_" + x.Tick + ")";
                     //}
                 }
                 result += ",\n";

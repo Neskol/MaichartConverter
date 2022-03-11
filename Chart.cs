@@ -293,7 +293,7 @@ namespace MaichartConverter
                 {
                     if (x.Bar == i)
                     {
-                        int delay = x.Bar * 384 + x.StartTime + x.WaitTime + x.LastTime;
+                        int delay = x.Bar * 384 + x.Tick + x.WaitTime + x.LastTime;
                         switch (x.NoteSpecificType)
                         {
                             case "BPM":
@@ -398,9 +398,9 @@ namespace MaichartConverter
             startTimeList.Add(0);
             foreach (Note x in bar)
             {
-                if (!startTimeList.Contains(x.StartTime))
+                if (!startTimeList.Contains(x.Tick))
                 {
-                    startTimeList.Add(x.StartTime);
+                    startTimeList.Add(x.Tick);
                 }
                 if (x.NoteType.Equals("BPM"))
                 {
@@ -492,7 +492,7 @@ namespace MaichartConverter
                 //Add Appropriate note into each set
                 foreach (Note x in bar)
                 {
-                    if ((x.StartTime == i) && x.IsNote&& !(x.NoteType.Equals("TTP")|| x.NoteType.Equals("THO")))
+                    if ((x.Tick == i) && x.IsNote&& !(x.NoteType.Equals("TTP")|| x.NoteType.Equals("THO")))
                     {
                         if (x.NoteSpecificType.Equals("BPM"))
                         {
@@ -510,7 +510,7 @@ namespace MaichartConverter
                             writeRest = false;
                         }                      
                     }
-                    else if ((x.StartTime == i) && x.IsNote&& (x.NoteType.Equals("TTP") || x.NoteType.Equals("THO")))
+                    else if ((x.Tick == i) && x.IsNote&& (x.NoteType.Equals("TTP") || x.NoteType.Equals("THO")))
                     {
                         if (x.NoteSpecificType.Equals("BPM"))
                         {
@@ -547,7 +547,7 @@ namespace MaichartConverter
                 }
                 //foreach (BPMChange x in bpmChanges)
                 //{
-                //    if (x.Bar == barNumber && x.StartTime == i)
+                //    if (x.Bar == barNumber && x.Tick == i)
                 //    {
                 //        List<Note> adjusted = new List<Note>();
                 //        eachSet.Remove(x);
@@ -629,7 +629,7 @@ namespace MaichartConverter
             {
                 for(int i = 0;!hasFirstBPMChange&&i<result.Count();i++)
                 {
-                    if (result[i].NoteGenre.Equals("BPM")&&result[i].StartTime==0)
+                    if (result[i].NoteGenre.Equals("BPM")&&result[i].Tick==0)
                     {                    
                         changedResult.Add(result[i]);
                         potentialFirstChange = result[i];

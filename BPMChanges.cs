@@ -60,7 +60,7 @@ namespace MaichartConverter
                 Note lastNote = new Rest();
                 foreach (BPMChange x in this.changeNotes)
                 {
-                    if (!(x.Bar==lastNote.Bar&&x.StartTime==lastNote.StartTime&&x.BPM==lastNote.BPM))
+                    if (!(x.Bar==lastNote.Bar&&x.Tick==lastNote.Tick&&x.BPM==lastNote.BPM))
                     {
                         adjusted.Add(x);
                         lastNote = x;
@@ -126,7 +126,7 @@ namespace MaichartConverter
             string result = "";
             for (int i = 0; i < changeNotes.Count; i++)
             {
-                result += "BPM" + "\t" + changeNotes[i].Bar + "\t" + changeNotes[i].StartTime + "\t" + changeNotes[i].BPM + "\n";
+                result += "BPM" + "\t" + changeNotes[i].Bar + "\t" + changeNotes[i].Tick + "\t" + changeNotes[i].BPM + "\n";
                 //result += "BPM" + "\t" + bar[i] + "\t" + tick[i] + "\t" + String.Format("{0:F3}", bpm[i])+"\n";
             }
             return result;

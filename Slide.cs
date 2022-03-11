@@ -20,7 +20,7 @@
             this.NoteType = noteType;
             this.Key = key;
             this.Bar = bar;
-            this.StartTime = startTime;
+            this.Tick = startTime;
             this.WaitTime = waitTime;
             this.LastTime = lastTime;
             this.EndKey = endKey;
@@ -44,7 +44,7 @@
             string result = "";
             if (format == 1)
             {
-                result = this.NoteType + "\t" + this.Bar + "\t" + this.StartTime + "\t" + this.Key + "\t" + this.WaitTime + "\t" + this.LastTime + "\t" + this.EndKey;
+                result = this.NoteType + "\t" + this.Bar + "\t" + this.Tick + "\t" + this.Key + "\t" + this.WaitTime + "\t" + this.LastTime + "\t" + this.EndKey;
             }
             else if (format == 0)
             {
@@ -108,7 +108,7 @@
                 {
                     result += ((Convert.ToInt32(this.EndKey) + 1).ToString()) + GenerateAppropriateLength(this.LastTime);
                 }
-                //result += "_" + this.StartTime;
+                //result += "_" + this.Tick;
                 //result += "_" + this.Key;
             }
             return result;
