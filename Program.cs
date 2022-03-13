@@ -38,6 +38,7 @@ namespace MaichartConverter
         /// </summary>
         public static int NumberTotalTrackCompiled;
         public static List<string> CompiledTracks = new();
+        public static List<string> CompiledChart = new();
         public static Dictionary<string, string> ReMasterTracks = new Dictionary<string, string>();
 
         /// <summary>
@@ -670,6 +671,27 @@ namespace MaichartConverter
             result += "Rev 1.02 by Neskol\n";
             result += "Check https://github.com/Neskol/MaichartConverter for updates and instructions\n";
             return result;
+        }
+
+        public void Log()
+        {
+            StreamWriter sw = new StreamWriter("log.txt", false);
+            Console.WriteLine("Total music compiled: " + NumberTotalTrackCompiled);
+            int index = 1;
+            foreach (string title in CompiledTracks)
+            {
+                Console.WriteLine("[" + index + "]: " + title);
+                index++;
+            }
+            index = 0;
+
+            Console.WriteLine("Total chart compiled: " + CompiledChart.Count);
+            foreach (string title in CompiledChart)
+            {
+                Console.WriteLine("[" + index + "]: " + title);
+                index++;
+            }
+            sw.Close();
         }
     }
 }

@@ -174,6 +174,7 @@ namespace MaichartConverter
                     {
                         result += "&inote_" + (i + 2) + "=\n";
                         result += this.Compose(charts[i]);
+                        Program.CompiledChart.Add(this.information.GetValueOrDefault("Name") + this.information.GetValueOrDefault("SDDX Suffix")+" ["+difficulty[i]+"]");
                     }
                     result += "\n";
                 }
@@ -237,7 +238,7 @@ namespace MaichartConverter
                         case "SLIDE_START":
                             //if (x.IsNote() && x.NoteSpecificType().Equals("SLIDE"))
                             //{
-
+                                
                             //}
                             break;
                         case "SLIDE":
