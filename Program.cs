@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MaichartConverter
+﻿namespace MaichartConverter
 {
     /// <summary>
     /// Main program of converter
@@ -48,8 +46,8 @@ namespace MaichartConverter
         public static void Main(string[] args)
         {
             Console.WriteLine(ComposeHeader());
-            TestSpecificChart("000834","4");
-            // CompileChartDatabase();
+            // TestSpecificChart("000834","4");
+            CompileChartDatabase();
         }
 
         /// <summary>
@@ -326,6 +324,7 @@ namespace MaichartConverter
                 Console.WriteLine("[" + index + "]: " + title);
                 index++;
             }
+            Log(outputLocation);
         }
 
         /// <summary>
@@ -673,22 +672,22 @@ namespace MaichartConverter
             return result;
         }
 
-        public void Log()
+        public static void Log(string outputLocation)
         {
-            StreamWriter sw = new StreamWriter("log.txt", false);
-            Console.WriteLine("Total music compiled: " + NumberTotalTrackCompiled);
+            StreamWriter sw = new StreamWriter(outputLocation+"log.txt", false);
+            sw.WriteLine("Total music compiled: " + NumberTotalTrackCompiled);
             int index = 1;
             foreach (string title in CompiledTracks)
             {
-                Console.WriteLine("[" + index + "]: " + title);
+                sw.WriteLine("[" + index + "]: " + title);
                 index++;
             }
             index = 0;
 
-            Console.WriteLine("Total chart compiled: " + CompiledChart.Count);
+            sw.WriteLine("Total chart compiled: " + CompiledChart.Count);
             foreach (string title in CompiledChart)
             {
-                Console.WriteLine("[" + index + "]: " + title);
+                sw.WriteLine("[" + index + "]: " + title);
                 index++;
             }
             sw.Close();

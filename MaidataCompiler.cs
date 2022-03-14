@@ -104,7 +104,7 @@ namespace MaichartConverter
                 beginning += "&title=" + this.information.GetValueOrDefault("Name") + this.information.GetValueOrDefault("SDDX Suffix") + "\n";
                 beginning += "&wholebpm=" + this.information.GetValueOrDefault("BPM") + "\n";
                 beginning += "&artist=" + this.information.GetValueOrDefault("Composer") + "\n";
-                beginning += "&des=" + this.information.GetValueOrDefault("Master Chart Maker")+"\n";
+                beginning += "&des=" + this.information.GetValueOrDefault("Master Chart Maker") + "\n";
                 beginning += "&shortid=" + this.information.GetValueOrDefault("Music ID") + "\n";
                 beginning += "&genre=" + this.information.GetValueOrDefault("Genre") + "\n";
                 beginning += "&cabinate=";
@@ -174,7 +174,7 @@ namespace MaichartConverter
                     {
                         result += "&inote_" + (i + 2) + "=\n";
                         result += this.Compose(charts[i]);
-                        Program.CompiledChart.Add(this.information.GetValueOrDefault("Name") + this.information.GetValueOrDefault("SDDX Suffix")+" ["+difficulty[i]+"]");
+                        Program.CompiledChart.Add(this.information.GetValueOrDefault("Name") + this.information.GetValueOrDefault("SDDX Suffix") + " [" + difficulty[i] + "]");
                     }
                     result += "\n";
                 }
@@ -238,7 +238,7 @@ namespace MaichartConverter
                         case "SLIDE_START":
                             //if (x.IsNote() && x.NoteSpecificType().Equals("SLIDE"))
                             //{
-                                
+
                             //}
                             break;
                         case "SLIDE":
