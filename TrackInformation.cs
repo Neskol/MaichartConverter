@@ -77,6 +77,7 @@ namespace MaichartConverter
                         { "Music ID", "" },
                         { "Genre", "" },
                         { "Version", "" },
+                        {"Version Number",""},
                         { "BPM", "" },
                         { "Composer", "" },
                         { "Easy", "" },
@@ -173,7 +174,7 @@ namespace MaichartConverter
             get { return this.Information.GetValueOrDefault("Master") ?? throw new NullReferenceException("Master level is not defined"); }
             set { this.information["Master"] = value; }
         }
-        
+
         /// <summary>
         /// Return the suffix of Track title for export
         /// </summary>
@@ -212,7 +213,7 @@ namespace MaichartConverter
         {
             get
             {
-                return "["+this.StandardDeluxePrefix+"]";
+                return "[" + this.StandardDeluxePrefix + "]";
             }
         }
 
@@ -253,6 +254,21 @@ namespace MaichartConverter
                 return version;
             }
             set { this.information["Version"] = value; }
+        }
+
+        /// <summary>
+        /// Return this.TrackVersionNumber
+        /// </summary>
+        /// <value>this.TrackVersionNumber</value>
+        public string TrackVersionNumber
+        {
+
+            get
+            {
+                string versionNumber = this.Information.GetValueOrDefault("Version Number") ?? throw new NullReferenceException("Version is not Defined");
+                return versionNumber;
+            }
+            set { this.information["Version Number"] = value; }
         }
 
         /// <summary>
