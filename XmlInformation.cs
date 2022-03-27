@@ -40,6 +40,7 @@ namespace MaichartConverter
             XmlNodeList genreCandidate = this.TakeInValue.GetElementsByTagName("genreName");
             XmlNodeList addVersionCandidate = this.TakeInValue.GetElementsByTagName("AddVersion");
             XmlNodeList sortNameCandidate = this.TakeInValue.GetElementsByTagName("sortName");
+            XmlNodeList versionNumberCandidate = this.TakeInValue.GetElementsByTagName("releaseTagName");
             //Add in name and music ID.
             ////Add BPM
             //this.information.Add("BPM",bpmCandidate[0].InnerText);
@@ -161,6 +162,17 @@ namespace MaichartConverter
                     {
                         var strCandidate = candidate["str"] ?? throw new NullReferenceException();
                         this.TrackGenre= strCandidate.InnerText;
+                    }
+                }
+            }
+
+            foreach (XmlNode candidate in versionNumberCandidate)
+            {
+                {
+                    if (this.TrackVersionNumber.Equals(""))
+                    {
+                        var strCandidate = candidate["str"] ?? throw new NullReferenceException();
+                        this.TrackVersionNumber = strCandidate.InnerText;
                     }
                 }
             }

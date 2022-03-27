@@ -37,7 +37,7 @@
         public static int NumberTotalTrackCompiled;
         public static List<string> CompiledTracks = new();
         public static List<string> CompiledChart = new();
-        public static Dictionary<string, string> ReMasterTracks = new Dictionary<string, string>();
+        public static Dictionary<string, string[]> CompiledTrackDetailSet = new Dictionary<string, string[]>();
 
         /// <summary>
         /// Main method to process charts
@@ -308,7 +308,9 @@
                         }
                     }
                     NumberTotalTrackCompiled++;
-                    CompiledTracks.Add(trackInfo.TrackName);
+                    CompiledTracks.Add(trackInfo.TrackSortName+ trackInfo.TrackID);
+                    string[] compiledTrackDetail = { trackInfo.TrackName, trackInfo.TrackGenre, trackInfo.TrackVersion, trackInfo.TrackVersionNumber };
+                    CompiledTrackDetailSet.Add(trackInfo.TrackSortName+trackInfo.TrackID, compiledTrackDetail);
                     Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
                     Console.WriteLine();
                 }
@@ -415,11 +417,11 @@
             }
 
             Console.WriteLine("Specify version you will be used on choosing:");
-            for (int i = 0; i<TrackInformation.version.Length; i++)
+            for (int i = 0; i < TrackInformation.version.Length; i++)
             {
-                Console.WriteLine("["+i+"]: "+TrackInformation.version[i]);
+                Console.WriteLine("[" + i + "]: " + TrackInformation.version[i]);
             }
-            Int32.TryParse(Console.ReadLine(),out int selection);
+            Int32.TryParse(Console.ReadLine(), out int selection);
             string rule = "";
             try
             {
@@ -427,8 +429,8 @@
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Invalid input. The progran will automatically compile the latest version. "+ex.Message);
-                rule = TrackInformation.version[TrackInformation.version.Length-1];
+                Console.WriteLine("Invalid input. The progran will automatically compile the latest version. " + ex.Message);
+                rule = TrackInformation.version[TrackInformation.version.Length - 1];
             }
 
             Dictionary<string, string> bgaMap = new Dictionary<string, string>();
@@ -672,22 +674,33 @@
             return result;
         }
 
+        /// <summary>
+        /// Log to given position.
+        /// </summary>
+        /// <param name="outputLocation">Place to log</param>
         public static void Log(string outputLocation)
         {
-            StreamWriter sw = new StreamWriter(outputLocation+"log.txt", false);
+            StreamWriter sw = new StreamWriter(outputLocation + "log.txt", false);
             sw.WriteLine("Total music compiled: " + NumberTotalTrackCompiled);
             int index = 1;
+            sw.WriteLine("Index\tTitle\tGenre\tVersion\tPatch Number");
             foreach (string title in CompiledTracks)
             {
-                sw.WriteLine("[" + index + "]: " + title);
+                string[]? compiledDetailArray = new string[0];
+                CompiledTrackDetailSet.TryGetValue(title, out compiledDetailArray);
+                if (compiledDetailArray == null)
+                {
+                    compiledDetailArray = new string[0];
+                }
+                sw.WriteLine("[" + index + "]\t" + compiledDetailArray[0]+"\t"+compiledDetailArray[1]+ "\t" +compiledDetailArray[2]+ "\t" +compiledDetailArray[3]?? throw new NullReferenceException());
                 index++;
             }
-            index = 0;
+            index = 1;
 
             sw.WriteLine("Total chart compiled: " + CompiledChart.Count);
             foreach (string title in CompiledChart)
             {
-                sw.WriteLine("[" + index + "]: " + title);
+                sw.WriteLine("[" + index + "]\t" + title);
                 index++;
             }
             sw.Close();
