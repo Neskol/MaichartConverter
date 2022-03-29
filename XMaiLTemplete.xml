@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding='UTF-8' standalone='no' ?>
+<!DOCTYPE XMaiL>
+<XMaiL version = "1.0">
+    <TrackInformation>
+        <Node TrackName = "Sample Track"/>
+        <Node TrackSortName = "SAMPLETRACK"/>
+        <Node TrackID = "001"/>
+        <Node TrackGenre = "Original"/>
+        <Node TrackSymbolicBPM = "120"/>
+        <Node TrackComposer = ""/>
+        <TrackPackSort>
+            <Node TrackPack = "Original Pack"/>
+        </TrackPackSort>
+    </TrackInformation>
+    <Charts>
+        <Chart>
+            <ChartInformation>
+                <ChartDifficulty UseDefaultDifficulty = "true">
+                    <Difficulty value = "1"/>
+                </ChartDifficulty>
+                <ChartMaker name = "Fumen 100"/>
+                <ChartSDDXSuffix suffix = "SD"/>
+            </ChartInformation>
+            <BPMSetting>
+                <Stamp order = "1">
+                    <Bar value = "0"/>
+                    <Tick value = "0"/>
+                    <AbsoluteTimeStamp value = "0"/>
+                    <BPM value = "120"/>
+                </Stamp>
+            </BPMSetting>
+            <Notes>
+                <Scene setting = "default">
+                    <Note>
+                        <Type value = "Tap"/>
+                        <Key value = "1"/>
+                        <EndKey value = "1"/>
+                        <Bar value = "1"/>
+                        <Tick value = "0"/>
+                        <LastTime value = "0"/>
+                        <WaitTime value = "0"/>
+                        <BPM value = "120"/>
+                    </Note>
+                </Scene>
+            </Notes>
+        </Chart>
+    </Charts>
+</XMaiL>

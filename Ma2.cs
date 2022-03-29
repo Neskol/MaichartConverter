@@ -5,7 +5,9 @@
     /// </summary>
     public class Ma2 : Chart, ICompiler
     {
-
+        /// <summary>
+        /// Default Constructor.
+        /// </summary>
         public Ma2()
         {
             this.Notes = new List<Note>();
@@ -16,9 +18,9 @@
         }
 
         /// <summary>
-        /// Construct Good Brother with given notes, bpm change definitions and measure change definitions.
+        /// Construct Ma2 with given notes, bpm change definitions and measure change definitions.
         /// </summary>
-        /// <param name="notes">Notes in Good Brother</param>
+        /// <param name="notes">Notes in Ma2</param>
         /// <param name="bpmChanges">BPM Changes: Initial BPM is NEEDED!</param>
         /// <param name="measureChanges">Measure Changes: Initial Measure is NEEDED!</param>
         public Ma2(List<Note> notes, BPMChanges bpmChanges, MeasureChanges measureChanges)
@@ -48,7 +50,7 @@
         }
 
         /// <summary>
-        /// Construct GoodBrother with tokens given
+        /// Construct Ma2 with tokens given
         /// </summary>
         /// <param name="tokens">Tokens given</param>
         public Ma2(string[] tokens)
@@ -63,10 +65,10 @@
         }
 
         /// <summary>
-        /// Construct GoodBrother with existing values
+        /// Construct Ma2 with existing values
         /// </summary>
         /// <param name="takenIn">Existing good brother</param>
-        public Ma2(Ma2 takenIn)
+        public Ma2(Chart takenIn)
         {
             this.Notes = takenIn.Notes;
             this.BPMChanges = takenIn.BPMChanges;

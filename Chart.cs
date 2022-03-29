@@ -273,7 +273,7 @@ namespace MaichartConverter
         /// <summary>
         /// Update properties in Good Brother for exporting
         /// </summary>
-        public void Update()
+        public virtual void Update()
         {
             int maxBar = notes[notes.Count - 1].Bar;
             for (int i = 0; i <= maxBar; i++)

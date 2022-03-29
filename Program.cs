@@ -388,9 +388,13 @@
 
             Console.WriteLine("Specify Output location: *Be sure to add " + sep + " in the end");
             string outputLocation = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
-            if (outputLocation.Equals(""))
+            if (outputLocation.Equals("")&&exportBGA)
             {
                 outputLocation = @"/Users/neskol/MaiAnalysis/Output/";
+            }
+            else if(outputLocation.Equals("")&&!exportBGA)
+            {
+                outputLocation = @"/Users/neskol/MaiAnalysis/Output_NoBGA/";
             }
 
             int categorizeIndex = 0;
