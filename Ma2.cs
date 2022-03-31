@@ -14,7 +14,7 @@
             this.BPMChanges = new BPMChanges();
             this.MeasureChanges = new MeasureChanges();
             this.StoredChart = new List<List<Note>>();
-            this.Information = new Dictionary<string, string>();
+            this.Information = new TrackInformation();
         }
 
         /// <summary>
@@ -29,7 +29,7 @@
             this.BPMChanges = bpmChanges;
             this.MeasureChanges = measureChanges;
             this.StoredChart = new List<List<Note>>();
-            this.Information = new Dictionary<string, string>();
+            this.Information = new TrackInformation();
             this.Update();
         }
 
@@ -45,7 +45,7 @@
             this.BPMChanges = takenIn.BPMChanges;
             this.MeasureChanges = takenIn.MeasureChanges;
             this.StoredChart = new List<List<Note>>();
-            this.Information = new Dictionary<string, string>();
+            this.Information = new TrackInformation();
             this.Update();
         }
 
@@ -60,7 +60,7 @@
             this.BPMChanges = takenIn.BPMChanges;
             this.MeasureChanges = takenIn.MeasureChanges;
             this.StoredChart = new List<List<Note>>();
-            this.Information = new Dictionary<string, string>();
+            this.Information = new TrackInformation();
             this.Update();
         }
 
@@ -74,7 +74,7 @@
             this.BPMChanges = takenIn.BPMChanges;
             this.MeasureChanges = takenIn.MeasureChanges;
             this.StoredChart = new List<List<Note>>();
-            this.Information = new Dictionary<string, string>();
+            this.Information = new TrackInformation();
             this.Update();
         }
 

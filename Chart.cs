@@ -1,6 +1,6 @@
 namespace MaichartConverter
 {
-    public abstract class Chart : IChart
+    public abstract class Chart : IChart, ICompiler
     {
         //Stores all notes
         private List<Note> notes;
@@ -30,11 +30,11 @@ namespace MaichartConverter
         private int thoNumber;
 
         //Defines 
-        private int[] unitScore = { 500, 1000, 1500, 2500 };
+        private readonly int[] unitScore = { 500, 1000, 1500, 2500 };
         private int achievement = 0;
         private int totalDelay = 0;
         private List<List<Note>> chart;
-        private Dictionary<string, string> information;
+        private TrackInformation information;
         private readonly string[] TapTypes = { "TAP", "STR", "TTP", "XTP", "XST" };
         private readonly string[] HoldTypes = { "HLD", "THO", "XHO" };
         private readonly string[] SlideTypes = { "SI_", "SV_", "SF_", "SCL", "SCR", "SUL", "SUR", "SLL", "SLR", "SXL", "SXR", "SSL", "SSR" };
@@ -198,7 +198,7 @@ namespace MaichartConverter
         {
             get
             {
-                return this.unitScore;
+                return this.UnitScore;
             }
         }
 
@@ -209,11 +209,11 @@ namespace MaichartConverter
         {
             get
             {
-                return this.achievement;
+                return this.Achievement;
             }
             set
             {
-                this.achievement = value;
+                this.Achievement = value;
             }
         }
 
@@ -237,7 +237,7 @@ namespace MaichartConverter
         /// Return Information
         /// </summary>
         /// <value>this.Information</value>
-        public Dictionary<string,string> Information
+        public TrackInformation Information
         {
             get
             {
@@ -258,7 +258,7 @@ namespace MaichartConverter
             this.bpmChanges = new BPMChanges();
             this.measureChanges = new MeasureChanges();
             this.chart = new List<List<Note>>();
-            this.information = new Dictionary<string, string>();
+            this.information = new TrackInformation();
         }
 
         /// <summary>
@@ -679,15 +679,12 @@ namespace MaichartConverter
         }
 
         /// <summary>
-        /// Take in and replace the current information.
+        /// Take In Information
         /// </summary>
-        /// <param name="information">Dictionary containing information needed</param>
-        public void TakeInformation(Dictionary<string, string> information)
+        /// <param name="newInformation">New information to take in.</param>
+        public void TakeInformation(TrackInformation newInformation)
         {
-            foreach (KeyValuePair<string, string> x in information)
-            {
-                this.information.Add(x.Key, x.Value);
-            }
+            this.Information = newInformation;
         }
     }
 }

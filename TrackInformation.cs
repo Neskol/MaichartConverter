@@ -6,7 +6,7 @@ namespace MaichartConverter
     /// <summary>
     /// Use xml to store track information
     /// </summary>
-    public abstract class TrackInformation : IXmlUtility
+    public class TrackInformation : IXmlUtility
     {
         /// <summary>
         /// Stores proper difficulties
@@ -303,6 +303,9 @@ namespace MaichartConverter
         /// <summary>
         /// Update information
         /// </summary>
-        public abstract void Update();
+        public virtual void Update()
+        {
+            this.FormatInformation();
+        }
     }
 }

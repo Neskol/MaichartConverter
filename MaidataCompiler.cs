@@ -21,7 +21,7 @@ namespace MaichartConverter
         /// <summary>
         /// Store global information
         /// </summary>
-        private Dictionary<string, string> information;
+        private TrackInformation information;
 
         /// <summary>
         /// Store read in music XML file
@@ -277,9 +277,13 @@ namespace MaichartConverter
             return result;
         }
 
-        public void TakeInformation(Dictionary<string, string> information)
+        /// <summary>
+        /// Take In Information
+        /// </summary>
+        /// <param name="newInformation">New information to take in.</param>
+        public void TakeInformation(TrackInformation newInformation)
         {
-            this.information = information;
+            this.information = newInformation;
         }
     }
 }

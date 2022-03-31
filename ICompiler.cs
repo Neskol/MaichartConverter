@@ -9,7 +9,7 @@
         /// Intake information to compile data.
         /// </summary>
         /// <param name="information">TakeInformation to provide</param>
-        public void TakeInformation(Dictionary<string, string> information);
+        public void TakeInformation(TrackInformation information);
 
         /// <summary>
         /// Compose given chart to specific format.
