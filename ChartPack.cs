@@ -11,7 +11,7 @@ public abstract class ChartPack : IChart
     /// Stores SD and DX chart
     /// [0] SD [1] DX
     /// </summary>
-    private Chart[] sddxCharts;
+    private List<Chart>[] sddxCharts;
 
     /// <summary>
     /// Stores shared information
@@ -23,14 +23,14 @@ public abstract class ChartPack : IChart
     /// </summary>
     public ChartPack()
     {
-        sddxCharts = new Chart[2];
+        sddxCharts = new List<Chart>[2];
     }
 
     /// <summary>
     /// Accesses this.sddxCharts
     /// </summary>
     /// <value>this.sddxCharts</value>
-    public Chart[] SDDXCharts
+    public List<Chart>[] SDDXCharts
     {
         get
         {
