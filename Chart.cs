@@ -1,5 +1,9 @@
 namespace MaichartConverter
 {
+
+    /// <summary>
+    /// A class holding notes and information to form a chart
+    /// </summary>
     public abstract class Chart : IChart
     {
         //Stores all notes
