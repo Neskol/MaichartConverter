@@ -193,7 +193,7 @@
                     string defaultCategorizedPath = outputLocation + categorizeScheme[categorizeIndex];
 
                     //Cross out if not creating update packs
-                    //defaultCategorizedPath += sep + categorizeScheme[0];
+                    // defaultCategorizedPath += sep + categorizeScheme[0];
 
                     //Deal with special characters in path
                     string trackNameSubstitute = trackInfo.TrackSortName.Replace("" + sep + "", "of");

@@ -77,7 +77,13 @@ namespace MaichartConverter
         
         public override string Compose()
         {
-            throw new NotImplementedException();
+            XmlDeclaration xmlDecl = this.StoredXMailL.CreateXmlDeclaration("1.0","UTF-8",null);
+            this.StoredXMailL.AppendChild(xmlDecl);
+            XmlElement root = this.StoredXMailL.CreateElement("XMaiL");
+            XmlAttribute rootVersion = this.StoredXMailL.CreateAttribute("1.0");
+            root.Attributes.Append(rootVersion);
+            this.StoredXMailL.AppendChild(root);
+            
         }
 
         public override string Compose(BPMChanges bpm, MeasureChanges measure)
