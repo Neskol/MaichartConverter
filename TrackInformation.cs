@@ -184,7 +184,7 @@ namespace MaichartConverter
             get
             {
                 string musicID = this.Information.GetValueOrDefault("Music ID") ?? throw new NullReferenceException("Music ID is not Defined");
-                if (musicID.Length > 3)
+                if (musicID.Length > 4)
                     return "_DX";
                 else return "";
             }
@@ -199,7 +199,7 @@ namespace MaichartConverter
             get
             {
                 string musicID = this.Information.GetValueOrDefault("Music ID") ?? throw new NullReferenceException("Music ID is not Defined");
-                if (musicID.Length > 3)
+                if (musicID.Length > 4)
                     return "DX";
                 else return "SD";
             }
@@ -226,7 +226,7 @@ namespace MaichartConverter
             get
             {
                 string musicID = this.Information.GetValueOrDefault("Music ID") ?? throw new NullReferenceException("Music ID is not Defined");
-                return musicID.Length > 3;
+                return musicID.Length > 4;
             }
         }
 

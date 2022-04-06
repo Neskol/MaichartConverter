@@ -308,9 +308,9 @@
                         }
                     }
                     NumberTotalTrackCompiled++;
-                    CompiledTracks.Add(trackInfo.TrackSortName+ trackInfo.TrackID);
+                    CompiledTracks.Add(trackInfo.TrackName+ trackInfo.TrackID);
                     string[] compiledTrackDetail = { trackInfo.TrackName, trackInfo.TrackGenre, trackInfo.TrackVersion, trackInfo.TrackVersionNumber };
-                    CompiledTrackDetailSet.Add(trackInfo.TrackSortName+trackInfo.TrackID, compiledTrackDetail);
+                    CompiledTrackDetailSet.Add(trackInfo.TrackName+trackInfo.TrackID, compiledTrackDetail);
                     Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
                     Console.WriteLine();
                 }

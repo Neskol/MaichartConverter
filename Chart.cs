@@ -33,6 +33,9 @@ namespace MaichartConverter
         //Counts number of Touch Hold
         private int thoNumber;
 
+        //Defines if the chart is DX chart
+        private bool isDxChart;
+
         //Defines 
         private int[] unitScore = { 500, 1000, 1500, 2500 };
         private int achievement = 0;
@@ -253,6 +256,12 @@ namespace MaichartConverter
             }
         }
 
+        public bool IsDXChart
+        {
+            get => this.isDxChart;
+            set => this.isDxChart = value;
+        }
+
         /// <summary>
         /// Empty constructor
         /// </summary>
@@ -263,7 +272,7 @@ namespace MaichartConverter
             this.measureChanges = new MeasureChanges();
             this.chart = new List<List<Note>>();
             this.information = new Dictionary<string, string>();
-        }
+            this.isDxChart = false;        }
 
         /// <summary>
         /// Check if every item is valid for exporting
@@ -279,7 +288,11 @@ namespace MaichartConverter
         /// </summary>
         public virtual void Update()
         {
-            int maxBar = notes[notes.Count - 1].Bar;
+            int maxBar = 0;
+            if (notes.Count>0)
+            {
+                maxBar = notes[notes.Count - 1].Bar;
+            }
             for (int i = 0; i <= maxBar; i++)
             {
                 List<Note> bar = new List<Note>();
@@ -309,9 +322,14 @@ namespace MaichartConverter
                                 break;
                             case "TAP":
                                 this.tapNumber++;
+                                if (x.NoteSpecificType.Equals("XTP"))
+                                {
+                                    this.isDxChart = false;
+                                }
                                 if (x.NoteType.Equals("TTP"))
                                 {
                                     this.touchNumber++;
+                                    this.isDxChart = false;
                                 }
                                 else if (x.NoteType.Equals("BRK") || x.NoteType.Equals("BST"))
                                 {
@@ -330,6 +348,7 @@ namespace MaichartConverter
                                 if (x.NoteType.Equals("THO"))
                                 {
                                     this.thoNumber++;
+                                    this.isDxChart = false;
                                 }
                                 break;
                             case "SLIDE_START":

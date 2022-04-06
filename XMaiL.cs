@@ -3,9 +3,19 @@ using System.Xml;
 
 namespace MaichartConverter
 {
+    /// <summary>
+    /// Using xml to store maicharts
+    /// </summary>
     public class XMaiL : Chart, ICompiler
     {
+        /// <summary>
+        /// Storage of Xml file
+        /// </summary>
         private XmlDocument StoredXMailL;
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public XMaiL()
         {
             this.Notes = new List<Note>();

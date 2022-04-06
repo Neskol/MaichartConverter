@@ -172,9 +172,14 @@ namespace MaichartConverter
                     // Console.WriteLine("Processing chart: " + i);
                     if (!this.information[difficulty[i]].Equals(""))
                     {
+                        string? isDxChart = this.information.GetValueOrDefault("SDDX Suffix");
+                        if (!charts[i].IsDXChart)
+                        {
+                            isDxChart = "";
+                        }
                         result += "&inote_" + (i + 2) + "=\n";
                         result += this.Compose(charts[i]);
-                        Program.CompiledChart.Add(this.information.GetValueOrDefault("Name") + this.information.GetValueOrDefault("SDDX Suffix") + " [" + difficulty[i] + "]");
+                        Program.CompiledChart.Add(this.information.GetValueOrDefault("Name") + isDxChart + " [" + difficulty[i] + "]");
                     }
                     result += "\n";
                 }
