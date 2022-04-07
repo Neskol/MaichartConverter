@@ -5,8 +5,20 @@
     /// </summary>
     public class Tap : Note
     {
+        /// <summary>
+        /// Stores if the Touch note have special effect
+        /// </summary>
         private int specialEffect;
+
+        /// <summary>
+        /// Stores how big the note is: M1 for Regular and L1 for large
+        /// </summary>
         private string touchSize;
+
+        /// <summary>
+        /// Stores enums of accepting tap notes
+        /// </summary>
+        /// <value></value>
         private readonly string[] allowedType = { "TAP", "STR", "BRK", "BST", "XTP", "XST", "TTP" };
 
         /// <summary>

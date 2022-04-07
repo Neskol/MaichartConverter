@@ -1,18 +1,34 @@
 ﻿namespace MaichartConverter
 {
+    /// <summary>
+    /// Constructs Hold Note
+    /// </summary>
     public class Hold : Note
     {
+        /// <summary>
+        /// Stores if this Touch Hold have special effect
+        /// </summary>
         private int specialEffect;
+
+        /// <summary>
+        /// Stores the size of touch hold
+        /// </summary>
         private string touchSize;
+
+        /// <summary>
+        /// Stores enums of accepting Hold type
+        /// </summary>
+        /// <value></value>
         private readonly string[] allowedType = { "HLD", "XHO", "THO" };
+
         /// <summary>
         /// Construct a Hold Note
         /// </summary>
-        /// <param name="noteType">HLD,XHO,THO</param>
-        /// <param name="key"></param>
-        /// <param name="bar"></param>
-        /// <param name="startTime"></param>
-        /// <param name="lastTime"></param>
+        /// <param name="noteType">HLD,XHO</param>
+        /// <param name="key">Key of the hold note</param>
+        /// <param name="bar">Bar of the hold note</param>
+        /// <param name="startTime">Tick of the hold note</param>
+        /// <param name="lastTime">Last time of the hold note</param>
         public Hold(string noteType, int bar, int startTime, string key, int lastTime)
         {
             this.NoteType = noteType;
@@ -24,6 +40,16 @@
             this.touchSize = "M1";
         }
 
+        /// <summary>
+        /// Construct a Touch Hold Note
+        /// </summary>
+        /// <param name="noteType">THO</param>
+        /// <param name="key">Key of the hold note</param>
+        /// <param name="bar">Bar of the hold note</param>
+        /// <param name="startTime">Tick of the hold note</param>
+        /// <param name="lastTime">Last time of the hold note</param>
+        /// <param name = "specialEffect">Store if the touch note ends with special effect</param>
+        /// <param name = "touchSize">Determines how large the touch note is</param>
         public Hold(string noteType, int bar, int startTime, string key, int lastTime, int specialEffect, string touchSize)
         {
             this.NoteType = noteType;
@@ -35,11 +61,19 @@
             this.touchSize = "touchSize";
         }
 
+        /// <summary>
+        /// Returns if the note comes with Special Effect
+        /// </summary>
+        /// <value>0 if no, 1 if yes</value>
         public int SpecialEffect
         {
             get { return specialEffect; }
         }
 
+        /// <summary>
+        /// Returns the size of the note
+        /// </summary>
+        /// <value>M1 if regular, L1 if large</value>
         public string TouchSize
         {
             get { return touchSize; }
@@ -89,32 +123,6 @@
                 }
             }
             return result;
-        }
-
-        /// <summary>
-        /// Generate appropriate length for hold and slide.
-        /// </summary>
-        /// <param name="length">Last Time</param>
-        /// <returns>[Definition:Length]=[Quaver:Beat]</returns>
-        public string GenerateAppropriateLength(int length)
-        {
-            string result = "";
-            const int definition = 384;
-            int divisor = GCD(definition, length);
-            int quaver = definition / divisor, beat = length / divisor;
-            result = "[" + quaver.ToString() + ":" + beat.ToString() + "]";
-            return result;
-        }
-
-        /// <summary>
-        /// Return GCD of A and B.
-        /// </summary>
-        /// <param name="a">A</param>
-        /// <param name="b">B</param>
-        /// <returns>GCD of A and B</returns>
-        static int GCD(int a, int b)
-        {
-            return b == 0 ? a : GCD(b, a % b);
         }
 
         public override string NoteGenre => "HOLD";

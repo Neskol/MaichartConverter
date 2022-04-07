@@ -37,22 +37,28 @@
         /// Return correct Tap note.
         /// </summary>
         /// <param name="token">Token to take in</param>
+        /// <param name="bar">Bar of this note</param>
+        /// <param name="tick">Tick of this note</param>
         /// <returns>Specific Tap</returns>
-        public Tap TapOfToken(string token);
+        public Tap TapOfToken(string token,int bar, int tick);
 
         /// <summary>
         /// Return correct Hold note.
         /// </summary>
         /// <param name="token">Token to take in</param>
+        /// <param name="bar">Bar of this note</param>
+        /// <param name="tick">Tick of this note</param>
         /// <returns>Specific Hold Note</returns>
-        public Hold HoldOfToken(string token);
+        public Hold HoldOfToken(string token, int bar, int tick);
 
         /// <summary>
         /// Return correct Slide note.
         /// </summary>
         /// <param name="token">Token to take in</param>
+        /// <param name="bar">Bar of this note</param>
+        /// <param name="tick">Tick of this note</param>
         /// <returns>Specific Slide Note</returns>
-        public Slide SlideOfToken(string token);
+        public Slide SlideOfToken(string token,int bar, int tick);
     }
 }
 

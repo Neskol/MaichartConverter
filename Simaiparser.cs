@@ -2,12 +2,28 @@ using System.Collections.Generic;
 
 namespace MaichartConverter;
 
+/// <summary>
+/// Parse charts in Simai format
+/// </summary>
 public class SimaiParser : IParser
 {
+    /// <summary>
+    /// Enums of variables in Simai file
+    /// </summary>
+    /// <value>Common variables</value>
     public readonly string[] State = { "Note","Tap","Break","Touch","EXTap","Slide","Hold","EXHold","TouchHold","BPM","Quaver","Information" };
+
+    /// <summary>
+    /// Enums of parser state
+    /// </summary>
+    /// <value></value>
     public readonly string[] Status = { "Ready","Submit"};
 
+    /// <summary>
+    /// The maximum definition of a chart
+    /// </summary>
     public static int MaximumDefinition = 384;
+
     /// <summary>
     /// Constructor of simaiparser
     /// </summary>
@@ -15,6 +31,11 @@ public class SimaiParser : IParser
     {
     }
 
+    /// <summary>
+    /// Parse BPM change notes
+    /// </summary>
+    /// <param name="token">The parsed set of BPM change</param>
+    /// <returns>Error: simai does not have this variable</returns>
     public BPMChanges BPMChangesOfToken(string token)
     {
         throw new NotImplementedException();
@@ -67,7 +88,7 @@ public class SimaiParser : IParser
         return result;
     }
 
-    public Hold HoldOfToken(string token)
+    public Hold HoldOfToken(string token, int bar, int tick)
     {
         throw new NotImplementedException();
     }
@@ -82,12 +103,12 @@ public class SimaiParser : IParser
         throw new NotImplementedException();
     }
 
-    public Slide SlideOfToken(string token)
+    public Slide SlideOfToken(string token, int bar, int tick)
     {
         throw new NotImplementedException();
     }
 
-    public Tap TapOfToken(string token)
+    public Tap TapOfToken(string token, int bar, int tick)
     {
         throw new NotImplementedException();
     }

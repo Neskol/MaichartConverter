@@ -123,48 +123,6 @@
         }
 
         /// <summary>
-        /// Generate appropriate length for hold and slide.
-        /// </summary>
-        /// <param name="length">Last Time</param>
-        /// <returns>[Definition:Length]=[Quaver:Beat]</returns>
-        public string GenerateAppropriateLength(int length)
-        {
-            string result = "";
-            const int definition = 384;
-            int divisor = GCD(definition, length);
-            int quaver = definition / divisor, beat = length / divisor;
-            result = "[" + quaver.ToString() + ":" + beat.ToString() + "]";
-            return result;
-        }
-
-        /// <summary>
-        /// Generate appropriate length for hold and slide.
-        /// </summary>
-        /// <param name="length">Last Time</param>
-        /// <param name="bpm">BPM</param>
-        /// <returns>[Definition:Length]=[Quaver:Beat]</returns>
-        public string GenerateAppropriateLength(int length, double bpm)
-        {
-            string result = "";
-            double tickTime = 60 / bpm * 4 / 384;
-            double sustain = this.WaitTime * tickTime;
-            double duration = this.LastTime * tickTime;
-            result = "[" + sustain + "##" + duration + "]";
-            return result;
-        }
-
-        /// <summary>
-        /// Return GCD of A and B.
-        /// </summary>
-        /// <param name="a">A</param>
-        /// <param name="b">B</param>
-        /// <returns>GCD of A and B</returns>
-        static int GCD(int a, int b)
-        {
-            return b == 0 ? a : GCD(b, a % b);
-        }
-
-        /// <summary>
         /// Return inflection point of SLL and SLR
         /// </summary>
         /// <param name="x">This note</param>

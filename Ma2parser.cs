@@ -121,37 +121,39 @@
                 || token.Split('\t')[0].Equals("SSL")
                 || token.Split('\t')[0].Equals("SSR"); ;
             string[] candidate = token.Split('\t');
+            int bar = Int32.Parse(candidate[1]);
+            int tick = Int32.Parse(candidate[2]);
             foreach (string x in candidate)
             {
                 if (isTap)
                 {
-                    result = TapOfToken(token);
+                    result = TapOfToken(token, bar, tick);
                 }
                 else if (isHold)
                 {
-                    result = HoldOfToken(token);
+                    result = HoldOfToken(token, bar, tick);
                 }
                 else if (isSlide)
                 {
-                    result = SlideOfToken(token);
+                    result = SlideOfToken(token, bar, tick);
                 }
             }
             return result;
         }
 
-        public Hold HoldOfToken(string token)
+        public Hold HoldOfToken(string token, int bar, int tick)
         {
             string[] candidate = token.Split('\t');
-            if (candidate[0].Equals("THO")&&candidate.Count()>7)
+            if (candidate[0].Equals("THO") && candidate.Count() > 7)
             {
                 return new Hold(candidate[0],
-                Int32.Parse(candidate[1]),
-                Int32.Parse(candidate[2]),
+                bar,
+                tick,
                 candidate[3] + candidate[5], Int32.Parse(candidate[4]),
                 Int32.Parse(candidate[6]),
                 candidate[7]); //candidate[6] is special effect
             }
-            else if (candidate[0].Equals("THO") && candidate.Count() <=7)
+            else if (candidate[0].Equals("THO") && candidate.Count() <= 7)
             {
                 //Console.ReadLine();
                 return new Hold(candidate[0],
@@ -169,26 +171,26 @@
                             Int32.Parse(candidate[4]));
         }
 
-        public Slide SlideOfToken(string token)
+        public Slide SlideOfToken(string token, int bar, int tick)
         {
             string[] candidate = token.Split('\t');
             return new Slide(candidate[0],
-                        Int32.Parse(candidate[1]),
-                        Int32.Parse(candidate[2]),
+                        bar,
+                        tick,
                         candidate[3],
                         Int32.Parse(candidate[4]),
                         Int32.Parse(candidate[5]),
                         candidate[6]);
         }
 
-        public Tap TapOfToken(string token)
+        public Tap TapOfToken(string token, int bar, int tick)
         {
             string[] candidate = token.Split('\t');
-            if (candidate[0].Equals("TTP")&&(candidate.Count())>=7)
+            if (candidate[0].Equals("TTP") && (candidate.Count()) >= 7)
             {
                 return new Tap(candidate[0],
-                Int32.Parse(candidate[1]),
-                Int32.Parse(candidate[2]),
+                bar,
+                tick,
                 candidate[3] + candidate[4],
                 Int32.Parse(candidate[5]),
                 candidate[6]);
