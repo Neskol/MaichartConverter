@@ -8,6 +8,7 @@
         <Node TrackGenre = "Original"/>
         <Node TrackSymbolicBPM = "120"/>
         <Node TrackComposer = ""/>
+        <Node TrackDesigner = ""/>
         <TrackPackSort>
             <Node TrackPack = "Original Pack"/>
         </TrackPackSort>

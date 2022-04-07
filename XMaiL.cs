@@ -83,7 +83,8 @@ namespace MaichartConverter
             XmlAttribute rootVersion = this.StoredXMailL.CreateAttribute("1.0");
             root.Attributes.Append(rootVersion);
             this.StoredXMailL.AppendChild(root);
-            
+            XmlElement information = this.StoredXMailL.CreateElement("TrackInformation");
+            throw new NotImplementedException();
         }
 
         public override string Compose(BPMChanges bpm, MeasureChanges measure)
