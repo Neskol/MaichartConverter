@@ -34,6 +34,17 @@
         public Note NoteOfToken(string token);
 
         /// <summary>
+        /// Return a specific note of given Token.
+        /// </summary>
+        /// <param name="token">Token to take in</param>
+        /// <param name="bar"></param>
+        /// <param name="tick"></param>
+        /// <param name="bgm"></param>
+        /// <param name="quaver"></param>
+        /// <returns>Specific Note</returns>
+        public Note NoteOfToken(string token,int bar, int tick, int bgm, int quaver);
+
+        /// <summary>
         /// Return correct Tap note.
         /// </summary>
         /// <param name="token">Token to take in</param>
@@ -41,6 +52,14 @@
         /// <param name="tick">Tick of this note</param>
         /// <returns>Specific Tap</returns>
         public Tap TapOfToken(string token,int bar, int tick);
+
+        /// <summary>
+        /// Return correct Tap note.
+        /// </summary>
+        /// <param name="token">Token to take in</param>
+        /// <returns>Specific Tap</returns>
+        public Tap TapOfToken(string token);
+
 
         /// <summary>
         /// Return correct Hold note.
@@ -52,6 +71,14 @@
         public Hold HoldOfToken(string token, int bar, int tick);
 
         /// <summary>
+        /// Return correct Hold note.
+        /// </summary>
+        /// <param name="token">Token to take in</param>
+        /// <returns>Specific Hold Note</returns>
+        public Hold HoldOfToken(string token);
+
+
+        /// <summary>
         /// Return correct Slide note.
         /// </summary>
         /// <param name="token">Token to take in</param>
@@ -59,6 +86,14 @@
         /// <param name="tick">Tick of this note</param>
         /// <returns>Specific Slide Note</returns>
         public Slide SlideOfToken(string token,int bar, int tick);
+
+        /// <summary>
+        /// Return correct Slide note.
+        /// </summary>
+        /// <param name="token">Token to take in</param>
+        /// <returns>Specific Slide Note</returns>
+        public Slide SlideOfToken(string token);
+
     }
 }
 

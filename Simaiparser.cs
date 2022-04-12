@@ -11,13 +11,13 @@ public class SimaiParser : IParser
     /// Enums of variables in Simai file
     /// </summary>
     /// <value>Common variables</value>
-    public readonly string[] State = { "Note","Tap","Break","Touch","EXTap","Slide","Hold","EXHold","TouchHold","BPM","Quaver","Information" };
+    public readonly string[] State = { "Note", "Tap", "Break", "Touch", "EXTap", "Slide", "Hold", "EXHold", "TouchHold", "BPM", "Quaver", "Information" };
 
     /// <summary>
     /// Enums of parser state
     /// </summary>
     /// <value></value>
-    public readonly string[] Status = { "Ready","Submit"};
+    public readonly string[] Status = { "Ready", "Submit" };
 
     /// <summary>
     /// The maximum definition of a chart
@@ -38,7 +38,7 @@ public class SimaiParser : IParser
     /// <returns>Error: simai does not have this variable</returns>
     public BPMChanges BPMChangesOfToken(string token)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException("Simai does not have this component");
     }
 
     public Chart ChartOfToken(string[] tokens)
@@ -49,10 +49,10 @@ public class SimaiParser : IParser
         List<Note> notes = new List<Note>();
         BPMChanges bpmChanges = new BPMChanges();
         MeasureChanges measureChanges = new MeasureChanges();
-        int bar=0;
-        int tick=0;
-        int tickStep=MaximumDefinition;
-        for (int i = 0;i<tokens.Length;i++)
+        int bar = 0;
+        int tick = 0;
+        int tickStep = MaximumDefinition;
+        for (int i = 0; i < tokens.Length; i++)
         {
             bool isBPM = tokens[i].Contains("(");
             bool isMeasure = tokens[i].Contains("{");
@@ -61,26 +61,26 @@ public class SimaiParser : IParser
             if (isBPM)
             {
                 string bpm = tokens[i];
-                bpm.Replace("(","");
-                bpm.Replace(")","");
-                bpmChanges.Add(new BPMChange(bar,tick,Double.Parse(bpm)));
+                bpm.Replace("(", "");
+                bpm.Replace(")", "");
+                bpmChanges.Add(new BPMChange(bar, tick, Double.Parse(bpm)));
             }
             else if (isMeasure)
             {
                 string quaverCandidate = tokens[i];
-                quaverCandidate.Replace("{","");
-                quaverCandidate.Replace("}","");
-                tickStep = MaximumDefinition/Int32.Parse(quaverCandidate);
+                quaverCandidate.Replace("{", "");
+                quaverCandidate.Replace("}", "");
+                tickStep = MaximumDefinition / Int32.Parse(quaverCandidate);
             }
             else
             {
                 notes.Add(NoteOfToken(tokens[i]));
             }
 
-            tick+=tickStep;
-            while (tick>=MaximumDefinition)
+            tick += tickStep;
+            while (tick >= MaximumDefinition)
             {
-                tick-=MaximumDefinition;
+                tick -= MaximumDefinition;
                 bar++;
             }
         }
@@ -93,6 +93,11 @@ public class SimaiParser : IParser
         throw new NotImplementedException();
     }
 
+    public Hold HoldOfToken(string token)
+    {
+        throw new NotImplementedException();
+    }
+
     public MeasureChanges MeasureChangesOfToken(string token)
     {
         throw new NotImplementedException();
@@ -100,7 +105,60 @@ public class SimaiParser : IParser
 
     public Note NoteOfToken(string token)
     {
-        throw new NotImplementedException();
+        Note result = new Rest();
+        bool isSlide = token.Contains("-") ||
+        token.Contains("v") ||
+        token.Contains("w") ||
+        token.Contains("<") ||
+        token.Contains(">") ||
+        token.Contains("p") ||
+        token.Contains("q") ||
+        token.Contains("s") ||
+        token.Contains("z") ||
+        token.Contains("V");
+        bool isHold = !isSlide && token.Contains("[");
+        if (isSlide)
+        {
+            result = SlideOfToken(token);
+        }
+        else if (isHold)
+        {
+            result = HoldOfToken(token);
+        }
+        else
+        {
+            result = TapOfToken(token);
+        }
+        return result;
+    }
+
+    public Note NoteOfToken(string token, int bar, int tick, int bgm, int quaver)
+    {
+        Note result = new Rest();
+        bool isSlide = token.Contains("-") ||
+        token.Contains("v") ||
+        token.Contains("w") ||
+        token.Contains("<") ||
+        token.Contains(">") ||
+        token.Contains("p") ||
+        token.Contains("q") ||
+        token.Contains("s") ||
+        token.Contains("z") ||
+        token.Contains("V");
+        bool isHold = !isSlide && token.Contains("[");
+        if (isSlide)
+        {
+            result = SlideOfToken(token);
+        }
+        else if (isHold)
+        {
+            result = HoldOfToken(token);
+        }
+        else
+        {
+            result = TapOfToken(token);
+        }
+        return result;
     }
 
     public Slide SlideOfToken(string token, int bar, int tick)
@@ -108,7 +166,17 @@ public class SimaiParser : IParser
         throw new NotImplementedException();
     }
 
+    public Slide SlideOfToken(string token)
+    {
+        throw new NotImplementedException();
+    }
+
     public Tap TapOfToken(string token, int bar, int tick)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Tap TapOfToken(string token)
     {
         throw new NotImplementedException();
     }
