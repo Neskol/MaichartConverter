@@ -141,7 +141,7 @@
             return result;
         }
 
-        public Note NoteOfToken(string token, int bar, int tick, int bpm, int quaver)
+        public Note NoteOfToken(string token, int bar, int tick, double bpm)
         {
             Note result = new Rest();
             bool isTap = token.Split('\t')[0].Equals("TAP")
