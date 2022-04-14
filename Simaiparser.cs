@@ -51,6 +51,7 @@ public class SimaiParser : IParser
         MeasureChanges measureChanges = new MeasureChanges();
         int bar = 0;
         int tick = 0;
+        double currentBPM = 0.0;
         int tickStep = MaximumDefinition;
         for (int i = 0; i < tokens.Length; i++)
         {
@@ -64,6 +65,7 @@ public class SimaiParser : IParser
                 bpm.Replace("(", "");
                 bpm.Replace(")", "");
                 bpmChanges.Add(new BPMChange(bar, tick, Double.Parse(bpm)));
+                currentBPM = Double.Parse(bpm);
             }
             else if (isMeasure)
             {
@@ -74,7 +76,11 @@ public class SimaiParser : IParser
             }
             else
             {
-                notes.Add(NoteOfToken(tokens[i]));
+                List<string> eachPairCandidates = EachGroupOfToken(tokens[i]);
+                foreach (string eachNote in eachPairCandidates)
+                {
+                    notes.Add(NoteOfToken(eachNote));
+                }
             }
 
             tick += tickStep;
@@ -132,7 +138,7 @@ public class SimaiParser : IParser
         return result;
     }
 
-    public Note NoteOfToken(string token, int bar, int tick, int bgm, int quaver)
+    public Note NoteOfToken(string token, int bar, int tick, double bgm)
     {
         Note result = new Rest();
         bool isSlide = token.Contains("-") ||
@@ -148,15 +154,15 @@ public class SimaiParser : IParser
         bool isHold = !isSlide && token.Contains("[");
         if (isSlide)
         {
-            result = SlideOfToken(token);
+            result = SlideOfToken(token, bar, tick);
         }
         else if (isHold)
         {
-            result = HoldOfToken(token);
+            result = HoldOfToken(token, bar, tick);
         }
         else
         {
-            result = TapOfToken(token);
+            result = TapOfToken(token, bar, tick);
         }
         return result;
     }
@@ -173,11 +179,75 @@ public class SimaiParser : IParser
 
     public Tap TapOfToken(string token, int bar, int tick)
     {
-        throw new NotImplementedException();
+        bool isBreak = token.Contains("b");
+        bool isEXTap = token.Contains("x");
+        bool isTouch = token.Contains("B") ||
+        token.Contains("C") ||
+        token.Contains("E") ||
+        token.Contains("F");
+        Tap result = new Tap();
+        if (isTouch)
+        {
+            bool hasSpecialEffect = token.Contains("f");
+            if (hasSpecialEffect)
+            {
+                result = new Tap("TTP", bar, tick, token.Substring(0, 1) + Int32.Parse(token.Substring(1, 1) + 1),1,"M1");
+
+            }
+            else result = new Tap("TTP", bar, tick, token.Substring(0, 1) + Int32.Parse(token.Substring(1, 1) + 1),0,"M1");
+        }
+        else if (isEXTap)
+        {
+            result = new Tap("XTP", bar, tick, token.Substring(0, 1));
+        }
+        else if (isBreak)
+        {
+            result = new Tap("BRK", bar, tick, token.Substring(0, 1));
+        }
+        else result = new Tap("TAP", bar, tick, token.Substring(0, 1));
+        return result;
     }
 
     public Tap TapOfToken(string token)
     {
         throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Deal with old, outfashioned and illogical Simai Each Groups.
+    /// </summary>
+    /// <param name="token">Tokens that potentially contains each Groups</param>
+    /// <returns>List of strings that is composed with single note.</returns>
+    public static List<string> EachGroupOfToken(string token)
+    {
+        List<string> result = new List<string>();
+        if (token.Contains("/"))
+        {
+            string[] candidate = token.Split("/");
+            foreach (string tokenCandidate in candidate)
+            {
+                result.AddRange(EachGroupOfToken(tokenCandidate));
+            }
+        }
+        else if (Int32.TryParse(token,out int eachPair))
+        {
+            char[] eachPairs = token.ToCharArray();
+            foreach (char x in eachPairs)
+            {
+                result.Add(x.ToString());
+            }
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Deal with annoying vigours Slide grammar of Simai
+    /// </summary>
+    /// <param name="token">Token that potentially contains slide note</param>
+    /// <returns>A list of string extracts each note</returns>
+    public static List<string> ExtractSlideComponents(string token)
+    {
+        List<string> result = new List<string>();
+        return result;
     }
 }

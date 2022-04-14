@@ -40,9 +40,8 @@
         /// <param name="bar"></param>
         /// <param name="tick"></param>
         /// <param name="bgm"></param>
-        /// <param name="quaver"></param>
         /// <returns>Specific Note</returns>
-        public Note NoteOfToken(string token,int bar, int tick, int bgm, int quaver);
+        public Note NoteOfToken(string token,int bar, int tick, double bgm);
 
         /// <summary>
         /// Return correct Tap note.
