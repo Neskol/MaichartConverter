@@ -25,6 +25,20 @@
                 throw ex;
             }
         }
+
+        public string[] TokensFromText(string text)
+        {
+            try
+            {
+                string[] result = text.Split("\n");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception raised: " + ex.Message);
+                throw ex;
+            }
+        }
     }
 }
 

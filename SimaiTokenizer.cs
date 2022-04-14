@@ -2,11 +2,11 @@
 using System.IO;
 namespace MaichartConverter
 {
-	public class SimaiTokenizer:ITokenizer
-	{
-		public SimaiTokenizer()
-		{
-		}
+    public class SimaiTokenizer : ITokenizer
+    {
+        public SimaiTokenizer()
+        {
+        }
 
         public string[] Tokens(string location)
         {
@@ -16,14 +16,30 @@ namespace MaichartConverter
                 string storage = "";
                 foreach (string line in takeIn)
                 {
-                    storage+=line;
+                    storage += line;
                 }
                 string[] result = storage.Split('&');
                 return result;
             }
-            catch (DirectoryNotFoundException)
+            catch (DirectoryNotFoundException ex)
             {
-                throw new DirectoryNotFoundException(location);
+                Console.WriteLine("Exception raised: " + ex.Message);
+                throw ex;
+            }
+        }
+
+        public string[] TokensFromText(string text)
+        {
+            try
+            {
+                string storage = text;
+                string[] result = storage.Split('&');
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception raised: " + ex.Message);
+                throw ex;
             }
         }
     }

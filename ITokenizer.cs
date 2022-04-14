@@ -9,8 +9,15 @@
         /// Intake files and return tokens.
         /// </summary>
         /// <param name="location"></param>
-        /// <returns></returns>
+        /// <returns>Tokens from file specified</returns>
         string[] Tokens(string location);
+
+        /// <summary>
+        /// Intake files and return tokens.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns>Tokens from text specified</returns>
+        string[] TokensFromText(string text);
     }
 }
 
