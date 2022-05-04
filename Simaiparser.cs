@@ -55,33 +55,26 @@ public class SimaiParser : IParser
         int tickStep = MaximumDefinition;
         for (int i = 0; i < tokens.Length; i++)
         {
-            bool isBPM = tokens[i].Contains("(");
-            bool isMeasure = tokens[i].Contains("{");
+            bool containsBPM = tokens[i].Contains("(");
+            bool containsMeasure = tokens[i].Contains("{");
             bool ended = tokens[i].Equals("E");
 
-            if (isBPM)
+            List<string> eachPairCandidates = EachGroupOfToken(tokens[i]);
+            foreach (string eachNote in eachPairCandidates)
             {
-                string bpm = tokens[i];
-                bpm.Replace("(", "");
-                bpm.Replace(")", "");
-                bpmChanges.Add(new BPMChange(bar, tick, Double.Parse(bpm)));
-                currentBPM = Double.Parse(bpm);
-            }
-            else if (isMeasure)
-            {
-                string quaverCandidate = tokens[i];
-                quaverCandidate.Replace("{", "");
-                quaverCandidate.Replace("}", "");
-                tickStep = MaximumDefinition / Int32.Parse(quaverCandidate);
-            }
-            else
-            {
-                List<string> eachPairCandidates = EachGroupOfToken(tokens[i]);
-                foreach (string eachNote in eachPairCandidates)
+                notes.Add(NoteOfToken(eachNote));
+                containsBPM = NoteOfToken(eachNote).NoteSpecificType.Equals("BPM");
+                containsMeasure = NoteOfToken(eachNote).NoteSpecificType.Equals("Measure");
+                if (containsBPM)
                 {
-                    notes.Add(NoteOfToken(eachNote));
+                    currentBPM = NoteOfToken(eachNote).BPM;
+                }
+                else if (containsMeasure)
+                {
+                    //tickStep = MaximumDefinition / MeasureChange(NoteOfToken(eachNote)).Quaver;
                 }
             }
+
 
             tick += tickStep;
             while (tick >= MaximumDefinition)
@@ -112,6 +105,8 @@ public class SimaiParser : IParser
     public Note NoteOfToken(string token)
     {
         Note result = new Rest();
+        bool isBPM = token.Contains(")");
+        bool isMeasure = token.Contains("}");
         bool isSlide = token.Contains("-") ||
         token.Contains("v") ||
         token.Contains("w") ||
@@ -131,6 +126,20 @@ public class SimaiParser : IParser
         {
             result = HoldOfToken(token);
         }
+        else if (isBPM)
+        {
+            string bpmCandidate = token;
+            bpmCandidate.Replace("(", "");
+            bpmCandidate.Replace(")", "");
+            //result = new BPMChange(bar, tick, Double.Parse(bpmCandidate));
+        }
+        else if (isMeasure)
+        {
+            string quaverCandidate = token;
+            quaverCandidate.Replace("{", "");
+            quaverCandidate.Replace("}", "");
+            //result = new MeasureChange(bar, tick, Int32.Parse(quaverCandidate));
+        }
         else
         {
             result = TapOfToken(token);
@@ -141,6 +150,8 @@ public class SimaiParser : IParser
     public Note NoteOfToken(string token, int bar, int tick, double bgm)
     {
         Note result = new Rest();
+        bool isBPM = token.Contains(")");
+        bool isMeasure = token.Contains("}");
         bool isSlide = token.Contains("-") ||
         token.Contains("v") ||
         token.Contains("w") ||
@@ -154,15 +165,29 @@ public class SimaiParser : IParser
         bool isHold = !isSlide && token.Contains("[");
         if (isSlide)
         {
-            result = SlideOfToken(token, bar, tick);
+            result = SlideOfToken(token);
         }
         else if (isHold)
         {
-            result = HoldOfToken(token, bar, tick);
+            result = HoldOfToken(token);
+        }
+        else if (isBPM)
+        {
+            string bpmCandidate = token;
+            bpmCandidate.Replace("(", "");
+            bpmCandidate.Replace(")", "");
+            result = new BPMChange(bar, tick, Double.Parse(bpmCandidate));
+        }
+        else if (isMeasure)
+        {
+            string quaverCandidate = token;
+            quaverCandidate.Replace("{", "");
+            quaverCandidate.Replace("}", "");
+            result = new MeasureChange(bar, tick, Int32.Parse(quaverCandidate));
         }
         else
         {
-            result = TapOfToken(token, bar, tick);
+            result = TapOfToken(token);
         }
         return result;
     }
@@ -191,10 +216,10 @@ public class SimaiParser : IParser
             bool hasSpecialEffect = token.Contains("f");
             if (hasSpecialEffect)
             {
-                result = new Tap("TTP", bar, tick, token.Substring(0, 1) + Int32.Parse(token.Substring(1, 1) + 1),1,"M1");
+                result = new Tap("TTP", bar, tick, token.Substring(0, 1) + Int32.Parse(token.Substring(1, 1) + 1), 1, "M1");
 
             }
-            else result = new Tap("TTP", bar, tick, token.Substring(0, 1) + Int32.Parse(token.Substring(1, 1) + 1),0,"M1");
+            else result = new Tap("TTP", bar, tick, token.Substring(0, 1) + Int32.Parse(token.Substring(1, 1) + 1), 0, "M1");
         }
         else if (isEXTap)
         {
@@ -229,7 +254,23 @@ public class SimaiParser : IParser
                 result.AddRange(EachGroupOfToken(tokenCandidate));
             }
         }
-        else if (Int32.TryParse(token,out int eachPair))
+        else if (token.Contains(")"))
+        {
+            string[] candidate = token.Split(")");
+            foreach (string tokenCandidate in candidate)
+            {
+                result.AddRange(EachGroupOfToken(tokenCandidate));
+            }
+        }
+        else if (token.Contains("}"))
+        {
+            string[] candidate = token.Split("}");
+            foreach (string tokenCandidate in candidate)
+            {
+                result.AddRange(EachGroupOfToken(tokenCandidate));
+            }
+        }
+        else if (Int32.TryParse(token, out int eachPair))
         {
             char[] eachPairs = token.ToCharArray();
             foreach (char x in eachPairs)
