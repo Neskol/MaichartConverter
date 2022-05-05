@@ -42,6 +42,7 @@ public class SimaiParser : IParser
     }
 
     public Chart ChartOfToken(string[] tokens)
+    // Note: here chart will only return syntax after &inote_x= and each token is separated by ","
     {
         throw new NotImplementedException();
         Chart result = new Simai2();
@@ -62,16 +63,27 @@ public class SimaiParser : IParser
             List<string> eachPairCandidates = EachGroupOfToken(tokens[i]);
             foreach (string eachNote in eachPairCandidates)
             {
-                notes.Add(NoteOfToken(eachNote));
+                if (currentBPM>0.0)
+                {
+                    notes.Add(NoteOfToken(eachNote, bar, tick, currentBPM));
+                }
                 containsBPM = NoteOfToken(eachNote).NoteSpecificType.Equals("BPM");
                 containsMeasure = NoteOfToken(eachNote).NoteSpecificType.Equals("Measure");
                 if (containsBPM)
                 {
-                    currentBPM = NoteOfToken(eachNote).BPM;
+                    string bpmCandidate = eachNote;
+                    bpmCandidate.Replace("(", "");
+                    bpmCandidate.Replace(")", "");
+                    notes.Add(new BPMChange(bar, tick, Double.Parse(bpmCandidate)));
+                    currentBPM = Double.Parse(bpmCandidate);
                 }
                 else if (containsMeasure)
                 {
-                    //tickStep = MaximumDefinition / MeasureChange(NoteOfToken(eachNote)).Quaver;
+                    string quaverCandidate = eachNote;
+                    quaverCandidate.Replace("{", "");
+                    quaverCandidate.Replace("}", "");
+                    tickStep = MaximumDefinition / Int32.Parse(quaverCandidate);
+                    notes.Add(new MeasureChange(bar, tick, tickStep));
                 }
             }
 
@@ -128,16 +140,18 @@ public class SimaiParser : IParser
         }
         else if (isBPM)
         {
-            string bpmCandidate = token;
-            bpmCandidate.Replace("(", "");
-            bpmCandidate.Replace(")", "");
+            throw new NotImplementedException("IsBPM is not supported in simai");
+            // string bpmCandidate = token;
+            // bpmCandidate.Replace("(", "");
+            // bpmCandidate.Replace(")", "");
             //result = new BPMChange(bar, tick, Double.Parse(bpmCandidate));
         }
         else if (isMeasure)
         {
-            string quaverCandidate = token;
-            quaverCandidate.Replace("{", "");
-            quaverCandidate.Replace("}", "");
+            throw new NotImplementedException("IsMeasure is not supported in simai");
+            // string quaverCandidate = token;
+            // quaverCandidate.Replace("{", "");
+            // quaverCandidate.Replace("}", "");
             //result = new MeasureChange(bar, tick, Int32.Parse(quaverCandidate));
         }
         else
@@ -254,6 +268,10 @@ public class SimaiParser : IParser
                 result.AddRange(EachGroupOfToken(tokenCandidate));
             }
         }
+        else if (token.Contains("*"))
+        {
+            result.AddRange(ExtractEachSlides(token));
+        }
         else if (token.Contains(")"))
         {
             string[] candidate = token.Split(")");
@@ -284,9 +302,9 @@ public class SimaiParser : IParser
     /// <summary>
     /// Deal with annoying vigours Slide grammar of Simai
     /// </summary>
-    /// <param name="token">Token that potentially contains slide note</param>
-    /// <returns>A list of string extracts each note</returns>
-    public static List<string> ExtractSlideComponents(string token)
+    /// <param name="token">Token that potentially contains multiple slide note</param>
+    /// <returns>A list of slides extracts each note</returns>
+    public static List<string> ExtractEachSlides(string token)
     {
         List<string> result = new List<string>();
         return result;
