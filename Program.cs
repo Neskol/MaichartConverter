@@ -15,10 +15,28 @@
         /// </summary>
         public static string MacPathSep = "/";
 
+        
+        public readonly static string[] WinPaths = { @"C:\Users\Neskol\Documents\MaiAnalysis\A000\",
+        @"C:\Users\Neskol\Documents\MaiAnalysis\Sound\",
+        @"C:\Users\Neskol\Documents\MaiAnalysis\Image\Texture2D\",
+        @"C:\Users\Neskol\Documents\MaiAnalysis\DXBGA_HEVC\",
+        @"C:\Users\Neskol\Documents\MaiAnalysis\Output\"};
+
+        public readonly static string[] macPaths = { @"/Users/neskol/MaiAnalysis/A000/",
+        @"/Users/neskol/MaiAnalysis/Sound/",
+        @"/Users/neskol/MaiAnalysis/Image/Texture2D/",
+        @"/Users/neskol/MaiAnalysis/DXBGA_HEVC/",
+        @"/Users/neskol/MaiAnalysis/Output/"};
+
         /// <summary>
         /// Defines which seperator is using in programs
         /// </summary>
-        public static string GlobalSep = MacPathSep;
+        public static string GlobalSep = WindowsPathSep;
+
+        /// <summary>
+        /// Defines which path is using in programs
+        /// </summary>
+        public static string[] GlobalPaths = WinPaths;
 
         /// <summary>
         /// Defines possible sorting scheme
@@ -85,7 +103,7 @@
             string a000Location = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
             if (a000Location.Equals(""))
             {
-                a000Location = @"/Users/neskol/MaiAnalysis/A000/";
+                a000Location = GlobalPaths[0];
             }
 
             string musiclocation = a000Location + @"music" + sep;
@@ -93,7 +111,7 @@
             string audioLocation = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
             if (audioLocation.Equals(""))
             {
-                audioLocation = @"/Users/neskol/MaiAnalysis/Sound/";
+                audioLocation = GlobalPaths[1];
             }
             else if (audioLocation.Equals("n"))
             {
@@ -104,7 +122,7 @@
             string imageLocation = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
             if (imageLocation.Equals(""))
             {
-                imageLocation = @"/Users/neskol/MaiAnalysis/Image/Texture2D/";
+                imageLocation = GlobalPaths[2];
             }
             else if (imageLocation.Equals("n"))
             {
@@ -115,7 +133,7 @@
             string bgaLocation = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
             if (bgaLocation.Equals(""))
             {
-                bgaLocation = @"/Users/neskol/MaiAnalysis/DXBGA_HEVC/";
+                bgaLocation = GlobalPaths[3];
             }
             else if (bgaLocation.Equals("n"))
             {
@@ -126,7 +144,7 @@
             string outputLocation = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
             if (outputLocation.Equals(""))
             {
-                outputLocation = @"/Users/neskol/MaiAnalysis/Output/";
+                outputLocation = GlobalPaths[4];
             }
 
             int categorizeIndex = 0;
