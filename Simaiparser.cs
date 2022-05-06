@@ -307,6 +307,14 @@ public class SimaiParser : IParser
     public static List<string> ExtractEachSlides(string token)
     {
         List<string> result = new List<string>();
+        if (token.Contains("*"))
+        {
+            string[] components = token.Split("*");
+            for (int i=1; i<components.Length;i++)
+            {
+
+            }
+        }
         return result;
     }
 }
