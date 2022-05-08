@@ -127,15 +127,15 @@
             {
                 if (isTap)
                 {
-                    result = TapOfToken(token, bar, tick);
+                    result = TapOfToken(token);
                 }
                 else if (isHold)
                 {
-                    result = HoldOfToken(token, bar, tick);
+                    result = HoldOfToken(token);
                 }
                 else if (isSlide)
                 {
-                    result = SlideOfToken(token, bar, tick);
+                    result = SlideOfToken(token);
                 }
             }
             return result;
@@ -172,26 +172,27 @@
             {
                 if (isTap)
                 {
-                    result = TapOfToken(token, bar, tick);
+                    result = TapOfToken(token, bar, tick, bpm);
                 }
                 else if (isHold)
                 {
-                    result = HoldOfToken(token, bar, tick);
+                    result = HoldOfToken(token, bar, tick, bpm);
                 }
                 else if (isSlide)
                 {
-                    result = SlideOfToken(token, bar, tick);
+                    result = SlideOfToken(token, bar, tick, bpm);
                 }
             }
             return result;
         }
 
-        public Hold HoldOfToken(string token, int bar, int tick)
+        public Hold HoldOfToken(string token, int bar, int tick, double bpm)
         {
+            Note result = new Rest();
             string[] candidate = token.Split('\t');
             if (candidate[0].Equals("THO") && candidate.Count() > 7)
             {
-                return new Hold(candidate[0],
+                result = new Hold(candidate[0],
                 bar,
                 tick,
                 candidate[3] + candidate[5], Int32.Parse(candidate[4]),
@@ -201,7 +202,7 @@
             else if (candidate[0].Equals("THO") && candidate.Count() <= 7)
             {
                 //Console.ReadLine();
-                return new Hold(candidate[0],
+                result =  new Hold(candidate[0],
                 Int32.Parse(candidate[1]),
                 Int32.Parse(candidate[2]),
                 candidate[3] + candidate[5], Int32.Parse(candidate[4]),
@@ -209,11 +210,13 @@
                 "M1"); //candidate[6] is special effect
             }
             else
-                return new Hold(candidate[0],
+                result = new Hold(candidate[0],
                             Int32.Parse(candidate[1]),
                             Int32.Parse(candidate[2]),
                             candidate[3],
                             Int32.Parse(candidate[4]));
+            result.BPM = bpm;
+            return (Hold)result;
         }
 
         public Hold HoldOfToken(string token)
@@ -248,16 +251,19 @@
                             Int32.Parse(candidate[4]));
         }
 
-        public Slide SlideOfToken(string token, int bar, int tick)
+        public Slide SlideOfToken(string token, int bar, int tick, double bpm)
         {
+            Note result = new Rest();
             string[] candidate = token.Split('\t');
-            return new Slide(candidate[0],
+            result = new Slide(candidate[0],
                                    bar,
                                    tick,
                                    candidate[3],
                                    Int32.Parse(candidate[4]),
                                    Int32.Parse(candidate[5]),
                                    candidate[6]);
+            result.BPM = bpm;
+            return (Slide)result;
         }
 
         public Slide SlideOfToken(string token)
@@ -275,12 +281,13 @@
         }
 
 
-        public Tap TapOfToken(string token, int bar, int tick)
+        public Tap TapOfToken(string token, int bar, int tick,double bpm)
         {
+            Note result = new Rest();
             string[] candidate = token.Split('\t');
             if (candidate[0].Equals("TTP") && (candidate.Count()) >= 7)
             {
-                return new Tap(candidate[0],
+                result = new Tap(candidate[0],
                 bar,
                 tick,
                 candidate[3] + candidate[4],
@@ -290,7 +297,7 @@
             else if (candidate[0].Equals("TTP") && (candidate.Count()) < 7)
             {
                 //Console.ReadLine();
-                return new Tap(candidate[0],
+                result = new Tap(candidate[0],
                 Int32.Parse(candidate[1]),
                 Int32.Parse(candidate[2]),
                 candidate[3] + candidate[4],
@@ -298,10 +305,12 @@
                 "M1");
             }
             else
-                return new Tap(candidate[0],
+                result = new Tap(candidate[0],
                     Int32.Parse(candidate[1]),
                     Int32.Parse(candidate[2]),
                     candidate[3]);
+            result.BPM = bpm;
+            return (Tap)result;
         }
 
         public Tap TapOfToken(string token)

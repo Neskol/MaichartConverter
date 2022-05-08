@@ -16,11 +16,11 @@
         public static string MacPathSep = "/";
 
         
-        public readonly static string[] WinPaths = { @"C:\Users\Neskol\Documents\MaiAnalysis\A000\",
-        @"C:\Users\Neskol\Documents\MaiAnalysis\Sound\",
-        @"C:\Users\Neskol\Documents\MaiAnalysis\Image\Texture2D\",
-        @"C:\Users\Neskol\Documents\MaiAnalysis\DXBGA_HEVC\",
-        @"C:\Users\Neskol\Documents\MaiAnalysis\Output\"};
+        public readonly static string[] WinPaths = { @"C:\Users\Neskol\MaiAnalysis\A000\",
+        @"C:\Users\Neskol\MaiAnalysis\Sound\",
+        @"C:\Users\Neskol\MaiAnalysis\Image\Texture2D\",
+        @"C:\Users\Neskol\MaiAnalysis\DXBGA_HEVC\",
+        @"C:\Users\Neskol\MaiAnalysis\Output\"};
 
         public readonly static string[] macPaths = { @"/Users/neskol/MaiAnalysis/A000/",
         @"/Users/neskol/MaiAnalysis/Sound/",
@@ -64,7 +64,7 @@
         public static void Main(string[] args)
         {
             Console.WriteLine(ComposeHeader());
-            // TestSpecificChart("000834","4");
+            //TestSpecificChart("000834", "4");
             CompileChartDatabase();
             // CompileAssignedChartDatabase();
         }

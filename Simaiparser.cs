@@ -25,6 +25,11 @@ public class SimaiParser : IParser
     public static int MaximumDefinition = 384;
 
     /// <summary>
+    /// For easy access - Don't want to rewrite the interface
+    /// </summary>
+    private static double CurrentBPM = 0;
+
+    /// <summary>
     /// Constructor of simaiparser
     /// </summary>
     public SimaiParser()
@@ -99,9 +104,13 @@ public class SimaiParser : IParser
         return result;
     }
 
-    public Hold HoldOfToken(string token, int bar, int tick)
+    public Hold HoldOfToken(string token, int bar, int tick, double bpm)
     {
         throw new NotImplementedException();
+        int sustainSymbol = token.IndexOf("[");
+        string keyCandidate = token.Substring(0,sustainSymbol); //key candidate is like tap grammar
+        string sustainCandidate = token.Substring(sustainSymbol+1,token.Length-2); //sustain candidate is like 1:2
+        bool sustainIsSecond = sustainCandidate.Contains("##");
     }
 
     public Hold HoldOfToken(string token)
@@ -161,7 +170,7 @@ public class SimaiParser : IParser
         return result;
     }
 
-    public Note NoteOfToken(string token, int bar, int tick, double bgm)
+    public Note NoteOfToken(string token, int bar, int tick, double bpm)
     {
         Note result = new Rest();
         bool isBPM = token.Contains(")");
@@ -179,11 +188,11 @@ public class SimaiParser : IParser
         bool isHold = !isSlide && token.Contains("[");
         if (isSlide)
         {
-            result = SlideOfToken(token);
+            result = SlideOfToken(token,bar,tick,bpm);
         }
         else if (isHold)
         {
-            result = HoldOfToken(token);
+            result = HoldOfToken(token,bar,tick,bpm);
         }
         else if (isBPM)
         {
@@ -206,7 +215,7 @@ public class SimaiParser : IParser
         return result;
     }
 
-    public Slide SlideOfToken(string token, int bar, int tick)
+    public Slide SlideOfToken(string token, int bar, int tick,double bpm)
     {
         throw new NotImplementedException();
     }
@@ -216,7 +225,7 @@ public class SimaiParser : IParser
         throw new NotImplementedException();
     }
 
-    public Tap TapOfToken(string token, int bar, int tick)
+    public Tap TapOfToken(string token, int bar, int tick, double bpm)
     {
         bool isBreak = token.Contains("b");
         bool isEXTap = token.Contains("x");
@@ -231,19 +240,37 @@ public class SimaiParser : IParser
             if (hasSpecialEffect)
             {
                 result = new Tap("TTP", bar, tick, token.Substring(0, 1) + Int32.Parse(token.Substring(1, 1) + 1), 1, "M1");
-
             }
             else result = new Tap("TTP", bar, tick, token.Substring(0, 1) + Int32.Parse(token.Substring(1, 1) + 1), 0, "M1");
         }
         else if (isEXTap)
         {
-            result = new Tap("XTP", bar, tick, token.Substring(0, 1));
+            if (token.Contains("_"))
+            {
+                result = new Tap("XST", bar, tick, token.Substring(0, 1));
+            }
+            else
+                result = new Tap("XTP", bar, tick, token.Substring(0, 1));
         }
         else if (isBreak)
         {
-            result = new Tap("BRK", bar, tick, token.Substring(0, 1));
+            if (token.Contains("_"))
+            {
+                result = new Tap("BST", bar, tick, token.Substring(0, 1));
+            }
+            else
+                result = new Tap("BRK", bar, tick, token.Substring(0, 1));
         }
-        else result = new Tap("TAP", bar, tick, token.Substring(0, 1));
+        else
+        {
+            if (token.Contains("_"))
+            {
+                result = new Tap("STR", bar, tick, token.Substring(0, 1));
+            }
+            else
+                result = new Tap("TAP", bar, tick, token.Substring(0, 1));
+        }
+        result.BPM = bpm;
         return result;
     }
 
@@ -260,6 +287,16 @@ public class SimaiParser : IParser
     public static List<string> EachGroupOfToken(string token)
     {
         List<string> result = new List<string>();
+        bool isSlide = token.Contains("-") ||
+        token.Contains("v") ||
+        token.Contains("w") ||
+        token.Contains("<") ||
+        token.Contains(">") ||
+        token.Contains("p") ||
+        token.Contains("q") ||
+        token.Contains("s") ||
+        token.Contains("z") ||
+        token.Contains("V");
         if (token.Contains("/"))
         {
             string[] candidate = token.Split("/");
@@ -267,10 +304,6 @@ public class SimaiParser : IParser
             {
                 result.AddRange(EachGroupOfToken(tokenCandidate));
             }
-        }
-        else if (token.Contains("*"))
-        {
-            result.AddRange(ExtractEachSlides(token));
         }
         else if (token.Contains(")"))
         {
@@ -296,6 +329,10 @@ public class SimaiParser : IParser
                 result.Add(x.ToString());
             }
         }
+        else if (isSlide)
+        {
+            result.AddRange(ExtractEachSlides(token));
+        }
         return result;
     }
 
@@ -307,12 +344,91 @@ public class SimaiParser : IParser
     public static List<string> ExtractEachSlides(string token)
     {
         List<string> result = new List<string>();
-        if (token.Contains("*"))
+        string[] components = token.Split("*");
+        if (components.Length<1)
         {
-            string[] components = token.Split("*");
-            for (int i=1; i<components.Length;i++)
+            throw new Exception("SLIDE TOKEN NOT VALID: \n"+token);
+        }
+        string splitCandidate = components[0];
+        //Parse first section
+        if (splitCandidate.Contains("qq"))
+        {
+            result.AddRange(splitCandidate.Split("qq"));
+            result[0]=result[0]+"_";
+            result[1]="qq"+result[1];
+        }
+        else if (splitCandidate.Contains("q"))
+        {
+            result.AddRange(splitCandidate.Split("q"));
+            result[0] = result[0] + "_";
+            result[1] = "q" + result[1];
+        }
+        else if (splitCandidate.Contains("pp"))
+        {
+            result.AddRange(splitCandidate.Split("pp"));
+            result[0] = result[0] + "_";
+            result[1] = "pp" + result[1];
+        }
+        else if (splitCandidate.Contains("p"))
+        {
+            result.AddRange(splitCandidate.Split("p"));
+            result[0] = result[0] + "_";
+            result[1] = "p" + result[1];
+        }
+        else if (splitCandidate.Contains("v"))
+        {
+            result.AddRange(splitCandidate.Split("v"));
+            result[0] = result[0] + "_";
+            result[1] = "v" + result[1];
+        }
+        else if (splitCandidate.Contains("w"))
+        {
+            result.AddRange(splitCandidate.Split("w"));
+            result[0] = result[0] + "_";
+            result[1] = "w" + result[1];
+        }
+        else if (splitCandidate.Contains("<"))
+        {
+            result.AddRange(splitCandidate.Split("<"));
+            result[0] = result[0] + "_";
+            result[1] = "<" + result[1];
+        }
+        else if (splitCandidate.Contains(">"))
+        {
+            result.AddRange(splitCandidate.Split(">"));
+            result[0] = result[0] + "_";
+            result[1] = ">" + result[1];
+        }
+        else if (splitCandidate.Contains("s"))
+        {
+            result.AddRange(splitCandidate.Split("s"));
+            result[0] = result[0] + "_";
+            result[1] = "s" + result[1];
+        }
+        else if (splitCandidate.Contains("z"))
+        {
+            result.AddRange(splitCandidate.Split("z"));
+            result[0] = result[0] + "_";
+            result[1] = "z" + result[1];
+        }
+        else if (splitCandidate.Contains("V"))
+        {
+            result.AddRange(splitCandidate.Split("V"));
+            result[0] = result[0] + "_";
+            result[1] = "V" + result[1];
+        }
+        else if (splitCandidate.Contains("-"))
+        {
+            result.AddRange(splitCandidate.Split("-"));
+            result[0] = result[0] + "_";
+            result[1] = "-" + result[1];
+        }
+        //Add rest of slide: components after * is always 
+        if (components.Length>1)
+        {
+            for (int i = 1;i<components.Length;i++)
             {
-
+                result.Add(components[i]);
             }
         }
         return result;

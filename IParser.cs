@@ -39,9 +39,9 @@
         /// <param name="token">Token to take in</param>
         /// <param name="bar"></param>
         /// <param name="tick"></param>
-        /// <param name="bgm"></param>
+        /// <param name="bpm"></param>
         /// <returns>Specific Note</returns>
-        public Note NoteOfToken(string token,int bar, int tick, double bgm);
+        public Note NoteOfToken(string token,int bar, int tick, double bpm);
 
         /// <summary>
         /// Return correct Tap note.
@@ -49,8 +49,9 @@
         /// <param name="token">Token to take in</param>
         /// <param name="bar">Bar of this note</param>
         /// <param name="tick">Tick of this note</param>
+        /// <param name="bpm">BPM of this note</param>
         /// <returns>Specific Tap</returns>
-        public Tap TapOfToken(string token,int bar, int tick);
+        public Tap TapOfToken(string token,int bar, int tick, double bpm);
 
         /// <summary>
         /// Return correct Tap note.
@@ -66,8 +67,9 @@
         /// <param name="token">Token to take in</param>
         /// <param name="bar">Bar of this note</param>
         /// <param name="tick">Tick of this note</param>
+        /// <param name="bpm">BPM of this note</param>
         /// <returns>Specific Hold Note</returns>
-        public Hold HoldOfToken(string token, int bar, int tick);
+        public Hold HoldOfToken(string token, int bar, int tick,double bpm);
 
         /// <summary>
         /// Return correct Hold note.
@@ -83,8 +85,9 @@
         /// <param name="token">Token to take in</param>
         /// <param name="bar">Bar of this note</param>
         /// <param name="tick">Tick of this note</param>
+        /// <param name="bpm">BPM of this note</param>
         /// <returns>Specific Slide Note</returns>
-        public Slide SlideOfToken(string token,int bar, int tick);
+        public Slide SlideOfToken(string token,int bar, int tick, double bpm);
 
         /// <summary>
         /// Return correct Slide note.
