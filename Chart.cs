@@ -299,6 +299,7 @@ namespace MaichartConverter
                 BPMChange noteChange = new BPMChange();
                 double currentBPM = this.BPMChanges.ChangeNotes[0].BPM;
                 Note lastNote = new Rest();
+                Note realLastNote = new Rest();
                 foreach (BPMChange x in this.BPMChanges.ChangeNotes)
                 {
                     if (x.Bar == i)
@@ -356,6 +357,11 @@ namespace MaichartConverter
                                 break;
                             case "SLIDE":
                                 this.slideNumber++;
+                                if (lastNote.NoteSpecificType.Equals("SLIDE_START"))
+                                {
+                                    x.SlideStart = lastNote;
+                                    lastNote.ConsecutiveSlide = x;
+                                }
                                 if (delay > this.TotalDelay)
                                 {
                                     this.totalDelay = delay;
@@ -367,21 +373,34 @@ namespace MaichartConverter
                                 break;
                         }
                         x.BPM = currentBPM;
-                        if (x.NoteGenre.Equals("SLIDE")&&!lastNote.NoteSpecificType.Equals("SLIDE_START"))
+                        //if (x.NoteGenre.Equals("SLIDE") && !lastNote.NoteSpecificType.Equals("SLIDE_START"))
+                        //{
+                        //    x.Prev = new Tap("NST", x.Bar, x.Tick, x.Key);
+                        //    lastNote.Next = x.Prev;
+                        //}
+                        //else
                         {
-                            x.Prev = new Tap("NST",x.Bar,x.Tick,x.Key); 
-                            lastNote.Next = x.Prev;
-                        }
-                        else
-                        {
+                            lastNote.Next = x;
                             x.Prev = lastNote;
+                        }
+                        x.Prev.Next = x;
+                        if ((!x.NoteGenre.Equals("SLIDE")) && x.Prev.NoteType.Equals("STR")&&x.Prev.ConsecutiveSlide == null)
+                        {
+                            Console.WriteLine("Found NSS");
+                            Console.WriteLine("This note's note type: " + x.NoteType);
+                            Console.WriteLine(x.Compose(1));
+                            Console.WriteLine("Prev note's note type: " + x.Prev.NoteType);
+                            Console.WriteLine(x.Prev.Compose(1));
+                            lastNote.NoteType = "NSS";
+                            x.Prev.NoteType = "NSS";
                         }
                         lastNote.Next = x;
                         bar.Add(x);
-                        if (!x.NoteSpecificType.Equals("SLIDE"))
+                        if (!x.NoteGenre.Equals("SLIDE"))
                         {
                             lastNote = x;
                         }
+                        realLastNote = x;
                     }
                 }
 

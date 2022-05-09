@@ -1,4 +1,6 @@
-﻿using System.Xml;
+﻿using System.Collections.Immutable;
+using System.ComponentModel;
+using System.Xml;
 
 namespace MaichartConverter
 {
@@ -11,7 +13,7 @@ namespace MaichartConverter
         /// Store difficulty keywords
         /// </summary>
         /// <value>Difficulty</value>
-        public static readonly string[] difficulty = { "Basic", "Advanced", "Expert", "Master", "Remaster" };
+        public static readonly string[] difficulty = { "Basic", "Advanced", "Expert", "Master", "Remaster", "Utage" };
 
         /// <summary>
         /// Store chart collections
@@ -67,6 +69,35 @@ namespace MaichartConverter
                 }
             }
             string result = this.Compose();
+            //Console.WriteLine(result);
+            StreamWriter sw = new StreamWriter(targetLocation + Program.GlobalSep + "maidata.txt", false);
+            {
+                sw.WriteLine(result);
+            }
+            sw.Close();
+        }
+
+        /// <summary>
+        /// Construct compiler of a single song.
+        /// </summary>
+        /// <param name="location">Folder</param>
+        /// <param name="targetLocation">Output folder</param>
+        /// <param name="forUtage">True if for utage</param>
+        public MaidataCompiler(string location, string targetLocation, bool forUtage)
+        {
+            string[] ma2files = Directory.GetFiles(location, "*.ma2");
+            charts = new List<Chart>();
+            this.musicXml = new XmlInformation(location);
+            this.information = musicXml.Information;
+            foreach (string ma2file in ma2files)
+            {
+                charts.Add(new Ma2(ma2file));
+            }
+
+            List<string> ma2List = new List<string>();
+            ma2List.AddRange(ma2files);
+
+            string result = this.Compose(true, ma2List);
             //Console.WriteLine(result);
             StreamWriter sw = new StreamWriter(targetLocation + Program.GlobalSep + "maidata.txt", false);
             {
@@ -261,7 +292,8 @@ namespace MaichartConverter
                             result += ",";
                             break;
                     }
-                    if (x.Prev!=null&&x.Prev.NoteType.Equals("NST"))
+                    //if (x.Prev!=null&&x.Prev.NoteType.Equals("NST"))
+                    if (x.NoteGenre.Equals("SLIDE")&&x.SlideStart== null)
                     {
                         result += Int32.Parse(x.Key) + 1;
                         result += "!";
@@ -284,6 +316,71 @@ namespace MaichartConverter
                 result += "{1},\n";
             }
             result += "E\n";
+            return result;
+        }
+
+        /// <summary>
+        /// Compose utage charts
+        /// </summary>
+        /// <param name="isUtage">switch to produce utage</param>
+        /// <returns>Corresponding utage chart</returns>
+        public string Compose(bool isUtage, List<string> ma2files)
+        {
+            string result = "";
+            //Add information
+
+                string beginning = "";
+                beginning += "&title=" + this.information.GetValueOrDefault("Name") + "[宴]" + "\n";
+                beginning += "&wholebpm=" + this.information.GetValueOrDefault("BPM") + "\n";
+                beginning += "&artist=" + this.information.GetValueOrDefault("Composer") + "\n";
+                beginning += "&des=" + this.information.GetValueOrDefault("Master Chart Maker") + "\n";
+                beginning += "&shortid=" + this.information.GetValueOrDefault("Music ID") + "\n";
+                beginning += "&genre=" + this.information.GetValueOrDefault("Genre") + "\n";
+                beginning += "&cabinate=SD";
+                beginning += "&version=" + this.musicXml.TrackVersion + "\n";
+                beginning += "&chartconverter=Neskol\n";
+                beginning += "\n";
+
+                int defaultChartIndex = 7;
+                if (ma2files.Count > 1)
+                {
+                    defaultChartIndex = 0;
+                }
+                
+                foreach (string ma2file in ma2files)
+                {
+                    beginning += "&lv_"+ defaultChartIndex+ "=" + "宴"+ "\n";
+                    beginning += "\n";
+                }
+
+                result += beginning;
+            Console.WriteLine("Finished writing header of " + this.information.GetValueOrDefault("Name"));
+
+            //Compose charts
+
+                if (defaultChartIndex<0)
+                {
+                    for (int i = 0; i < this.charts.Count; i++)
+                    {
+                        // Console.WriteLine("Processing chart: " + i);
+                        if (!this.information[difficulty[i]].Equals(""))
+                        {
+                            string? isDxChart = "Utage";
+                            result += "&inote_" + (i + 2) + "=\n";
+                            result += this.Compose(charts[i]);
+                            Program.CompiledChart.Add(this.information.GetValueOrDefault("Name") + isDxChart + " [" + difficulty[i] + "]");
+                        }
+                        result += "\n";
+                    }
+                }
+                else
+                {
+                result += "&inote_7=\n";
+                result += this.Compose(charts[0]);
+                Program.CompiledChart.Add(this.information.GetValueOrDefault("Name") + "Utage" + " [宴]");
+                }
+
+            Console.WriteLine("Finished composing.");
             return result;
         }
 

@@ -70,6 +70,10 @@
         /// </summary>
         private Note? next;
 
+        private Note? slideStart;
+
+        private Note? consecutiveSlide;
+
         public Note()
         {
             noteType = "";
@@ -247,6 +251,24 @@
         {
             get { return this.next; }
             set { this.next = value; }
+        }
+
+        /// <summary>
+        /// Return the slide start of a note (reserved for slides only)
+        /// </summary>
+        public Note? SlideStart
+        {
+            get { return this.slideStart; }
+            set { this.slideStart = value; }
+        }
+
+        /// <summary>
+        /// Return the consecutive of a note (reserved for slides only)
+        /// </summary>
+        public Note ConsecutiveSlide
+        {
+            get { return this.consecutiveSlide; }
+            set { this.consecutiveSlide = value; }
         }
 
         /// <summary>

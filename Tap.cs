@@ -19,7 +19,7 @@
         /// Stores enums of accepting tap notes
         /// </summary>
         /// <value></value>
-        private readonly string[] allowedType = { "TAP", "STR", "BRK", "BST", "XTP", "XST", "TTP", "NST" };
+        private readonly string[] allowedType = { "TAP", "STR", "BRK", "BST", "XTP", "XST", "TTP", "NST", "NSS" };
 
         /// <summary>
         /// Empty Constructor Tap Note
@@ -32,7 +32,7 @@
         /// <summary>
         /// Construct a Tap note
         /// </summary>
-        /// <param name="noteType">TAP,STR,BRK,BST,XTP,XST,TTP</param>
+        /// <param name="noteType">TAP,STR,BRK,BST,XTP,XST,TTP; NST or NSS</param>
         /// <param name="key">0-7 representing each key</param>
         /// <param name="bar">Bar location</param>
         /// <param name="startTime">Start Location</param>
@@ -97,13 +97,13 @@
         public override string Compose(int format)
         {
             string result = "";
-            if (format == 1 && !(this.NoteType.Equals("TTP")) && !(this.NoteType.Equals("NTP")))
+            if (format == 1 && !(this.NoteType.Equals("TTP")) && !((this.NoteType.Equals("NST"))||this.NoteType.Equals("NSS")))
             {
                 result = this.NoteType + "\t" + this.Bar + "\t" + this.Tick + "\t" + this.Key;
             }
-            else if (format == 1 && this.NoteType.Equals("NST"))
+            else if (format == 1 && (this.NoteType.Equals("NST")||this.NoteType.Equals("NSS")))
             {
-                result = ""; //NST is just a place holder for slide
+                result = ""; //NST and NSS is just a place holder for slide
             }
             else if (format == 1 && this.NoteType.Equals("TTP"))
             {
@@ -139,6 +139,9 @@
                         break;
                     case "NST":
                         result += (Int32.Parse(this.Key) + 1).ToString() + "!";
+                        break;
+                    case "NSS":
+                        result += (Int32.Parse(this.Key) + 1).ToString() + "$";
                         break;
                     case "TTP":
                         result += this.Key.ToCharArray()[1] + ((Convert.ToInt32(this.Key.Substring(0, 1)) + 1).ToString());
@@ -195,7 +198,10 @@
                     case "TTP":
                         result += "TAP";
                         break;
-                    case "NTP":
+                    case "NST":
+                        result += "SLIDE_START";
+                        break;
+                    case "NSS":
                         result += "SLIDE_START";
                         break;
                 }

@@ -138,6 +138,11 @@
                     result = SlideOfToken(token);
                 }
             }
+            if (result.Tick == 384)
+            {
+                result.Tick = 0;
+                result.Bar++;
+            }
             return result;
         }
 
@@ -182,6 +187,11 @@
                 {
                     result = SlideOfToken(token, bar, tick, bpm);
                 }
+            }
+            if (result.Tick == 384)
+            {
+                result.Tick = 0;
+                result.Bar++;
             }
             return result;
         }
