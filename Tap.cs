@@ -19,7 +19,7 @@
         /// Stores enums of accepting tap notes
         /// </summary>
         /// <value></value>
-        private readonly string[] allowedType = { "TAP", "STR", "BRK", "BST", "XTP", "XST", "TTP" };
+        private readonly string[] allowedType = { "TAP", "STR", "BRK", "BST", "XTP", "XST", "TTP", "NST" };
 
         /// <summary>
         /// Empty Constructor Tap Note
@@ -97,9 +97,13 @@
         public override string Compose(int format)
         {
             string result = "";
-            if (format == 1 && !(this.NoteType.Equals("TTP")))
+            if (format == 1 && !(this.NoteType.Equals("TTP")) && !(this.NoteType.Equals("NTP")))
             {
                 result = this.NoteType + "\t" + this.Bar + "\t" + this.Tick + "\t" + this.Key;
+            }
+            else if (format == 1 && this.NoteType.Equals("NST"))
+            {
+                result = ""; //NST is just a place holder for slide
             }
             else if (format == 1 && this.NoteType.Equals("TTP"))
             {
@@ -133,6 +137,9 @@
                     case "XST":
                         result += (Int32.Parse(this.Key) + 1).ToString() + "x";
                         break;
+                    case "NST":
+                        result += (Int32.Parse(this.Key) + 1).ToString() + "!";
+                        break;
                     case "TTP":
                         result += this.Key.ToCharArray()[1] + ((Convert.ToInt32(this.Key.Substring(0, 1)) + 1).ToString());
                         if (this.SpecialEffect == 1)
@@ -148,7 +155,17 @@
 
         public override string NoteGenre => "TAP";
 
-        public override bool IsNote => true;
+        public override bool IsNote
+        {
+            get
+            {
+                if (this.NoteType.Equals("NST"))
+                {
+                    return false;
+                }
+                else return true;
+            }
+        }
 
         public override string NoteSpecificType
         {
@@ -177,6 +194,9 @@
                         break;
                     case "TTP":
                         result += "TAP";
+                        break;
+                    case "NTP":
+                        result += "SLIDE_START";
                         break;
                 }
 

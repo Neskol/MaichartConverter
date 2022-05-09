@@ -248,12 +248,17 @@
             get { return this.next; }
             set { this.next = value; }
         }
+
+        /// <summary>
+        /// Return this.SpecificType
+        /// </summary>
+        /// <returns>string of specific genre (specific type of Tap, Slide, etc.)</returns>
         public abstract string NoteSpecificType { get; }
 
         /// <summary>
         /// Return this.noteGenre
         /// </summary>
-        /// <returns>string of note genre</returns>
+        /// <returns>string of note genre (general category of TAP, SLIDE and HOLD)</returns>
         public abstract string NoteGenre { get; }
 
         /// <summary>

@@ -322,7 +322,7 @@ namespace MaichartConverter
                                 break;
                             case "TAP":
                                 this.tapNumber++;
-                                if (x.NoteSpecificType.Equals("XTP"))
+                                if (x.NoteSpecificType.Equals("XTP")&&!x.NoteType.Equals("NST"))
                                 {
                                     this.isDxChart = false;
                                 }
@@ -367,7 +367,15 @@ namespace MaichartConverter
                                 break;
                         }
                         x.BPM = currentBPM;
-                        x.Prev = lastNote;
+                        if (x.NoteGenre.Equals("SLIDE")&&!lastNote.NoteSpecificType.Equals("SLIDE_START"))
+                        {
+                            x.Prev = new Tap("NST",x.Bar,x.Tick,x.Key); 
+                            lastNote.Next = x.Prev;
+                        }
+                        else
+                        {
+                            x.Prev = lastNote;
+                        }
                         lastNote.Next = x;
                         bar.Add(x);
                         if (!x.NoteSpecificType.Equals("SLIDE"))

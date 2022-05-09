@@ -64,8 +64,9 @@
         public static void Main(string[] args)
         {
             Console.WriteLine(ComposeHeader());
+            TestSpecificChart();
             //TestSpecificChart("000834", "4");
-            CompileChartDatabase();
+            //CompileChartDatabase();
             // CompileAssignedChartDatabase();
         }
 
@@ -77,6 +78,33 @@
         public static void TestSpecificChart(string musicID, string difficulty)
         {
             Chart good = new Ma2(@"/Users/neskol/MaiAnalysis/A000/music/music" + musicID + "/" + musicID + "_0" + difficulty + ".ma2");
+            MaidataCompiler compiler = new MaidataCompiler();
+            Console.WriteLine(good.Compose());
+            Console.WriteLine(compiler.Compose(good));
+            Console.WriteLine(good.Information);
+        }
+
+        /// <summary>
+        /// Debug method to test specific chart
+        /// </summary>
+        /// <param name="path">Path to ma2</param>
+        public static void TestSpecificChart(string path)
+        {
+            Chart good = new Ma2(path);
+            MaidataCompiler compiler = new MaidataCompiler();
+            Console.WriteLine(good.Compose());
+            Console.WriteLine(compiler.Compose(good));
+            Console.WriteLine(good.Information);
+        }
+
+        /// <summary>
+        /// Debug method to test specific chart
+        /// </summary>
+        public static void TestSpecificChart()
+        {
+            Console.WriteLine("Give the path to ma2");
+            string path = Console.ReadLine() ?? throw new NullReferenceException();
+            Chart good = new Ma2(path);
             MaidataCompiler compiler = new MaidataCompiler();
             Console.WriteLine(good.Compose());
             Console.WriteLine(compiler.Compose(good));
