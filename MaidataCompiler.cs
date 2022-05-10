@@ -358,7 +358,7 @@ namespace MaichartConverter
 
             //Compose charts
 
-                if (defaultChartIndex<0)
+                if (defaultChartIndex<7)
                 {
                     for (int i = 0; i < this.charts.Count; i++)
                     {
@@ -387,6 +387,25 @@ namespace MaichartConverter
         public void TakeInformation(Dictionary<string, string> information)
         {
             this.information = information;
+        }
+
+        /// <summary>
+        /// Return the first bpm change table of maicompiler
+        /// </summary>
+        /// <returns>First BPM change table of this.charts</returns>
+        public BPMChanges SymbolicBPMTable()
+        {
+            BPMChanges bpmTable = new BPMChanges();
+            bool foundTable = false;
+            for (int i = 0; i<this.charts.Count && !foundTable; i++)
+            {
+                if (this.charts[i]!=null)
+                {
+                    bpmTable = this.charts[i].BPMChanges;
+                    foundTable = true;
+                }
+            }
+            return bpmTable;
         }
     }
 }

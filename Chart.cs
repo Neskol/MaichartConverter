@@ -384,16 +384,16 @@ namespace MaichartConverter
                             x.Prev = lastNote;
                         }
                         x.Prev.Next = x;
-                        if ((!x.NoteGenre.Equals("SLIDE")) && x.Prev.NoteType.Equals("STR")&&x.Prev.ConsecutiveSlide == null)
-                        {
-                            Console.WriteLine("Found NSS");
-                            Console.WriteLine("This note's note type: " + x.NoteType);
-                            Console.WriteLine(x.Compose(1));
-                            Console.WriteLine("Prev note's note type: " + x.Prev.NoteType);
-                            Console.WriteLine(x.Prev.Compose(1));
-                            lastNote.NoteType = "NSS";
-                            x.Prev.NoteType = "NSS";
-                        }
+                        //if ((!x.NoteGenre.Equals("SLIDE")) && x.Prev.NoteType.Equals("STR")&&x.Prev.ConsecutiveSlide == null)
+                        //{
+                        //    Console.WriteLine("Found NSS");
+                        //    Console.WriteLine("This note's note type: " + x.NoteType);
+                        //    Console.WriteLine(x.Compose(1));
+                        //    Console.WriteLine("Prev note's note type: " + x.Prev.NoteType);
+                        //    Console.WriteLine(x.Prev.Compose(1));
+                        //    lastNote.NoteType = "NSS";
+                        //    x.Prev.NoteType = "NSS";
+                        //}
                         lastNote.Next = x;
                         bar.Add(x);
                         if (!x.NoteGenre.Equals("SLIDE"))

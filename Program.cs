@@ -61,6 +61,7 @@ namespace MaichartConverter
         public static Dictionary<string, string[]> CompiledTrackDetailSet = new Dictionary<string, string[]>();
 
         public static XmlDocument BPMCollection = new XmlDocument();
+        public static XmlDocument BPMChangeTable = new XmlDocument();
 
         /// <summary>
         /// Main method to process charts
@@ -71,9 +72,13 @@ namespace MaichartConverter
             Console.WriteLine(ComposeHeader());
 
             XmlDeclaration xmlDecl = BPMCollection.CreateXmlDeclaration("1.0", "UTF-8", null);
+            XmlDeclaration xmlDeclBPM = BPMChangeTable.CreateXmlDeclaration("1.0", "UTF-8", null);
             BPMCollection.AppendChild(xmlDecl);
+            BPMChangeTable.AppendChild(xmlDeclBPM);
             XmlElement root = BPMCollection.CreateElement("BPM");
+            XmlElement btRoot = BPMChangeTable.CreateElement("BPM-Table");
             BPMCollection.AppendChild(root);
+            BPMChangeTable.AppendChild(btRoot);
 
             CompileUtageChartDatabase();
             // TestSpecificChart();
@@ -369,6 +374,7 @@ namespace MaichartConverter
                     NumberTotalTrackCompiled++;
                     CompiledTracks.Add(trackInfo.TrackName + trackInfo.TrackID);
                     AppendKeyValue(trackInfo.TrackID, trackInfo.TrackBPM);
+                    AppendBPMTable(trackInfo.TrackID,trackInfo.TrackBPM, compiler.SymbolicBPMTable());
                     string[] compiledTrackDetail = { trackInfo.TrackName, trackInfo.TrackGenre, trackInfo.TrackVersion, trackInfo.TrackVersionNumber };
                     CompiledTrackDetailSet.Add(trackInfo.TrackName + trackInfo.TrackID, compiledTrackDetail);
                     Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
@@ -1014,6 +1020,7 @@ namespace MaichartConverter
             }
             sw.Close();
             BPMCollection.Save(outputLocation + "bpm.xml");
+            BPMChangeTable.Save(outputLocation + "bpm_table.xml");
         }
 
         /// <summary>
@@ -1027,10 +1034,39 @@ namespace MaichartConverter
             XmlElement id = BPMCollection.CreateElement("ID");
             id.InnerText = key;
             XmlElement bpm = BPMCollection.CreateElement("BPM");
-            bpm.InnerText = value;
             node.AppendChild(id);
             node.AppendChild(bpm);
             XmlNode root = BPMCollection.ChildNodes[1] ?? throw new NullReferenceException();
+            root.AppendChild(node);
+        }
+
+        /// <summary>
+        /// Append Nodes to BPM Table
+        /// </summary>
+        /// <param name="bpmTable">ID</param>
+        public static void AppendBPMTable(string key, string value, BPMChanges bpmTable)
+        {
+            XmlElement node = BPMChangeTable.CreateElement("Node");
+            XmlElement id = BPMChangeTable.CreateElement("ID");
+            id.InnerText = key;
+            XmlElement bpm = BPMChangeTable.CreateElement("BPM");
+            node.AppendChild(id);
+            node.AppendChild(bpm);
+            foreach (BPMChange note in bpmTable.ChangeNotes)
+            {
+                XmlElement changeNote = BPMChangeTable.CreateElement("Note");
+                XmlElement bar = BPMChangeTable.CreateElement("Bar");
+                bar.InnerText = note.Bar.ToString();
+                XmlElement tick = BPMChangeTable.CreateElement("Tick");
+                tick.InnerText = note.Tick.ToString();
+                XmlElement noteBPM = BPMChangeTable.CreateElement("BPM");
+                noteBPM.InnerText = note.BPM.ToString();
+                changeNote.AppendChild(bar);
+                changeNote.AppendChild(tick);
+                changeNote.AppendChild(noteBPM);
+                bpm.AppendChild(changeNote);
+            }
+            XmlNode root = BPMChangeTable.ChildNodes[1] ?? throw new NullReferenceException();
             root.AppendChild(node);
         }
     }
