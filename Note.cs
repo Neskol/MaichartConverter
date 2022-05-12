@@ -31,6 +31,11 @@
         private int tick;
 
         /// <summary>
+        /// The start time stamp
+        /// </summary>
+        private double tickTimeStamp;
+
+        /// <summary>
         /// The wait time
         /// </summary>
         private int waitTime;
@@ -81,10 +86,11 @@
             endKey = "";
             bar = 0;
             tick = 0;
+            tickTimeStamp = 0.0;
             lastTime = 0;
             waitTime = 0;
-            calculatedLastTime = 0;
-            calculatedWaitTime = 0;
+            calculatedLastTime = 0.0;
+            calculatedWaitTime = 0.0;
             bpm = 0;
         }
 
@@ -265,7 +271,7 @@
         /// <summary>
         /// Return the consecutive of a note (reserved for slides only)
         /// </summary>
-        public Note ConsecutiveSlide
+        public Note? ConsecutiveSlide
         {
             get { return this.consecutiveSlide; }
             set { this.consecutiveSlide = value; }
