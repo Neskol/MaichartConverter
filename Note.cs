@@ -31,6 +31,11 @@
         private int tick;
 
         /// <summary>
+        /// The absolute tick calculated by this.bar*384+this.tick
+        /// </summary>
+        private int tickStamp;
+
+        /// <summary>
         /// The start time stamp
         /// </summary>
         private double tickTimeStamp;
@@ -75,10 +80,24 @@
         /// </summary>
         private Note? next;
 
+        /// <summary>
+        /// Stores the start note of slide
+        /// </summary>
         private Note? slideStart;
 
+        /// <summary>
+        /// Stores the connecting slide of slide start
+        /// </summary>
         private Note? consecutiveSlide;
 
+        /// <summary>
+        /// The next BPM change to this note
+        /// </summary>
+        private BPMChange? nextBPMChange;
+
+        /// <summary>
+        /// Construct an empty note
+        /// </summary>
         public Note()
         {
             noteType = "";
@@ -86,12 +105,33 @@
             endKey = "";
             bar = 0;
             tick = 0;
+            tickStamp = 0;
             tickTimeStamp = 0.0;
             lastTime = 0;
             waitTime = 0;
             calculatedLastTime = 0.0;
             calculatedWaitTime = 0.0;
             bpm = 0;
+        }
+
+        /// <summary>
+        /// Construct a note from other note
+        /// </summary>
+        /// <param name="inTake">The intake note</param>
+        public Note(Note inTake)
+        {
+            this.noteType = inTake.NoteType;
+            this.key = inTake.Key;
+            this.endKey = inTake.EndKey;
+            this.bar = inTake.Bar;
+            this.tick = inTake.Tick;
+            this.tickStamp = inTake.TickStamp;
+            this.tickTimeStamp = inTake.TickTimeStamp;
+            this.lastTime = inTake.LastTime;
+            this.waitTime = inTake.WaitTime;
+            this.calculatedLastTime = inTake.CalculatedLastTime;
+            this.calculatedLastTime = inTake.CalculatedLastTime;
+            this.bpm=inTake.bpm;
         }
 
         /// <summary>
@@ -152,6 +192,24 @@
             {
                 this.tick = value;
             }
+        }
+
+        /// <summary>
+        /// Access Tick Stamp = this.Bar*384 + this.Tick
+        /// </summary>
+        public int TickStamp
+        {
+            get { return this.tickStamp; }
+            set { this.tickStamp = value; }
+        }
+
+        /// <summary>
+        /// Access Tick Stamp = this.Bar*384 + this.Tick
+        /// </summary>
+        public double TickTimeStamp
+        {
+            get { return this.tickTimeStamp; }
+            set { this.tickTimeStamp = value; }
         }
 
         /// <summary>
@@ -384,9 +442,11 @@
         public bool Update()
         {
             bool result = false;
+            this.TickStamp = this.Bar*384 + this.Tick;
             double tickTime = 60 / this.bpm * 4 / 384;
             this.calculatedWaitTime = this.waitTime * tickTime;
             this.calculatedLastTime = this.lastTime * tickTime;
+            this.TickTimeStamp = this.TickStamp * tickTime ;
             if (!(this.NoteType.Equals("SLIDE") || this.NoteType.Equals("HOLD")))
             {
                 result = true;

@@ -289,6 +289,7 @@ namespace MaichartConverter
         public virtual void Update()
         {
             int maxBar = 0;
+            double timeStamp = 0.0;
             if (notes.Count>0)
             {
                 maxBar = notes[notes.Count - 1].Bar;
