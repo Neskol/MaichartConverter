@@ -80,9 +80,9 @@ namespace MaichartConverter
             BPMCollection.AppendChild(root);
             BPMChangeTable.AppendChild(btRoot);
 
-            CompileUtageChartDatabase();
+            // CompileUtageChartDatabase();
             // TestSpecificChart();
-            //TestSpecificChart("000835", "3");
+            TestSpecificChart("000835", "3");
             //CompileChartDatabase();
             // CompileAssignedChartDatabase();
         }

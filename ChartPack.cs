@@ -5,7 +5,7 @@ namespace MaichartConverter;
 /// <summary>
 /// Construct a collection to store charts in relate of SD and DX.
 /// </summary>
-public abstract class ChartPack : IChart
+public abstract class ChartPack : Chart, IChart
 {
     /// <summary>
     /// Stores SD and DX chart
@@ -60,7 +60,10 @@ public abstract class ChartPack : IChart
 
     public abstract bool CheckValidity();
 
-    public abstract string Compose();
+    public override string Compose()
+    {
+        throw new NotImplementedException();
+    }
 
     public abstract void Update();
 }

@@ -21,5 +21,12 @@
         /// </summary>
         /// <returns></returns>
         string Compose();
+
+        /// <summary>
+        /// Get appropriate time stamp of given tick
+        /// </summary>
+        /// <returns>Time stamp of bar and note</returns>
+        /// <requires>this.bpmChanges!=null</requires>
+        double GetTimeStamp(int bar, int tick);
     }
 }

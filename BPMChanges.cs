@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace MaichartConverter
 {
-    public class BPMChanges : IChart
+    public class BPMChanges
     {
         private List<BPMChange> changeNotes;
 

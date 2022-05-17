@@ -1,4 +1,6 @@
-﻿namespace MaichartConverter
+﻿using System.Numerics;
+
+namespace MaichartConverter
 {
     /// <summary>
     /// Basic note
@@ -46,7 +48,17 @@
         private int waitTime;
 
         /// <summary>
-        /// The calculated wait time
+        /// The stamp of wait time ends in ticks
+        /// </summary>
+        private int waitStamp;
+
+        /// <summary>
+        /// The stamp when the wait time ends in seconds
+        /// </summary>
+        private double waitTimeStamp;
+
+        /// <summary>
+        /// The calculated wait time in seconds
         /// </summary>
         private double calculatedWaitTime;
 
@@ -54,6 +66,16 @@
         /// The last time
         /// </summary>
         private int lastTime;
+
+        /// <summary>
+        /// The stamp when the last time ends in ticks
+        /// </summary>
+        private int lastStamp;
+
+        /// <summary>
+        /// The stamp when the last time ends in seconds
+        /// </summary>
+        private double lastTimeStamp;
 
         /// <summary>
         /// The calculated last time
@@ -108,7 +130,11 @@
             tickStamp = 0;
             tickTimeStamp = 0.0;
             lastTime = 0;
+            lastStamp = 0;
+            lastTimeStamp = 0.0;
             waitTime = 0;
+            waitStamp = 0;
+            waitTimeStamp = 0.0;
             calculatedLastTime = 0.0;
             calculatedWaitTime = 0.0;
             bpm = 0;
@@ -128,10 +154,14 @@
             this.tickStamp = inTake.TickStamp;
             this.tickTimeStamp = inTake.TickTimeStamp;
             this.lastTime = inTake.LastTime;
+            this.lastStamp = inTake.LastStamp;
+            this.lastTimeStamp = inTake.LastTimeStamp;
             this.waitTime = inTake.WaitTime;
+            this.waitStamp = inTake.WaitStamp;
+            this.waitTimeStamp = inTake.WaitTimeStamp;
             this.calculatedLastTime = inTake.CalculatedLastTime;
             this.calculatedLastTime = inTake.CalculatedLastTime;
-            this.bpm=inTake.bpm;
+            this.bpm = inTake.bpm;
         }
 
         /// <summary>
@@ -228,10 +258,30 @@
         }
 
         /// <summary>
+        /// Access the time stamp where wait time ends in ticks
+        /// </summary>
+        /// <value>The incoming time</value>
+        public int WaitStamp
+        {
+            get { return this.waitStamp; }
+            set { this.waitStamp = value; }
+        }
+
+        /// <summary>
+        /// Access the time stamp where wait time ends in seconds
+        /// </summary>
+        /// <value>The incoming time</value>
+        public double WaitTimeStamp
+        {
+            get { return this.waitTimeStamp; }
+            set { this.waitTimeStamp = value; }
+        }
+
+        /// <summary>
         /// Gets or sets the calculated wait time.
         /// </summary>
         /// <value>
-        /// The calculated wait time.
+        /// The calculated wait time in seconds.
         /// </value>
         public double CalculatedWaitTime
         {
@@ -255,10 +305,40 @@
         }
 
         /// <summary>
-        /// Gets or sets the calculated last time.
+        /// Access Last time in ticks
+        /// </summary>
+        public int LastStamp
+        {
+            get
+            {
+                return this.lastStamp;
+            }
+            set
+            {
+                this.lastStamp = value;
+            }
+        }
+
+        /// <summary>
+        /// Access last time in seconds
+        /// </summary>
+        public double LastTimeStamp
+        {
+            get
+            {
+                return this.lastTimeStamp;
+            }
+            set
+            {
+                this.lastTimeStamp = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the calculated last time in seconds.
         /// </summary>
         /// <value>
-        /// The calculated last time.
+        /// The calculated last time in seconds.
         /// </value>
         public double CalculatedLastTime
         {
@@ -442,11 +522,9 @@
         public bool Update()
         {
             bool result = false;
-            this.TickStamp = this.Bar*384 + this.Tick;
-            double tickTime = 60 / this.bpm * 4 / 384;
-            this.calculatedWaitTime = this.waitTime * tickTime;
-            this.calculatedLastTime = this.lastTime * tickTime;
-            this.TickTimeStamp = this.TickStamp * tickTime ;
+            this.tickStamp = this.Bar * 384 + this.tick;
+            this.waitStamp = this.TickStamp + this.waitTime;
+            this.lastStamp = this.waitStamp + this.lastStamp;
             if (!(this.NoteType.Equals("SLIDE") || this.NoteType.Equals("HOLD")))
             {
                 result = true;

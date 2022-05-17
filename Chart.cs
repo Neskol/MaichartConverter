@@ -58,7 +58,7 @@ namespace MaichartConverter
             }
             set
             {
-                this.notes=value;
+                this.notes = value;
             }
         }
 
@@ -68,13 +68,13 @@ namespace MaichartConverter
         /// <value>this.Chart</value>
         public List<List<Note>> StoredChart
         {
-            get 
-            { 
-                return this.chart; 
-            }
-            set 
+            get
             {
-                this.chart=value;
+                return this.chart;
+            }
+            set
+            {
+                this.chart = value;
             }
         }
 
@@ -244,7 +244,7 @@ namespace MaichartConverter
         /// Return Information
         /// </summary>
         /// <value>this.Information</value>
-        public Dictionary<string,string> Information
+        public Dictionary<string, string> Information
         {
             get
             {
@@ -272,7 +272,8 @@ namespace MaichartConverter
             this.measureChanges = new MeasureChanges();
             this.chart = new List<List<Note>>();
             this.information = new Dictionary<string, string>();
-            this.isDxChart = false;        }
+            this.isDxChart = false;
+        }
 
         /// <summary>
         /// Check if every item is valid for exporting
@@ -290,7 +291,7 @@ namespace MaichartConverter
         {
             int maxBar = 0;
             double timeStamp = 0.0;
-            if (notes.Count>0)
+            if (notes.Count > 0)
             {
                 maxBar = notes[notes.Count - 1].Bar;
             }
@@ -312,6 +313,20 @@ namespace MaichartConverter
                 {
                     if (x.Bar == i)
                     {
+                        x.Update();
+                        x.TickTimeStamp = this.GetTimeStamp(x.TickStamp);
+                        x.WaitTimeStamp = this.GetTimeStamp(x.WaitStamp);
+                        x.LastTimeStamp = this.GetTimeStamp(x.LastStamp);
+
+                        x.CalculatedWaitTime = x.WaitTimeStamp - x.TickTimeStamp;
+                        x.CalculatedLastTime = x.LastTimeStamp - x.WaitTimeStamp;
+
+                        Console.WriteLine(x.Compose(1));
+                        Console.WriteLine("Tick time stamp: " + x.TickTimeStamp);
+                        Console.WriteLine("Wait time stamp: " + x.WaitStamp);
+                        Console.WriteLine("Last time stamp: " + x.LastTimeStamp);
+                        Console.WriteLine("Calculated Wait Time: " + x.CalculatedWaitTime);
+                        Console.WriteLine("Calculated Last Time: " + x.CalculatedLastTime);
                         int delay = x.Bar * 384 + x.Tick + x.WaitTime + x.LastTime;
                         switch (x.NoteSpecificType)
                         {
@@ -324,7 +339,7 @@ namespace MaichartConverter
                                 break;
                             case "TAP":
                                 this.tapNumber++;
-                                if (x.NoteSpecificType.Equals("XTP")&&!x.NoteType.Equals("NST"))
+                                if (x.NoteSpecificType.Equals("XTP") && !x.NoteType.Equals("NST"))
                                 {
                                     this.isDxChart = false;
                                 }
@@ -402,6 +417,7 @@ namespace MaichartConverter
                             lastNote = x;
                         }
                         realLastNote = x;
+                        timeStamp += x.TickTimeStamp;
                     }
                 }
 
@@ -414,7 +430,7 @@ namespace MaichartConverter
             }
             //Console.WriteLine("TOTAL DELAY: "+this.TotalDelay);
             //Console.WriteLine("TOTAL COUNT: "+ this.chart.Count * 384);
-            if (this.totalDelay<this.chart.Count*384)
+            if (this.totalDelay < this.chart.Count * 384)
             {
                 this.totalDelay = 0;
             }
@@ -463,7 +479,7 @@ namespace MaichartConverter
                 startTimeList.Add(384);
             }
             List<int> intervalCandidates = new List<int>();
-            int minimalInterval = GCD(startTimeList[0],startTimeList[1]);
+            int minimalInterval = GCD(startTimeList[0], startTimeList[1]);
             for (int i = 1; i < startTimeList.Count; i++)
             {
                 minimalInterval = GCD(minimalInterval, startTimeList[i]);
@@ -543,7 +559,7 @@ namespace MaichartConverter
                 //Add Appropriate note into each set
                 foreach (Note x in bar)
                 {
-                    if ((x.Tick == i) && x.IsNote&& !(x.NoteType.Equals("TTP")|| x.NoteType.Equals("THO")))
+                    if ((x.Tick == i) && x.IsNote && !(x.NoteType.Equals("TTP") || x.NoteType.Equals("THO")))
                     {
                         if (x.NoteSpecificType.Equals("BPM"))
                         {
@@ -559,17 +575,13 @@ namespace MaichartConverter
                             eachSet.Add(x);
                             //Console.WriteLine("A note was found at tick " + i + " of bar " + barNumber + ", it is "+x.NoteType);
                             writeRest = false;
-                        }                      
+                        }
                     }
-                    else if ((x.Tick == i) && x.IsNote&& (x.NoteType.Equals("TTP") || x.NoteType.Equals("THO")))
+                    else if ((x.Tick == i) && x.IsNote && (x.NoteType.Equals("TTP") || x.NoteType.Equals("THO")))
                     {
                         if (x.NoteSpecificType.Equals("BPM"))
                         {
                             bpm = x;
-                            //List<Note> tempSet = new List<Note>();
-                            //tempSet.Add(x);
-                            //tempSet.AddRange(touchEachSet);
-                            //touchEachSet=tempSet;
                             //Console.WriteLine("A note was found at tick " + i + " of bar " + barNumber + ", it is "+x.NoteType);
                         }
                         else
@@ -581,7 +593,7 @@ namespace MaichartConverter
                     }
                 }
                 //Searching for BPM change. If find one, get into front.
-                if (bpm.BPM!=0)
+                if (bpm.BPM != 0)
                 {
                     List<Note> adjusted = new List<Note>();
                     adjusted.Add(bpm);
@@ -596,48 +608,6 @@ namespace MaichartConverter
                     adjusted.AddRange(eachSet);
                     eachSet = adjusted;
                 }
-                //foreach (BPMChange x in bpmChanges)
-                //{
-                //    if (x.Bar == barNumber && x.Tick == i)
-                //    {
-                //        List<Note> adjusted = new List<Note>();
-                //        eachSet.Remove(x);
-                //        touchEachSet.Remove(x);
-                //        adjusted.Add(x);
-                //        adjusted.AddRange(touchEachSet);
-                //        adjusted.AddRange(eachSet);
-                //        eachSet = adjusted;
-                //        addedTouch = true;
-                //    }
-                //    //if (eachSet.Contains(x) && !addedTouch)
-                //    //{
-                //    //    eachSet.Remove(x);
-                //    //    List<Note> adjusted = new List<Note>();
-                //    //    adjusted.Add(x);
-                //    //    adjusted.AddRange(touchEachSet);
-                //    //    adjusted.AddRange(eachSet);
-                //    //    eachSet = adjusted;
-                //    //    addedTouch = true;
-                //    //}
-                //    //else if (touchEachSet.Contains(x)&&!addedTouch)
-                //    //{
-                //    //    touchEachSet.Remove(x);
-                //    //    List<Note> adjusted = new List<Note>();
-                //    //    adjusted.Add(x);
-                //    //    adjusted.AddRange(touchEachSet);
-                //    //    adjusted.AddRange(eachSet);
-                //    //    eachSet = adjusted;
-                //    //    addedTouch = true;
-                //    //}
-                //    //else if (!addedTouch)
-                //    //{
-                //    //    List<Note> adjusted = new List<Note>();
-                //    //    adjusted.AddRange(touchEachSet);
-                //    //    adjusted.AddRange(eachSet);
-                //    //    eachSet = adjusted;
-                //    //    addedTouch = true;
-                //    //}
-                //}
                 if (writeRest)
                 {
                     //Console.WriteLine("There is no note at tick " + i + " of bar " + barNumber + ", Adding one");
@@ -648,7 +618,7 @@ namespace MaichartConverter
             if (RealNoteNumber(result) != RealNoteNumber(bar))
             {
                 string error = "";
-                error += ("Bar notes not match in bar: " + barNumber)+"\n";
+                error += ("Bar notes not match in bar: " + barNumber) + "\n";
                 error += ("Expected: " + RealNoteNumber(bar)) + "\n";
                 foreach (Note x in bar)
                 {
@@ -662,36 +632,24 @@ namespace MaichartConverter
                 Console.WriteLine(error);
                 throw new Exception("NOTE NUMBER IS NOT MATCHING");
             }
-            //result.Sort();
-            //if (RealNoteNumber(result)==0)
-            //{
-            //    Console.WriteLine("There is no note at tick " + 0 + " of bar " + barNumber + ", Adding one");
-            //    result.Add(new Rest("RST", barNumber,0));
-            //}
-            // if (result[1].NoteSpecificType().Equals("BPM"))
-            // {
-            //     Note temp = result[0];
-            //     result[0] = result[1];
-            //     result[1] = temp;
-            // }
-            bool hasFirstBPMChange=false;
+            bool hasFirstBPMChange = false;
             List<Note> changedResult = new List<Note>();
             Note potentialFirstChange = new Rest();
             {
-                for(int i = 0;!hasFirstBPMChange&&i<result.Count();i++)
+                for (int i = 0; !hasFirstBPMChange && i < result.Count(); i++)
                 {
-                    if (result[i].NoteGenre.Equals("BPM")&&result[i].Tick==0)
-                    {                    
+                    if (result[i].NoteGenre.Equals("BPM") && result[i].Tick == 0)
+                    {
                         changedResult.Add(result[i]);
                         potentialFirstChange = result[i];
-                        hasFirstBPMChange=true;
+                        hasFirstBPMChange = true;
                     }
                 }
                 if (hasFirstBPMChange)
                 {
                     result.Remove(potentialFirstChange);
                     changedResult.AddRange(result);
-                    result=changedResult;
+                    result = changedResult;
                 }
             }
 
@@ -739,6 +697,69 @@ namespace MaichartConverter
             {
                 this.information.Add(x.Key, x.Value);
             }
+        }
+
+        public double GetTimeStamp(int bar, int tick)
+        {
+            BPMChange prevChange;
+            double result = 0.0;
+
+            if (bar == 0 && tick == 0)
+            {
+                prevChange = this.BPMChanges.ChangeNotes[0];
+            }
+            else
+            {
+                for (int i = 0; this.BPMChanges.ChangeNotes[i].Bar <= bar; i++)
+                {
+                    if (this.BPMChanges.ChangeNotes[i].Bar < bar)
+                    {
+                        double tickTime = 60 / this.BPMChanges.ChangeNotes[i].BPM * 4 / 384;
+                        result += this.BPMChanges.ChangeNotes[i].Bar * 384 * tickTime + this.BPMChanges.ChangeNotes[i].Tick * tickTime;
+                    }
+                    else if (this.BPMChanges.ChangeNotes[i].Bar == bar && this.BPMChanges.ChangeNotes[i].Tick < tick)
+                    {
+                        double tickTime = 60 / this.BPMChanges.ChangeNotes[i].BPM * 4 / 384;
+                        result += this.BPMChanges.ChangeNotes[i].Bar * 384 * tickTime + (tick - this.BPMChanges.ChangeNotes[i].Tick) * tickTime;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// GetTimeStamp with only tick = this.bar*384 + this.tick
+        /// </summary>
+        /// <param name="tick">Overall ticks</param>
+        /// <returns>The appropriate time stamp</returns>
+        public double GetTimeStamp(int tick)
+        {
+            BPMChange prevChange;
+            double result = 0.0;
+            int bar = tick / 384;
+            if (bar == 0 && tick == 0)
+            {
+                prevChange = this.BPMChanges.ChangeNotes[0];
+            }
+            else
+            {
+                for (int i = 0; i < this.BPMChanges.ChangeNotes.Count && this.BPMChanges.ChangeNotes[i].Bar <= bar; i++)
+                {
+                    if (this.BPMChanges.ChangeNotes[i].Bar < bar)
+                    {
+                        double tickTime = 60 / this.BPMChanges.ChangeNotes[i].BPM * 4 / 384;
+                        result += this.BPMChanges.ChangeNotes[i].Bar * 384 * tickTime + this.BPMChanges.ChangeNotes[i].Tick * tickTime;
+                    }
+                    else if (this.BPMChanges.ChangeNotes[i].Bar == bar && this.BPMChanges.ChangeNotes[i].Tick < tick)
+                    {
+                        double tickTime = 60 / this.BPMChanges.ChangeNotes[i].BPM * 4 / 384;
+                        result += this.BPMChanges.ChangeNotes[i].Bar * 384 * tickTime + (tick - this.BPMChanges.ChangeNotes[i].Tick) * tickTime;
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }

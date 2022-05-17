@@ -3,7 +3,7 @@
     /// <summary>
     /// Store measure change notes in a chart
     /// </summary>
-    public class MeasureChanges : IChart
+    public class MeasureChanges
     {
         private List<int> bar;
         private List<int> tick;
