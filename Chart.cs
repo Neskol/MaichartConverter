@@ -314,7 +314,7 @@ namespace MaichartConverter
                     if (x.Bar == i)
                     {
                         x.Update();
-                        x.TickTimeStamp = this.GetTimeStamp(x.TickStamp);
+                        x.TickTimeStamp = this.GetTimeStamp(x.Bar, x.Tick);
                         x.WaitTimeStamp = this.GetTimeStamp(x.WaitStamp);
                         x.LastTimeStamp = this.GetTimeStamp(x.LastStamp);
 
@@ -710,7 +710,7 @@ namespace MaichartConverter
             }
             else
             {
-                for (int i = 0; this.BPMChanges.ChangeNotes[i].Bar <= bar; i++)
+                for (int i = 0; i < this.BPMChanges.ChangeNotes.Count && this.BPMChanges.ChangeNotes[i].Bar <= bar; i++)
                 {
                     if (this.BPMChanges.ChangeNotes[i].Bar < bar)
                     {
@@ -731,34 +731,49 @@ namespace MaichartConverter
         /// <summary>
         /// GetTimeStamp with only tick = this.bar*384 + this.tick
         /// </summary>
-        /// <param name="tick">Overall ticks</param>
+        /// <param name="overallTick">Overall ticks</param>
         /// <returns>The appropriate time stamp</returns>
-        public double GetTimeStamp(int tick)
+        public double GetTimeStamp(int overallTick)
         {
-            BPMChange prevChange;
+            // BPMChange prevChange;
+            // double result = 0.0;
+            // int tick = overallTick % 384;
+            // int bar = overallTick / 384;
+
+            // if (bar == 0 && tick == 0)
+            // {
+            //     prevChange = this.BPMChanges.ChangeNotes[0];
+            // }
+            // else
+            // {
+            //     for (int i = 0; i < this.BPMChanges.ChangeNotes.Count && this.BPMChanges.ChangeNotes[i].Bar <= bar; i++)
+            //     {
+            //         if (this.BPMChanges.ChangeNotes[i].Bar < bar)
+            //         {
+            //             double tickTime = 60 / this.BPMChanges.ChangeNotes[i].BPM * 4 / 384;
+            //             result += this.BPMChanges.ChangeNotes[i].Bar * 384 * tickTime + this.BPMChanges.ChangeNotes[i].Tick * tickTime;
+            //         }
+            //         else if (this.BPMChanges.ChangeNotes[i].Bar == bar && this.BPMChanges.ChangeNotes[i].Tick < tick)
+            //         {
+            //             double tickTime = 60 / this.BPMChanges.ChangeNotes[i].BPM * 4 / 384;
+            //             result += this.BPMChanges.ChangeNotes[i].Bar * 384 * tickTime + (tick - this.BPMChanges.ChangeNotes[i].Tick) * tickTime;
+            //         }
+            //     }
+            // }
+
+            // return result;
+
+            List<BPMChange> previousChanges = new List<BPMChange>();
             double result = 0.0;
-            int bar = tick / 384;
-            if (bar == 0 && tick == 0)
+
+            foreach (BPMChange bpmNote in this.BPMChanges.ChangeNotes)
             {
-                prevChange = this.BPMChanges.ChangeNotes[0];
-            }
-            else
-            {
-                for (int i = 0; i < this.BPMChanges.ChangeNotes.Count && this.BPMChanges.ChangeNotes[i].Bar <= bar; i++)
+                if (bpmNote.TickStamp < overallTick)
                 {
-                    if (this.BPMChanges.ChangeNotes[i].Bar < bar)
-                    {
-                        double tickTime = 60 / this.BPMChanges.ChangeNotes[i].BPM * 4 / 384;
-                        result += this.BPMChanges.ChangeNotes[i].Bar * 384 * tickTime + this.BPMChanges.ChangeNotes[i].Tick * tickTime;
-                    }
-                    else if (this.BPMChanges.ChangeNotes[i].Bar == bar && this.BPMChanges.ChangeNotes[i].Tick < tick)
-                    {
-                        double tickTime = 60 / this.BPMChanges.ChangeNotes[i].BPM * 4 / 384;
-                        result += this.BPMChanges.ChangeNotes[i].Bar * 384 * tickTime + (tick - this.BPMChanges.ChangeNotes[i].Tick) * tickTime;
-                    }
+                    previousChanges.Add(bpmNote);
+                    Console.WriteLine("A BPM Note was added: "+bpmNote.Bar+", "+bpmNote.Tick+", "+bpmNote.BPM);
                 }
             }
-
             return result;
         }
     }

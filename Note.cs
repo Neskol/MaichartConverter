@@ -522,8 +522,8 @@ namespace MaichartConverter
         public bool Update()
         {
             bool result = false;
-            this.tickStamp = this.Bar * 384 + this.tick;
-            this.waitStamp = this.TickStamp + this.waitTime;
+            this.tickStamp = this.bar * 384 + this.tick;
+            this.waitStamp = this.tickStamp + this.waitTime;
             this.lastStamp = this.waitStamp + this.lastStamp;
             if (!(this.NoteType.Equals("SLIDE") || this.NoteType.Equals("HOLD")))
             {
