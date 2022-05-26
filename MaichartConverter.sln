@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.31911.260
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaichartConverter", "MaichartConverter.csproj", "{C80EAA2B-1033-415B-BB01-F8784133AB21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaichartConverter", "MaichartConverter.csproj", "{C80EAA2B-1033-415B-BB01-F8784133AB21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaichartConverterUnitTest", "..\MaichartConverterUnitTest\MaichartConverterUnitTest.csproj", "{72E54494-8D80-41D9-9CD2-44D6C34FBDE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{C80EAA2B-1033-415B-BB01-F8784133AB21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C80EAA2B-1033-415B-BB01-F8784133AB21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C80EAA2B-1033-415B-BB01-F8784133AB21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72E54494-8D80-41D9-9CD2-44D6C34FBDE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72E54494-8D80-41D9-9CD2-44D6C34FBDE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72E54494-8D80-41D9-9CD2-44D6C34FBDE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72E54494-8D80-41D9-9CD2-44D6C34FBDE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
