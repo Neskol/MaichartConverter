@@ -1,0 +1,3 @@
+[submodule "MaichartConverterUnitTest"]
+	path = MaichartConverterUnitTest
+	url = git@github.com:Neskol/MaichartConverterUnitTest.git
