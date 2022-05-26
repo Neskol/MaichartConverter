@@ -16,6 +16,7 @@
             this.Bar = 0;
             this.Tick = 0;
             this.BPM = 0;
+            this.Update();
         }
 
         /// <summary>
@@ -29,6 +30,7 @@
             this.Bar = bar;
             this.Tick = startTime;
             this.BPM = BPM;
+            this.Update();
         }
 
         /// <summary>
@@ -40,6 +42,7 @@
             this.Bar = takeIn.Bar;
             this.Tick = takeIn.Tick;
             this.BPM = takeIn.BPM;
+            this.Update();
         }
 
 
@@ -65,5 +68,37 @@
         public override bool IsNote => true;
 
         public override string NoteSpecificType => "BPM";
+
+        public override bool Equals(object? obj)
+        {
+            bool result = false;
+            if (this == obj && this == null)
+            {
+                result = true;
+            }
+            else if (this!=null && obj != null)
+            {
+                BPMChange candidate = (BPMChange)obj;
+                if (this.GetHashCode() == candidate.GetHashCode())
+                {
+                    result = true;
+                }
+                else if (this.Bar == candidate.Bar)
+                {
+                    if (this.Tick == candidate.Tick && this.BPM == candidate.BPM)
+                    {
+                        result = true;
+                    }
+                }
+            }
+            return result;
+        }
+
+        public override int GetHashCode()
+        {
+            // string hash = this.Bar + "0" + this.Tick + "0" + this.BPM;
+            // return int.Parse(hash);
+            return base.GetHashCode();
+        }
     }
 }

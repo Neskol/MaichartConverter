@@ -14,6 +14,7 @@
         {
             this.Tick = 0;
             this.quaver = 0;
+            this.Update();
         }
 
         /// <summary>
@@ -27,6 +28,7 @@
             this.Bar = bar;
             this.Tick = tick;
             this.quaver = quaver;
+            this.Update();
         }
         
         /// <summary>
@@ -38,6 +40,7 @@
             this.Bar = takeIn.Bar;
             this.Tick = takeIn.Tick;
             this.quaver = takeIn.Quaver;
+            this.Update();
         }
 
         /// <summary>

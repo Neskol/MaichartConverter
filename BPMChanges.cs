@@ -5,7 +5,7 @@ namespace MaichartConverter
 {
     public class BPMChanges
     {
-        private List<BPMChange> changeNotes;
+        private HashSet<BPMChange> changeNotes;
 
         /// <summary>
         /// Construct with changes listed
@@ -15,10 +15,10 @@ namespace MaichartConverter
         /// <param name="bpm">Specified BPM changes</param>
         public BPMChanges(List<int> bar, List<int> tick, List<double> bpm)
         {
-            this.changeNotes = new List<BPMChange>();
-            for (int i=0;i<bar.Count;i++)
+            this.changeNotes = new HashSet<BPMChange>();
+            for (int i = 0; i < bar.Count; i++)
             {
-                BPMChange candidate = new BPMChange(bar[i],tick[i],bpm[i]);
+                BPMChange candidate = new BPMChange(bar[i], tick[i], bpm[i]);
                 changeNotes.Add(candidate);
             }
             this.Update();
@@ -29,7 +29,7 @@ namespace MaichartConverter
         /// </summary>
         public BPMChanges()
         {
-            this.changeNotes = new List<BPMChange>();
+            this.changeNotes = new HashSet<BPMChange>();
             this.Update();
         }
 
@@ -37,7 +37,9 @@ namespace MaichartConverter
         {
             get
             {
-                return this.changeNotes;
+                List<BPMChange> result = new List<BPMChange>();
+                result.AddRange(this.changeNotes);
+                return result;
             }
         }
 
@@ -57,16 +59,25 @@ namespace MaichartConverter
         public void Update()
         {
             List<BPMChange> adjusted = new List<BPMChange>();
-                Note lastNote = new Rest();
-                foreach (BPMChange x in this.changeNotes)
+            Note lastNote = new Rest();
+            foreach (BPMChange x in this.changeNotes)
+            {
+                if (!(x.Bar == lastNote.Bar && x.Tick == lastNote.Tick && x.BPM == lastNote.BPM))
                 {
-                    if (!(x.Bar==lastNote.Bar&&x.Tick==lastNote.Tick&&x.BPM==lastNote.BPM))
-                    {
-                        adjusted.Add(x);
-                        lastNote = x;
-                    }
+                    adjusted.Add(x);
+                    lastNote = x;
                 }
-                this.changeNotes=adjusted;
+            }
+            // Console.WriteLine(adjusted.Count);
+            this.changeNotes = new HashSet<BPMChange>();
+            foreach(BPMChange x in adjusted)
+            {
+                this.changeNotes.Add(x);
+            }
+            if (this.changeNotes.Count!=adjusted.Count)
+            {
+                throw new Exception("Adjusted BPM Note number not matching");
+            }
         }
 
         /// <summary>
@@ -81,7 +92,7 @@ namespace MaichartConverter
                     string result = "BPM_DEF" + "\t";
                     for (int x = 0; x < 4; x++)
                     {
-                        result = result + String.Format("{0:F3}", changeNotes[x].BPM);
+                        result = result + String.Format("{0:F3}", this.ChangeNotes[x].BPM);
                         result += "\t";
                     }
                     return result + "\n";
@@ -98,7 +109,7 @@ namespace MaichartConverter
                     }
                     while (times < 4)
                     {
-                        result += String.Format("{0:F3}", changeNotes[0].BPM);
+                        result += String.Format("{0:F3}", this.ChangeNotes[0].BPM);
                         result += "\t";
                         times++;
                     }
@@ -126,7 +137,7 @@ namespace MaichartConverter
             string result = "";
             for (int i = 0; i < changeNotes.Count; i++)
             {
-                result += "BPM" + "\t" + changeNotes[i].Bar + "\t" + changeNotes[i].Tick + "\t" + changeNotes[i].BPM + "\n";
+                result += "BPM" + "\t" + this.ChangeNotes[i].Bar + "\t" + this.ChangeNotes[i].Tick + "\t" + this.ChangeNotes[i].BPM + "\n";
                 //result += "BPM" + "\t" + bar[i] + "\t" + tick[i] + "\t" + String.Format("{0:F3}", bpm[i])+"\n";
             }
             return result;

@@ -27,6 +27,7 @@
         public Tap()
         {
             this.touchSize="";
+            this.Update();
         }
 
         /// <summary>
@@ -44,6 +45,7 @@
             this.Tick = startTime;
             this.specialEffect = 0;
             this.touchSize = "M1";
+            this.Update();
         }
 
         /// <summary>
@@ -63,6 +65,7 @@
             this.Tick = startTime;
             this.specialEffect = specialEffect;
             this.touchSize = touchSize;
+            this.Update();
         }
 
 

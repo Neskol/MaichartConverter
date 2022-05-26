@@ -29,10 +29,11 @@
             this.Key = key;
             this.Bar = bar;
             this.Tick = startTime;
-            this.WaitTime = waitTime;
-            this.LastTime = lastTime;
+            this.WaitLength = waitTime;
+            this.LastLength = lastTime;
             this.EndKey = endKey;
-            this.Delayed = this.WaitTime != 96;
+            this.Delayed = this.WaitLength != 96;
+            this.Update();
         }
 
         public override bool CheckValidity()
@@ -52,7 +53,7 @@
             string result = "";
             if (format == 1)
             {
-                result = this.NoteType + "\t" + this.Bar + "\t" + this.Tick + "\t" + this.Key + "\t" + this.WaitTime + "\t" + this.LastTime + "\t" + this.EndKey;
+                result = this.NoteType + "\t" + this.Bar + "\t" + this.Tick + "\t" + this.Key + "\t" + this.WaitLength + "\t" + this.LastLength + "\t" + this.EndKey;
             }
             else if (format == 0)
             {
@@ -110,11 +111,11 @@
                 }
                 if (this.Delayed)
                 {
-                    result += ((Convert.ToInt32(this.EndKey) + 1).ToString()) + GenerateAppropriateLength(this.LastTime, this.BPM);
+                    result += ((Convert.ToInt32(this.EndKey) + 1).ToString()) + GenerateAppropriateLength(this.LastLength, this.BPM);
                 }
                 else
                 {
-                    result += ((Convert.ToInt32(this.EndKey) + 1).ToString()) + GenerateAppropriateLength(this.LastTime);
+                    result += ((Convert.ToInt32(this.EndKey) + 1).ToString()) + GenerateAppropriateLength(this.LastLength);
                 }
                 //result += "_" + this.Tick;
                 //result += "_" + this.Key;

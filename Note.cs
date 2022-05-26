@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Resources;
 
 namespace MaichartConverter
 {
@@ -43,14 +44,14 @@ namespace MaichartConverter
         private double tickTimeStamp;
 
         /// <summary>
-        /// The wait time
+        /// The wait length
         /// </summary>
-        private int waitTime;
+        private int waitLength;
 
         /// <summary>
         /// The stamp of wait time ends in ticks
         /// </summary>
-        private int waitStamp;
+        private int waitTickStamp;
 
         /// <summary>
         /// The stamp when the wait time ends in seconds
@@ -63,14 +64,14 @@ namespace MaichartConverter
         private double calculatedWaitTime;
 
         /// <summary>
-        /// The last time
+        /// The last length
         /// </summary>
-        private int lastTime;
+        private int lastLength;
 
         /// <summary>
         /// The stamp when the last time ends in ticks
         /// </summary>
-        private int lastStamp;
+        private int lastTickStamp;
 
         /// <summary>
         /// The stamp when the last time ends in seconds
@@ -113,9 +114,9 @@ namespace MaichartConverter
         private Note? consecutiveSlide;
 
         /// <summary>
-        /// The next BPM change to this note
+        /// Stores all BPM change prior to this
         /// </summary>
-        private BPMChange? nextBPMChange;
+        private List<BPMChange> bpmChangeNotes;
 
         /// <summary>
         /// Construct an empty note
@@ -129,15 +130,16 @@ namespace MaichartConverter
             tick = 0;
             tickStamp = 0;
             tickTimeStamp = 0.0;
-            lastTime = 0;
-            lastStamp = 0;
+            lastLength = 0;
+            lastTickStamp = 0;
             lastTimeStamp = 0.0;
-            waitTime = 0;
-            waitStamp = 0;
+            waitLength = 0;
+            waitTickStamp = 0;
             waitTimeStamp = 0.0;
             calculatedLastTime = 0.0;
             calculatedWaitTime = 0.0;
             bpm = 0;
+            bpmChangeNotes = new List<BPMChange>();
         }
 
         /// <summary>
@@ -153,15 +155,16 @@ namespace MaichartConverter
             this.tick = inTake.Tick;
             this.tickStamp = inTake.TickStamp;
             this.tickTimeStamp = inTake.TickTimeStamp;
-            this.lastTime = inTake.LastTime;
-            this.lastStamp = inTake.LastStamp;
+            this.lastLength = inTake.LastLength;
+            this.lastTickStamp = inTake.LastTickStamp;
             this.lastTimeStamp = inTake.LastTimeStamp;
-            this.waitTime = inTake.WaitTime;
-            this.waitStamp = inTake.WaitStamp;
+            this.waitLength = inTake.WaitLength;
+            this.waitTickStamp = inTake.WaitTickStamp;
             this.waitTimeStamp = inTake.WaitTimeStamp;
             this.calculatedLastTime = inTake.CalculatedLastTime;
             this.calculatedLastTime = inTake.CalculatedLastTime;
-            this.bpm = inTake.bpm;
+            this.bpm = inTake.BPM;
+            this.bpmChangeNotes = inTake.bpmChangeNotes;
         }
 
         /// <summary>
@@ -245,15 +248,15 @@ namespace MaichartConverter
         /// <summary>
         /// Access wait time
         /// </summary>
-        public int WaitTime
+        public int WaitLength
         {
             get
             {
-                return this.waitTime;
+                return this.waitLength;
             }
             set
             {
-                this.waitTime = value;
+                this.waitLength = value;
             }
         }
 
@@ -261,10 +264,10 @@ namespace MaichartConverter
         /// Access the time stamp where wait time ends in ticks
         /// </summary>
         /// <value>The incoming time</value>
-        public int WaitStamp
+        public int WaitTickStamp
         {
-            get { return this.waitStamp; }
-            set { this.waitStamp = value; }
+            get { return this.waitTickStamp; }
+            set { this.waitTickStamp = value; }
         }
 
         /// <summary>
@@ -292,30 +295,30 @@ namespace MaichartConverter
         /// <summary>
         /// Access EndTime
         /// </summary>
-        public int LastTime
+        public int LastLength
         {
             get
             {
-                return this.lastTime;
+                return this.lastLength;
             }
             set
             {
-                this.lastTime = value;
+                this.lastLength = value;
             }
         }
 
         /// <summary>
         /// Access Last time in ticks
         /// </summary>
-        public int LastStamp
+        public int LastTickStamp
         {
             get
             {
-                return this.lastStamp;
+                return this.lastTickStamp;
             }
             set
             {
-                this.lastStamp = value;
+                this.lastTickStamp = value;
             }
         }
 
@@ -415,6 +418,18 @@ namespace MaichartConverter
             set { this.consecutiveSlide = value; }
         }
 
+        public List<BPMChange> BPMChangeNotes
+        {
+            get
+            {
+                return this.bpmChangeNotes;
+            }
+            set
+            {
+                this.bpmChangeNotes = value;
+            }
+        }
+
         /// <summary>
         /// Return this.SpecificType
         /// </summary>
@@ -511,7 +526,7 @@ namespace MaichartConverter
             this.EndKey.Equals(other.EndKey) &&
             this.Bar == other.Bar &&
             this.Tick == other.Tick &&
-            this.LastTime == other.LastTime &&
+            this.LastLength == other.LastLength &&
             this.BPM == other.BPM)
             {
                 result = true;
@@ -521,10 +536,15 @@ namespace MaichartConverter
 
         public bool Update()
         {
+            // Console.WriteLine("This note has bpm note number of " + this.BPMChangeNotes.Count());
             bool result = false;
             this.tickStamp = this.bar * 384 + this.tick;
-            this.waitStamp = this.tickStamp + this.waitTime;
-            this.lastStamp = this.waitStamp + this.lastStamp;
+            // string noteInformation = "This note is "+this.NoteType+", in tick "+ this.tickStamp+", ";
+            // this.tickTimeStamp = this.GetTimeStamp(this.tickStamp,noteInformation);
+            this.waitTickStamp = this.tickStamp + this.waitLength;
+            // this.waitTimeStamp = this.GetTimeStamp(this.waitTickStamp);
+            this.lastTickStamp = this.waitTickStamp + this.lastLength;
+            // this.lastTimeStamp = this.GetTimeStamp(this.lastTickStamp);
             if (!(this.NoteType.Equals("SLIDE") || this.NoteType.Equals("HOLD")))
             {
                 result = true;
@@ -564,7 +584,7 @@ namespace MaichartConverter
 
         /// <summary>
         /// Generate appropriate length for hold and slide.
-        /// </summary>
+        /// </summary>`
         /// <param name="length">Last Time</param>
         /// <param name="bpm">BPM</param>
         /// <returns>[Definition:Length]=[Quaver:Beat]</returns>
@@ -572,8 +592,8 @@ namespace MaichartConverter
         {
             string result = "";
             double tickTime = 60 / bpm * 4 / 384;
-            double sustain = this.WaitTime * tickTime;
-            double duration = this.LastTime * tickTime;
+            double sustain = this.WaitLength * tickTime;
+            double duration = this.LastLength * tickTime;
             result = "[" + sustain + "##" + duration + "]";
             return result;
         }

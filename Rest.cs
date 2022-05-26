@@ -14,6 +14,7 @@
             this.NoteType = "RST";
             this.Bar = 0;
             this.Tick = 0;
+            this.Update();
         }
 
         /// <summary>
@@ -22,11 +23,13 @@
         /// <param name="noteType">Note Type to take in</param>
         /// <param name="bar">Bar to take in</param>
         /// <param name="startTime">Start to take in</param>
-        public Rest(string noteType, int bar, int startTime)
+        public Rest(string noteType, int bar, int startTime, List<BPMChange> changeNotes)
         {
             this.NoteType = noteType;
             this.Bar = bar;
             this.Tick = startTime;
+            this.BPMChangeNotes = changeNotes;
+            this.Update();
         }
 
         /// <summary>
@@ -38,6 +41,8 @@
             this.NoteType = "RST";
             this.Bar = n.Bar;
             this.Tick = n.Tick;
+            this.BPMChangeNotes = n.BPMChangeNotes;
+            this.Update();
         }
         public override bool CheckValidity()
         {

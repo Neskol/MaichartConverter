@@ -1,4 +1,6 @@
-﻿namespace MaichartConverter
+﻿using System.Runtime.CompilerServices;
+
+namespace MaichartConverter
 {
     /// <summary>
     /// Parses ma2 file into Ma2 chart format
@@ -63,8 +65,16 @@
                         BPMChange candidate = new BPMChange(Int32.Parse(bpmCandidate[1]),
                             Int32.Parse(bpmCandidate[2]),
                             Double.Parse(bpmCandidate[3]));
+                        // foreach (BPMChange change in bpmChanges.ChangeNotes)
+                        // {
+                        //     if (change.TickStamp <= candidate.LastTickStamp)
+                        //     {
+                        //         candidate.BPMChangeNotes.Add(change);
+                        //         Console.WriteLine("A BPM change note was added with overall tick of "+change.TickStamp + " with bpm of "+change.BPM);
+                        //     }
+                        // }
                         bpmChanges.Add(candidate);
-                        bpmChanges.Update();
+                        bpmChanges.Update();        
                     }
                     else if (isMET)
                     {
@@ -76,8 +86,29 @@
                     }
                     else if (isNOTE)
                     {
-                        notes.Add(NoteOfToken(x));
+                        Note candidate = NoteOfToken(x);
+                        // foreach (BPMChange change in bpmChanges.ChangeNotes)
+                        // {
+                        //     if (change.TickStamp <= candidate.LastTickStamp)
+                        //     {
+                        //         candidate.BPMChangeNotes.Add(change);
+                        //         Console.WriteLine("A BPM change note was added with overall tick of " + change.TickStamp + " with bpm of " + change.BPM);
+                        //     }
+                        // }
+                        notes.Add(candidate);
                     }
+                }
+            }
+            foreach (Note note in notes)
+            {
+                note.BPMChangeNotes = bpmChanges.ChangeNotes;
+                if (bpmChanges.ChangeNotes.Count>0 && note.BPMChangeNotes.Count == 0)
+                {
+                    throw new IndexOutOfRangeException("BPM COUNT DISAGREE");
+                }
+                if (bpmChanges.ChangeNotes.Count == 0)
+                {
+                    throw new IndexOutOfRangeException("BPM CHANGE COUNT DISAGREE");
                 }
             }
             Chart result = new Ma2(notes, bpmChanges, measureChanges);
@@ -212,7 +243,7 @@
             else if (candidate[0].Equals("THO") && candidate.Count() <= 7)
             {
                 //Console.ReadLine();
-                result =  new Hold(candidate[0],
+                result = new Hold(candidate[0],
                 Int32.Parse(candidate[1]),
                 Int32.Parse(candidate[2]),
                 candidate[3] + candidate[5], Int32.Parse(candidate[4]),
@@ -291,7 +322,7 @@
         }
 
 
-        public Tap TapOfToken(string token, int bar, int tick,double bpm)
+        public Tap TapOfToken(string token, int bar, int tick, double bpm)
         {
             Note result = new Rest();
             string[] candidate = token.Split('\t');

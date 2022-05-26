@@ -35,9 +35,10 @@
             this.Key = key;
             this.Bar = bar;
             this.Tick = startTime;
-            this.LastTime = lastTime;
+            this.LastLength = lastTime;
             this.specialEffect = 0;
             this.touchSize = "M1";
+            this.Update();
         }
 
         /// <summary>
@@ -56,9 +57,10 @@
             this.Key = key;
             this.Bar = bar;
             this.Tick = startTime;
-            this.LastTime = lastTime;
+            this.LastLength = lastTime;
             this.specialEffect = specialEffect;
             this.touchSize = "touchSize";
+            this.Update();
         }
 
         /// <summary>
@@ -96,29 +98,29 @@
             string result = "";
             if (format == 1 && !(this.NoteType.Equals("THO")))
             {
-                result = this.NoteType + "\t" + this.Bar + "\t" + this.Tick + "\t" + this.Key + "\t" + this.LastTime;
+                result = this.NoteType + "\t" + this.Bar + "\t" + this.Tick + "\t" + this.Key + "\t" + this.LastLength;
             }
             else if (format == 1 && (this.NoteType.Equals("THO") || this.NoteType.Equals("XHO")))
             {
-                result = this.NoteType + "\t" + this.Bar + "\t" + this.Tick + "\t" + this.Key.ToCharArray()[1] + "\t" + this.LastTime + "\t" + this.Key.ToCharArray()[0] + "\t0\tM1"; //M1 for regular note and L1 for Larger Note
+                result = this.NoteType + "\t" + this.Bar + "\t" + this.Tick + "\t" + this.Key.ToCharArray()[1] + "\t" + this.LastLength + "\t" + this.Key.ToCharArray()[0] + "\t0\tM1"; //M1 for regular note and L1 for Larger Note
             }
             else if (format == 0)
             {
                 switch (this.NoteType)
                 {
                     case "HLD":
-                        result += (Convert.ToInt32(this.Key) + 1) + "h" + GenerateAppropriateLength(this.LastTime);
+                        result += (Convert.ToInt32(this.Key) + 1) + "h" + GenerateAppropriateLength(this.LastLength);
                         break;
                     case "XHO":
-                        result += (Convert.ToInt32(this.Key) + 1) + "xh" + GenerateAppropriateLength(this.LastTime);
+                        result += (Convert.ToInt32(this.Key) + 1) + "xh" + GenerateAppropriateLength(this.LastLength);
                         break;
                     case "THO":
                         if (this.SpecialEffect == 1)
                         {
-                            result += this.Key.ToCharArray()[1].ToString() + ((Convert.ToInt32(this.Key.Substring(0, 1)) + 1).ToString() + "hf" + GenerateAppropriateLength(this.LastTime));
+                            result += this.Key.ToCharArray()[1].ToString() + ((Convert.ToInt32(this.Key.Substring(0, 1)) + 1).ToString() + "hf" + GenerateAppropriateLength(this.LastLength));
                         }
                         else
-                            result += this.Key.ToCharArray()[1].ToString() + ((Convert.ToInt32(this.Key.Substring(0, 1)) + 1).ToString() + "xh" + GenerateAppropriateLength(this.LastTime));
+                            result += this.Key.ToCharArray()[1].ToString() + ((Convert.ToInt32(this.Key.Substring(0, 1)) + 1).ToString() + "xh" + GenerateAppropriateLength(this.LastLength));
                         break;
                 }
             }
