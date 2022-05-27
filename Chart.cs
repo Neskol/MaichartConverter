@@ -314,10 +314,13 @@ namespace MaichartConverter
                 foreach (Note x in this.Notes)
                 {
                     x.BPMChangeNotes = this.bpmChanges.ChangeNotes;
+                    x.TickTimeStamp = this.GetTimeStamp(x.TickStamp);
+                    x.WaitTimeStamp = this.GetTimeStamp(x.WaitTickStamp);
+                    x.LastTimeStamp = this.GetTimeStamp(x.LastTickStamp);
                     if (x.Bar == i)
                     {
                         // Console.WriteLine("This note contains "+x.BPMChangeNotes.Count+" BPM notes");
-                        Console.WriteLine(GetNoteDetail(this.bpmChanges,x));
+                        //Console.WriteLine(GetNoteDetail(this.bpmChanges, x));
                         int delay = x.Bar * 384 + x.Tick + x.WaitLength + x.LastLength;
                         switch (x.NoteSpecificType)
                         {
@@ -742,16 +745,16 @@ namespace MaichartConverter
                 }
                 if (maximumBPMIndex == 0)
                 {
-                    result = GetBPMTimeUnit(this.BPMChanges.ChangeNotes[0].BPM);
+                    result = GetBPMTimeUnit(this.BPMChanges.ChangeNotes[0].BPM)*overallTick;
                 }
                 else
                 {
                     for (int i = 1; i <= maximumBPMIndex; i++)
                     {
-                        double previousTickTimeUnit = 60 / this.BPMChanges.ChangeNotes[i - 1].BPM * 4 / 384;
+                        double previousTickTimeUnit = GetBPMTimeUnit(this.BPMChanges.ChangeNotes[i - 1].BPM);
                         result += (this.BPMChanges.ChangeNotes[i].TickStamp - this.BPMChanges.ChangeNotes[i - 1].TickStamp) * previousTickTimeUnit;
                     }
-                    double tickTimeUnit = 60 / this.BPMChanges.ChangeNotes[maximumBPMIndex].BPM * 4 / 384;
+                    double tickTimeUnit = GetBPMTimeUnit(this.BPMChanges.ChangeNotes[maximumBPMIndex].BPM);
                     result += (overallTick - this.BPMChanges.ChangeNotes[maximumBPMIndex].TickStamp) * tickTimeUnit;
                 }
             }
@@ -778,16 +781,16 @@ namespace MaichartConverter
                 }
                 if (maximumBPMIndex == 0)
                 {
-                    result = GetBPMTimeUnit(bpmChanges.ChangeNotes[0].BPM);
+                    result = GetBPMTimeUnit(bpmChanges.ChangeNotes[0].BPM) * overallTick;
                 }
                 else
                 {
                     for (int i = 1; i <= maximumBPMIndex; i++)
                     {
-                        double previousTickTimeUnit = 60 / bpmChanges.ChangeNotes[i - 1].BPM * 4 / 384;
+                        double previousTickTimeUnit = GetBPMTimeUnit(bpmChanges.ChangeNotes[i - 1].BPM);
                         result += (bpmChanges.ChangeNotes[i].TickStamp - bpmChanges.ChangeNotes[i - 1].TickStamp) * previousTickTimeUnit;
                     }
-                    double tickTimeUnit = 60 / bpmChanges.ChangeNotes[maximumBPMIndex].BPM * 4 / 384;
+                    double tickTimeUnit = GetBPMTimeUnit(bpmChanges.ChangeNotes[maximumBPMIndex].BPM);
                     result += (overallTick - bpmChanges.ChangeNotes[maximumBPMIndex].TickStamp) * tickTimeUnit;
                 }
             }
@@ -799,17 +802,23 @@ namespace MaichartConverter
             double result = 60 / bpm * 4 / 384;
             return result;
         }
-
+        
+        /// <summary>
+        /// For debug use: print out the note's time stamp in given bpm changes
+        /// </summary>
+        /// <param name="bpmChanges">The list of BPMChanges</param>
+        /// <param name="inTake">The Note to test</param>
+        /// <returns>String of result, consists tick time stamp, wait time stamp and last time stamp</returns>
         public static string GetNoteDetail(BPMChanges bpmChanges, Note inTake)
         {
             string result = "";
             result += inTake.Compose(1) + "\n";
             result += "This is a " + inTake.NoteSpecificType + " note,\n";
-            result += "This note has overall tick of " + inTake.TickStamp +", and therefor, the tick time stamp shall be" + GetTimeStamp(bpmChanges,inTake.TickStamp) + "\n";
+            result += "This note has overall tick of " + inTake.TickStamp +", and therefor, the tick time stamp shall be " + GetTimeStamp(bpmChanges,inTake.TickStamp) + "\n";
             if (inTake.NoteGenre.Equals("SLIDE"))
             {
                 result += "This note has wait length of " + inTake.WaitLength + ", and therefor, its wait tick stamp is " + inTake.WaitTickStamp + " with wait time stamp of "+ GetTimeStamp(bpmChanges, inTake.WaitTickStamp) +"\n";
-                result += "This note has last length of " + inTake.LastLength + ", and therefor, its wait tick stamp is " + inTake.LastTickStamp + " with last time stamp of " + GetTimeStamp(bpmChanges, inTake.LastTickStamp) + "\n";
+                result += "This note has last length of " + inTake.LastLength + ", and therefor, its last tick stamp is " + inTake.LastTickStamp + " with last time stamp of " + GetTimeStamp(bpmChanges, inTake.LastTickStamp) + "\n";
             }
             return result;
         }

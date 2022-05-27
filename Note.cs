@@ -584,16 +584,15 @@ namespace MaichartConverter
 
         /// <summary>
         /// Generate appropriate length for hold and slide.
-        /// </summary>`
+        /// </summary>
         /// <param name="length">Last Time</param>
         /// <param name="bpm">BPM</param>
         /// <returns>[Definition:Length]=[Quaver:Beat]</returns>
         public string GenerateAppropriateLength(int length, double bpm)
         {
             string result = "";
-            double tickTime = 60 / bpm * 4 / 384;
-            double sustain = this.WaitLength * tickTime;
-            double duration = this.LastLength * tickTime;
+            double sustain = this.WaitTimeStamp-this.TickTimeStamp;
+            double duration = this.LastTimeStamp - this.WaitTimeStamp;
             result = "[" + sustain + "##" + duration + "]";
             return result;
         }
