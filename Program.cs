@@ -25,7 +25,7 @@ namespace MaichartConverter
         @"C:\Users\Neskol\MaiAnalysis\DXBGA_HEVC\",
         @"C:\Users\Neskol\MaiAnalysis\Output\"};
 
-        public readonly static string[] macPaths = { @"/Users/neskol/MaiAnalysis/A000/",
+        public readonly static string[] MacPaths = { @"/Users/neskol/MaiAnalysis/A000/",
         @"/Users/neskol/MaiAnalysis/Sound/",
         @"/Users/neskol/MaiAnalysis/Image/Texture2D/",
         @"/Users/neskol/MaiAnalysis/DXBGA_HEVC/",
@@ -34,12 +34,12 @@ namespace MaichartConverter
         /// <summary>
         /// Defines which seperator is using in programs
         /// </summary>
-        public static string GlobalSep = WindowsPathSep;
+        public static string GlobalSep = MacPathSep;
 
         /// <summary>
         /// Defines which path is using in programs
         /// </summary>
-        public static string[] GlobalPaths = WinPaths;
+        public static string[] GlobalPaths = MacPaths;
 
         /// <summary>
         /// Defines possible sorting scheme
@@ -374,7 +374,7 @@ namespace MaichartConverter
                     NumberTotalTrackCompiled++;
                     CompiledTracks.Add(trackInfo.TrackName + trackInfo.TrackID);
                     AppendKeyValue(trackInfo.TrackID, trackInfo.TrackBPM);
-                    AppendBPMTable(trackInfo.TrackID,trackInfo.TrackBPM, compiler.SymbolicBPMTable());
+                    AppendBPMTable(trackInfo.TrackID, trackInfo.TrackBPM, compiler.SymbolicBPMTable());
                     string[] compiledTrackDetail = { trackInfo.TrackName, trackInfo.TrackGenre, trackInfo.TrackVersion, trackInfo.TrackVersionNumber };
                     CompiledTrackDetailSet.Add(trackInfo.TrackName + trackInfo.TrackID, compiledTrackDetail);
                     Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
@@ -548,7 +548,7 @@ namespace MaichartConverter
                     {
                         Console.WriteLine("Already exist song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + "_Utage");
                     }
-                    MaidataCompiler compiler = new MaidataCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + "_Utage",true);
+                    MaidataCompiler compiler = new MaidataCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + "_Utage", true);
                     Console.WriteLine("Finished compiling maidata " + trackInfo.TrackName + " to: " + defaultCategorizedPath + sep + trackNameSubstitute + "_Utage" + sep + "maidata.txt");
 
                     if (exportAudio)
@@ -558,7 +558,7 @@ namespace MaichartConverter
                         string newMusicLocation = defaultCategorizedPath + sep + trackNameSubstitute + "_Utage" + sep + "track.mp3";
                         if (!File.Exists(newMusicLocation))
                         {
-                            File.Copy(originalMusicLocation, newMusicLocation,true);
+                            File.Copy(originalMusicLocation, newMusicLocation, true);
                             Console.WriteLine("Exported music to: " + newMusicLocation);
                         }
                         else

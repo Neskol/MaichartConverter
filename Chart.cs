@@ -314,12 +314,16 @@ namespace MaichartConverter
                 }
                 foreach (Note x in this.Notes)
                 {
-                    x.BPMChangeNotes = this.bpmChanges.ChangeNotes;
-                    x.TickTimeStamp = this.GetTimeStamp(x.TickStamp);
-                    x.WaitTimeStamp = this.GetTimeStamp(x.WaitTickStamp);
-                    x.LastTimeStamp = this.GetTimeStamp(x.LastTickStamp);
+                    //x.BPMChangeNotes = this.bpmChanges.ChangeNotes;
+                    //x.Update();
+                    //x.TickTimeStamp = this.GetTimeStamp(x.TickStamp);
+                    //x.WaitTimeStamp = this.GetTimeStamp(x.WaitTickStamp);
+                    //x.LastTimeStamp = this.GetTimeStamp(x.LastTickStamp);
                     if (x.Bar == i)
                     {
+                        //x.ReplaceBPMChanges(this.bpmChanges);
+                        //x.BPMChangeNotes = this.bpmChanges.ChangeNotes;
+                        //x.Update();
                         // Console.WriteLine("This note contains "+x.BPMChangeNotes.Count+" BPM notes");
                         //Console.WriteLine(GetNoteDetail(this.bpmChanges, x));
                         int delay = x.Bar * 384 + x.Tick + x.WaitLength + x.LastLength;
@@ -351,6 +355,8 @@ namespace MaichartConverter
                             case "HOLD":
                                 this.holdNumber++;
                                 this.slideNumber++;
+                                x.TickBPMDisagree = (GetBPMByTick(x.TickStamp) != GetBPMByTick(x.WaitTickStamp) || GetBPMByTick(x.WaitTickStamp) != GetBPMByTick(x.LastTickStamp) || GetBPMByTick(x.TickStamp) != GetBPMByTick(x.LastTickStamp));
+                                x.Update();
                                 if (delay > this.TotalDelay)
                                 {
                                     this.totalDelay = delay;
@@ -368,6 +374,8 @@ namespace MaichartConverter
                                 break;
                             case "SLIDE":
                                 this.slideNumber++;
+                                x.TickBPMDisagree = (GetBPMByTick(x.TickStamp) != GetBPMByTick(x.WaitTickStamp) || GetBPMByTick(x.WaitTickStamp) != GetBPMByTick(x.LastTickStamp) || GetBPMByTick(x.TickStamp) != GetBPMByTick(x.LastTickStamp));
+                                x.Update();
                                 if (lastNote.NoteSpecificType.Equals("SLIDE_START"))
                                 {
                                     x.SlideStart = lastNote;
@@ -606,7 +614,7 @@ namespace MaichartConverter
                 if (writeRest)
                 {
                     //Console.WriteLine("There is no note at tick " + i + " of bar " + barNumber + ", Adding one");
-                    eachSet.Add(new Rest("RST", barNumber, i,bpmChanges));
+                    eachSet.Add(new Rest("RST", barNumber, i, bpmChanges));
                 }
                 result.AddRange(eachSet);
             }
@@ -701,9 +709,9 @@ namespace MaichartConverter
             if (overallTick != 0)
             {
                 int maximumBPMIndex = 0;
-                for (int i = 0; i<this.BPMChanges.ChangeNotes.Count;i++)
+                for (int i = 0; i < this.BPMChanges.ChangeNotes.Count; i++)
                 {
-                    if (this.BPMChanges.ChangeNotes[i].TickStamp<=overallTick)
+                    if (this.BPMChanges.ChangeNotes[i].TickStamp <= overallTick)
                     {
                         maximumBPMIndex = i;
                     }
@@ -714,9 +722,9 @@ namespace MaichartConverter
                 }
                 else
                 {
-                    for (int i = 1; i <= maximumBPMIndex;i++)
+                    for (int i = 1; i <= maximumBPMIndex; i++)
                     {
-                        double previousTickTimeUnit = 60 / this.BPMChanges.ChangeNotes[i-1].BPM * 4 / 384;
+                        double previousTickTimeUnit = 60 / this.BPMChanges.ChangeNotes[i - 1].BPM * 4 / 384;
                         result += (this.BPMChanges.ChangeNotes[i].TickStamp - this.BPMChanges.ChangeNotes[i - 1].TickStamp) * previousTickTimeUnit;
                     }
                     double tickTimeUnit = 60 / this.BPMChanges.ChangeNotes[maximumBPMIndex].BPM * 4 / 384;
@@ -736,17 +744,22 @@ namespace MaichartConverter
             double result = 0.0;
             if (overallTick != 0)
             {
+                bool foundMax = false;
                 int maximumBPMIndex = 0;
-                for (int i = 0; i < this.BPMChanges.ChangeNotes.Count; i++)
+                for (int i = 0; i < this.BPMChanges.ChangeNotes.Count && !foundMax; i++)
                 {
                     if (this.BPMChanges.ChangeNotes[i].TickStamp <= overallTick)
                     {
                         maximumBPMIndex = i;
                     }
+                    else
+                    {
+                        foundMax = true;
+                    }
                 }
                 if (maximumBPMIndex == 0)
                 {
-                    result = GetBPMTimeUnit(this.BPMChanges.ChangeNotes[0].BPM)*overallTick;
+                    result = GetBPMTimeUnit(this.BPMChanges.ChangeNotes[0].BPM) * overallTick;
                 }
                 else
                 {
@@ -808,7 +821,7 @@ namespace MaichartConverter
             double result = 60 / bpm * 4 / 384;
             return result;
         }
-        
+
         /// <summary>
         /// For debug use: print out the note's time stamp in given bpm changes
         /// </summary>
@@ -820,10 +833,10 @@ namespace MaichartConverter
             string result = "";
             result += inTake.Compose(1) + "\n";
             result += "This is a " + inTake.NoteSpecificType + " note,\n";
-            result += "This note has overall tick of " + inTake.TickStamp +", and therefor, the tick time stamp shall be " + GetTimeStamp(bpmChanges,inTake.TickStamp) + "\n";
+            result += "This note has overall tick of " + inTake.TickStamp + ", and therefor, the tick time stamp shall be " + GetTimeStamp(bpmChanges, inTake.TickStamp) + "\n";
             if (inTake.NoteGenre.Equals("SLIDE"))
             {
-                result += "This note has wait length of " + inTake.WaitLength + ", and therefor, its wait tick stamp is " + inTake.WaitTickStamp + " with wait time stamp of "+ GetTimeStamp(bpmChanges, inTake.WaitTickStamp) +"\n";
+                result += "This note has wait length of " + inTake.WaitLength + ", and therefor, its wait tick stamp is " + inTake.WaitTickStamp + " with wait time stamp of " + GetTimeStamp(bpmChanges, inTake.WaitTickStamp) + "\n";
                 result += "This note has last length of " + inTake.LastLength + ", and therefor, its last tick stamp is " + inTake.LastTickStamp + " with last time stamp of " + GetTimeStamp(bpmChanges, inTake.LastTickStamp) + "\n";
             }
             return result;
@@ -837,7 +850,7 @@ namespace MaichartConverter
         public double GetBPMByTick(int overallTick)
         {
             double result = this.bpmChanges.ChangeNotes[0].BPM;
-            if (overallTick>0)
+            if (overallTick > 0)
             {
                 int maximumBPMIndex = 0;
                 for (int i = 0; i < this.bpmChanges.ChangeNotes.Count; i++)

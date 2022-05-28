@@ -84,6 +84,11 @@ namespace MaichartConverter
         private double calculatedLastTime;
 
         /// <summary>
+        /// Stores if the BPM of wait or last tick is in different BPM
+        /// </summary>
+        private bool tickBPMDisagree;
+
+        /// <summary>
         /// The delayed
         /// </summary>
         private bool delayed;
@@ -138,6 +143,7 @@ namespace MaichartConverter
             waitTimeStamp = 0.0;
             calculatedLastTime = 0.0;
             calculatedWaitTime = 0.0;
+            tickBPMDisagree = false;
             bpm = 0;
             bpmChangeNotes = new List<BPMChange>();
         }
@@ -163,6 +169,7 @@ namespace MaichartConverter
             this.waitTimeStamp = inTake.WaitTimeStamp;
             this.calculatedLastTime = inTake.CalculatedLastTime;
             this.calculatedLastTime = inTake.CalculatedLastTime;
+            this.tickBPMDisagree = inTake.TickBPMDisagree;
             this.bpm = inTake.BPM;
             this.bpmChangeNotes = inTake.bpmChangeNotes;
         }
@@ -347,6 +354,16 @@ namespace MaichartConverter
         {
             get => this.calculatedLastTime;
             set { this.calculatedLastTime = value; }
+        }
+
+        /// <summary>
+        /// Stores if the wait or last are in different BPM
+        /// </summary>
+        /// <value>True if in different BPM, false elsewise</value>
+        public bool TickBPMDisagree
+        {
+            get => this.tickBPMDisagree;
+            set { this.tickBPMDisagree = value; }
         }
 
         /// <summary>
@@ -540,11 +557,11 @@ namespace MaichartConverter
             bool result = false;
             this.tickStamp = this.bar * 384 + this.tick;
             // string noteInformation = "This note is "+this.NoteType+", in tick "+ this.tickStamp+", ";
-            // this.tickTimeStamp = this.GetTimeStamp(this.tickStamp,noteInformation);
+            //this.tickTimeStamp = this.GetTimeStamp(this.tickStamp);
             this.waitTickStamp = this.tickStamp + this.waitLength;
-            // this.waitTimeStamp = this.GetTimeStamp(this.waitTickStamp);
+            //this.waitTimeStamp = this.GetTimeStamp(this.waitTickStamp);
             this.lastTickStamp = this.waitTickStamp + this.lastLength;
-            // this.lastTimeStamp = this.GetTimeStamp(this.lastTickStamp);
+            //this.lastTimeStamp = this.GetTimeStamp(this.lastTickStamp);
             if (!(this.NoteType.Equals("SLIDE") || this.NoteType.Equals("HOLD")))
             {
                 result = true;
@@ -554,6 +571,26 @@ namespace MaichartConverter
                 result = true;
             }
             return result;
+        }
+
+        /// <summary>
+        /// Replace this.BPMChangeNotes from change table given
+        /// </summary>
+        /// <param name="changeTable">Change table contains bpm notes</param>
+        public void ReplaceBPMChanges(BPMChanges changeTable)
+        {
+            this.bpmChangeNotes = new List<BPMChange>();
+            this.bpmChangeNotes.AddRange(changeTable.ChangeNotes);
+        }
+
+        /// <summary>
+        /// Replace this.BPMChangeNotes from change table given
+        /// </summary>
+        /// <param name="changeTable">Change table contains bpm notes</param>
+        public void ReplaceBPMChanges(List<BPMChange> changeTable)
+        {
+            this.bpmChangeNotes = new List<BPMChange>();
+            this.bpmChangeNotes.AddRange(changeTable);
         }
 
         /// <summary>
@@ -591,7 +628,7 @@ namespace MaichartConverter
         public string GenerateAppropriateLength(int length, double bpm)
         {
             string result = "";
-            double sustain = this.WaitTimeStamp-this.TickTimeStamp;
+            double sustain = this.WaitTimeStamp - this.TickTimeStamp;
             double duration = this.LastTimeStamp - this.WaitTimeStamp;
             result = "[" + sustain + "##" + duration + "]";
             return result;
@@ -630,7 +667,7 @@ namespace MaichartConverter
                     for (int i = 1; i <= maximumBPMIndex; i++)
                     {
                         double previousTickTimeUnit = GetBPMTimeUnit(this.bpmChangeNotes[i - 1].BPM);
-                        result += (this.bpmChangeNotes[i].TickStamp -   this.bpmChangeNotes[i - 1].TickStamp) * previousTickTimeUnit;
+                        result += (this.bpmChangeNotes[i].TickStamp - this.bpmChangeNotes[i - 1].TickStamp) * previousTickTimeUnit;
                     }
                     double tickTimeUnit = GetBPMTimeUnit(this.bpmChangeNotes[maximumBPMIndex].BPM);
                     result += (overallTick - this.bpmChangeNotes[maximumBPMIndex].TickStamp) * tickTimeUnit;

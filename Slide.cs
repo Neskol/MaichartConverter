@@ -109,7 +109,7 @@
                         result += "qq";
                         break;
                 }
-                if (this.Delayed)
+                if (this.TickBPMDisagree || this.Delayed)
                 {
                     result += ((Convert.ToInt32(this.EndKey) + 1).ToString()) + GenerateAppropriateLength(this.LastLength, this.BPM);
                 }
