@@ -797,6 +797,11 @@ namespace MaichartConverter
             return result;
         }
 
+        /// <summary>
+        /// Return BPM tick unit of given bpm
+        /// </summary>
+        /// <param name="bpm">BPM to calculate</param>
+        /// <returns>Tick Unit of BPM</returns>
         public static double GetBPMTimeUnit(double bpm)
         {
             double result = 60 / bpm * 4 / 384;

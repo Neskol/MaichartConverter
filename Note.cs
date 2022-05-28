@@ -596,5 +596,47 @@ namespace MaichartConverter
             result = "[" + sustain + "##" + duration + "]";
             return result;
         }
+
+        /// <summary>
+        /// Get BPM Time tick unit of bpm
+        /// </summary>
+        /// <param name="bpm">BPM to calculate</param>
+        /// <returns>BPM Tick Unit of bpm</returns>
+        public static double GetBPMTimeUnit(double bpm)
+        {
+            double result = 60 / bpm * 4 / 384;
+            return result;
+        }
+
+        public double GetTimeStamp(int overallTick)
+        {
+            double result = 0.0;
+            if (overallTick != 0)
+            {
+                int maximumBPMIndex = 0;
+                for (int i = 0; i < this.bpmChangeNotes.Count; i++)
+                {
+                    if (this.bpmChangeNotes[i].TickStamp <= overallTick)
+                    {
+                        maximumBPMIndex = i;
+                    }
+                }
+                if (maximumBPMIndex == 0)
+                {
+                    result = GetBPMTimeUnit(this.bpmChangeNotes[0].BPM) * overallTick;
+                }
+                else
+                {
+                    for (int i = 1; i <= maximumBPMIndex; i++)
+                    {
+                        double previousTickTimeUnit = GetBPMTimeUnit(this.bpmChangeNotes[i - 1].BPM);
+                        result += (this.bpmChangeNotes[i].TickStamp -   this.bpmChangeNotes[i - 1].TickStamp) * previousTickTimeUnit;
+                    }
+                    double tickTimeUnit = GetBPMTimeUnit(this.bpmChangeNotes[maximumBPMIndex].BPM);
+                    result += (overallTick - this.bpmChangeNotes[maximumBPMIndex].TickStamp) * tickTimeUnit;
+                }
+            }
+            return result;
+        }
     }
 }

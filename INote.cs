@@ -22,5 +22,12 @@
         /// </summary>
         /// <returns>True if Calculated Times is defined, false elsewise</returns>
         bool Update();
+
+        /// <summary>
+        /// Give time stamp given overall tick
+        /// </summary>
+        /// <param name="overallTick">Note.Bar*384+Note.Tick</param>
+        /// <returns>Appropriate time stamp in seconds</returns>
+        double GetTimeStamp(int overallTick);
     }
 }
