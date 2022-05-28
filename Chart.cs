@@ -840,14 +840,15 @@ namespace MaichartConverter
             if (overallTick>0)
             {
                 int maximumBPMIndex = 0;
-                for (int i = 0; i < bpmChanges.ChangeNotes.Count; i++)
+                for (int i = 0; i < this.bpmChanges.ChangeNotes.Count; i++)
                 {
-                    if (bpmChanges.ChangeNotes[i].TickStamp <= overallTick)
+                    if (this.bpmChanges.ChangeNotes[i].TickStamp <= overallTick)
                     {
                         maximumBPMIndex = i;
                     }
                 }
                 result = this.bpmChanges.ChangeNotes[maximumBPMIndex].BPM;
+
             }
             return result;
         }
