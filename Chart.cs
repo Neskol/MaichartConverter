@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
 namespace MaichartConverter
 {
@@ -824,6 +825,29 @@ namespace MaichartConverter
             {
                 result += "This note has wait length of " + inTake.WaitLength + ", and therefor, its wait tick stamp is " + inTake.WaitTickStamp + " with wait time stamp of "+ GetTimeStamp(bpmChanges, inTake.WaitTickStamp) +"\n";
                 result += "This note has last length of " + inTake.LastLength + ", and therefor, its last tick stamp is " + inTake.LastTickStamp + " with last time stamp of " + GetTimeStamp(bpmChanges, inTake.LastTickStamp) + "\n";
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Return the BPM at certain tick
+        /// </summary>
+        /// <param name="overallTick">Tick to specify</param>
+        /// <returns>BPM at that tick</returns>
+        public double GetBPMByTick(int overallTick)
+        {
+            double result = this.bpmChanges.ChangeNotes[0].BPM;
+            if (overallTick>0)
+            {
+                int maximumBPMIndex = 0;
+                for (int i = 0; i < bpmChanges.ChangeNotes.Count; i++)
+                {
+                    if (bpmChanges.ChangeNotes[i].TickStamp <= overallTick)
+                    {
+                        maximumBPMIndex = i;
+                    }
+                }
+                result = this.bpmChanges.ChangeNotes[maximumBPMIndex].BPM;
             }
             return result;
         }
