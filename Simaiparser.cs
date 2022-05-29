@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace MaichartConverter;
 
@@ -106,11 +107,51 @@ public class SimaiParser : IParser
 
     public Hold HoldOfToken(string token, int bar, int tick, double bpm)
     {
-        throw new NotImplementedException();
         int sustainSymbol = token.IndexOf("[");
         string keyCandidate = token.Substring(0,sustainSymbol); //key candidate is like tap grammar
         string sustainCandidate = token.Substring(sustainSymbol+1,token.Length-2); //sustain candidate is like 1:2
-        bool sustainIsSecond = sustainCandidate.Contains("##");
+        string key = "";
+        string holdType = "";
+        int specialEffect = 0;
+        // bool sustainIsSecond = sustainCandidate.Contains("##");
+        // if (sustainIsSecond)
+        // {
+        //     string[] secondCandidates = sustainCandidate.Split("##");
+
+        // }
+        if (keyCandidate.Contains("C"))
+        {
+            holdType = "THO";
+            if (keyCandidate.Contains("f"))
+            {
+                specialEffect = 1;
+            }
+        }
+        else if (keyCandidate.Contains("x"))
+        {
+            key = keyCandidate.Substring(0,1);
+            holdType = "XHO";
+        }
+        else
+        {
+            key = keyCandidate;
+            holdType = "HLD";
+        }
+        string[] lastTimeCandidates = sustainCandidate.Split(":");
+        int quaver = int.Parse(lastTimeCandidates[0]);
+        int lastTick = 384 / quaver;
+        int times = int.Parse(lastTimeCandidates[1]);
+        lastTick *= times;
+        Hold candidate;
+        if (holdType.Equals("THO"))
+        {
+            candidate = new Hold(holdType, bar, tick, key, lastTick, specialEffect, "M1");
+        }
+        else
+        {
+            candidate = new Hold(holdType, bar, tick, key, lastTick);
+        }
+        return candidate;
     }
 
     public Hold HoldOfToken(string token)
