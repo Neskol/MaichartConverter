@@ -321,7 +321,7 @@ public class SimaiParser : IParser
     }
 
     /// <summary>
-    /// Deal with old, outfashioned and illogical Simai Each Groups.
+    /// Deal with old, out-fashioned and illogical Simai Each Groups.
     /// </summary>
     /// <param name="token">Tokens that potentially contains each Groups</param>
     /// <returns>List of strings that is composed with single note.</returns>

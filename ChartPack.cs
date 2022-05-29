@@ -58,12 +58,12 @@ public abstract class ChartPack : Chart, IChart
         }
     }
 
-    public abstract bool CheckValidity();
+    // public abstract bool CheckValidity();
 
     public override string Compose()
     {
         throw new NotImplementedException();
     }
 
-    public abstract void Update();
+    // public abstract void Update();
 }
