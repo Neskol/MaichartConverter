@@ -338,7 +338,7 @@ namespace MaichartConverter
                                 break;
                             case "TAP":
                                 this.tapNumber++;
-                                if (x.NoteSpecificType.Equals("XTP") && !x.NoteType.Equals("NST"))
+                                if (x.NoteSpecificType.Equals("XTP"))
                                 {
                                     this.isDxChart = false;
                                 }
@@ -374,8 +374,14 @@ namespace MaichartConverter
                                 break;
                             case "SLIDE":
                                 this.slideNumber++;
-                                x.TickBPMDisagree = (GetBPMByTick(x.TickStamp) != GetBPMByTick(x.WaitTickStamp) || GetBPMByTick(x.WaitTickStamp) != GetBPMByTick(x.LastTickStamp) || GetBPMByTick(x.TickStamp) != GetBPMByTick(x.LastTickStamp));
+                                x.TickBPMDisagree = (GetBPMByTick(x.TickStamp) != GetBPMByTick(x.WaitTickStamp) || 
+                                    GetBPMByTick(x.WaitTickStamp) != GetBPMByTick(x.LastTickStamp) || 
+                                    GetBPMByTick(x.TickStamp) != GetBPMByTick(x.LastTickStamp) ||
+                                    HasBPMChangeInBetween(x.TickStamp,x.WaitTickStamp));
                                 x.Update();
+                                x.TickTimeStamp = this.GetTimeStamp(x.TickStamp);
+                                x.WaitTimeStamp = this.GetTimeStamp(x.WaitTickStamp);
+                                x.LastTimeStamp = this.GetTimeStamp(x.LastTickStamp);
                                 if (lastNote.NoteSpecificType.Equals("SLIDE_START"))
                                 {
                                     x.SlideStart = lastNote;
@@ -863,6 +869,27 @@ namespace MaichartConverter
                 result = this.bpmChanges.ChangeNotes[maximumBPMIndex].BPM;
 
             }
+            return result;
+        }
+
+        /// <summary>
+        /// Determine if there are BPM change in between ticks
+        /// </summary>
+        /// <param name="startTick">Tick to start with</param>
+        /// <param name="endTick">Tick to end with</param>
+        /// <returns></returns>
+        public bool HasBPMChangeInBetween(int startTick, int endTick)
+        {
+            bool result = false;
+
+            for (int i = 0; i < this.bpmChanges.ChangeNotes.Count && !result; i++)
+            {
+                if (this.bpmChanges.ChangeNotes[i].TickStamp > startTick && this.bpmChanges.ChangeNotes[i].TickStamp < endTick)
+                {
+                    result = true;
+                }
+            }
+
             return result;
         }
     }

@@ -293,11 +293,11 @@ namespace MaichartConverter
                             break;
                     }
                     //if (x.Prev!=null&&x.Prev.NoteType.Equals("NST"))
-                    if (x.NoteGenre.Equals("SLIDE")&&x.SlideStart== null)
-                    {
-                        result += Int32.Parse(x.Key) + 1;
-                        result += "!";
-                    }
+                    //if (x.NoteGenre.Equals("SLIDE")&&x.SlideStart== null)
+                    //{
+                    //    result += Int32.Parse(x.Key) + 1;
+                    //    result += "!";
+                    //}
                     result += x.Compose(0);
                     lastNote = x;
                     //if (x.NoteGenre().Equals("BPM"))
