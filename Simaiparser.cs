@@ -69,7 +69,7 @@ public class SimaiParser : IParser
             List<string> eachPairCandidates = EachGroupOfToken(tokens[i]);
             foreach (string eachNote in eachPairCandidates)
             {
-                if (currentBPM>0.0)
+                if (currentBPM > 0.0)
                 {
                     notes.Add(NoteOfToken(eachNote, bar, tick, currentBPM));
                 }
@@ -108,8 +108,10 @@ public class SimaiParser : IParser
     public Hold HoldOfToken(string token, int bar, int tick, double bpm)
     {
         int sustainSymbol = token.IndexOf("[");
-        string keyCandidate = token.Substring(0,sustainSymbol); //key candidate is like tap grammar
-        string sustainCandidate = token.Substring(sustainSymbol+1,token.Length-2); //sustain candidate is like 1:2
+        string keyCandidate = token.Substring(0, sustainSymbol); //key candidate is like tap grammar
+        Console.WriteLine(keyCandidate);
+        string sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
+        Console.WriteLine(sustainCandidate);
         string key = "";
         string holdType = "";
         int specialEffect = 0;
@@ -122,6 +124,7 @@ public class SimaiParser : IParser
         if (keyCandidate.Contains("C"))
         {
             holdType = "THO";
+            key = "0C";
             if (keyCandidate.Contains("f"))
             {
                 specialEffect = 1;
@@ -129,12 +132,14 @@ public class SimaiParser : IParser
         }
         else if (keyCandidate.Contains("x"))
         {
-            key = keyCandidate.Substring(0,1);
+            key = keyCandidate.Substring(0, 1);
+            key = (int.Parse(key) - 1).ToString();
             holdType = "XHO";
         }
         else
         {
             key = keyCandidate;
+            key = (int.Parse(key) - 1).ToString();
             holdType = "HLD";
         }
         string[] lastTimeCandidates = sustainCandidate.Split(":");
@@ -151,6 +156,7 @@ public class SimaiParser : IParser
         {
             candidate = new Hold(holdType, bar, tick, key, lastTick);
         }
+        candidate.BPM = bpm;
         return candidate;
     }
 
@@ -229,11 +235,11 @@ public class SimaiParser : IParser
         bool isHold = !isSlide && token.Contains("[");
         if (isSlide)
         {
-            result = SlideOfToken(token,bar,tick,bpm);
+            result = SlideOfToken(token, bar, tick, bpm);
         }
         else if (isHold)
         {
-            result = HoldOfToken(token,bar,tick,bpm);
+            result = HoldOfToken(token, bar, tick, bpm);
         }
         else if (isBPM)
         {
@@ -256,7 +262,7 @@ public class SimaiParser : IParser
         return result;
     }
 
-    public Slide SlideOfToken(string token, int bar, int tick,double bpm)
+    public Slide SlideOfToken(string token, int bar, int tick, double bpm)
     {
         throw new NotImplementedException();
     }
@@ -386,17 +392,17 @@ public class SimaiParser : IParser
     {
         List<string> result = new List<string>();
         string[] components = token.Split("*");
-        if (components.Length<1)
+        if (components.Length < 1)
         {
-            throw new Exception("SLIDE TOKEN NOT VALID: \n"+token);
+            throw new Exception("SLIDE TOKEN NOT VALID: \n" + token);
         }
         string splitCandidate = components[0];
         //Parse first section
         if (splitCandidate.Contains("qq"))
         {
             result.AddRange(splitCandidate.Split("qq"));
-            result[0]=result[0]+"_";
-            result[1]="qq"+result[1];
+            result[0] = result[0] + "_";
+            result[1] = "qq" + result[1];
         }
         else if (splitCandidate.Contains("q"))
         {
@@ -465,9 +471,9 @@ public class SimaiParser : IParser
             result[1] = "-" + result[1];
         }
         //Add rest of slide: components after * is always 
-        if (components.Length>1)
+        if (components.Length > 1)
         {
-            for (int i = 1;i<components.Length;i++)
+            for (int i = 1; i < components.Length; i++)
             {
                 result.Add(components[i]);
             }
