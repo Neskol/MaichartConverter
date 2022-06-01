@@ -18,7 +18,7 @@ namespace MaichartConverter
                 {
                     storage += line;
                 }
-                string[] result = storage.Split('&');
+                string[] result = storage.Split(",");
                 return result;
             }
             catch (DirectoryNotFoundException ex)
@@ -33,7 +33,7 @@ namespace MaichartConverter
             try
             {
                 string storage = text;
-                string[] result = storage.Split('&');
+                string[] result = storage.Split(",");
                 return result;
             }
             catch (Exception ex)
