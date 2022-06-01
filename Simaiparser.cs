@@ -352,22 +352,14 @@ public class SimaiParser : IParser
                 result.AddRange(EachGroupOfToken(tokenCandidate));
             }
         }
-        else if (token.Contains(")"))
+        else if (token.Contains(")")|| token.Contains("}"))
         {
-            string[] candidate = token.Split(")");
-            foreach (string tokenCandidate in candidate)
+            List<string> resultCandidate = ExtractParentheses(token);
+            foreach (string candidate in resultCandidate)
             {
-                result.AddRange(EachGroupOfToken(tokenCandidate));
+                result.AddRange(ExtractParentheses(candidate));
             }
-        }
-        else if (token.Contains("}"))
-        {
-            string[] candidate = token.Split("}");
-            foreach (string tokenCandidate in candidate)
-            {
-                result.AddRange(EachGroupOfToken(tokenCandidate));
-            }
-        }
+        } //lol this is the dummiest code I have ever wrote
         else if (Int32.TryParse(token, out int eachPair))
         {
             char[] eachPairs = token.ToCharArray();
@@ -380,11 +372,66 @@ public class SimaiParser : IParser
         {
             result.AddRange(ExtractEachSlides(token));
         }
+        else result.Add(token);
         return result;
     }
 
     /// <summary>
-    /// Deal with annoying vigours Slide grammar of Simai
+    /// Deal with annoying and vigours Parentheses grammar of Simai
+    /// </summary>
+    /// <param name="token">Token that potentially contains multiple slide note</param>
+    /// <returns>A list of strings extracts each note</returns>
+    public static List<string> ExtractParentheses(string token)
+    {
+        List<string> result = new List<string>();
+        bool containsBPM = token.Contains(")");
+        bool containsMeasure = token.Contains("}");
+
+        if (containsBPM)
+        {
+            string[] tokenCandidate = token.Split(")");
+            List<string> tokenResult = new();
+            for (int i = 0;i<tokenCandidate.Length;i++)
+            {
+                string x = tokenCandidate[i];
+                if (x.Contains("("))
+                {
+                    x += ")";
+                }
+                if (!x.Equals(""))
+                {
+                    tokenResult.Add(x);
+                }
+            }
+            result.AddRange(tokenResult);
+        }
+        else if(containsMeasure)
+        {
+            string[] tokenCandidate = token.Split("}");
+            List<string> tokenResult = new();
+            for (int i = 0; i < tokenCandidate.Length; i++)
+            {
+                string x = tokenCandidate[i];
+                if (x.Contains("{"))
+                {
+                    x += "}";
+                }
+                if (!x.Equals(""))
+                {
+                    tokenResult.Add(x);
+                }
+            }
+            result.AddRange(tokenResult);
+        }
+        else
+        {
+            result.Add(token);
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Deal with annoying and vigours Slide grammar of Simai
     /// </summary>
     /// <param name="token">Token that potentially contains multiple slide note</param>
     /// <returns>A list of slides extracts each note</returns>
