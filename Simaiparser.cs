@@ -109,9 +109,9 @@ public class SimaiParser : IParser
     {
         int sustainSymbol = token.IndexOf("[");
         string keyCandidate = token.Substring(0, sustainSymbol); //key candidate is like tap grammar
-        Console.WriteLine(keyCandidate);
+        //Console.WriteLine(keyCandidate);
         string sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
-        Console.WriteLine(sustainCandidate);
+        //Console.WriteLine(sustainCandidate);
         string key = "";
         string holdType = "";
         int specialEffect = 0;
@@ -265,6 +265,80 @@ public class SimaiParser : IParser
     public Slide SlideOfToken(string token, int bar, int tick, double bpm)
     {
         throw new NotImplementedException();
+        //Note result;
+        ////Parse first section
+        //if (token.Contains("qq"))
+        //{
+        //    string keyCandidate = token.Substring(2, 1);
+        //    int sustainSymbol = token.IndexOf("[");
+        //    string sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
+        //}
+        //else if (splitCandidate.Contains("q"))
+        //{
+        //    result.AddRange(splitCandidate.Split("q"));
+        //    result[0] = result[0] + "_";
+        //    result[1] = "q" + result[1];
+        //}
+        //else if (splitCandidate.Contains("pp"))
+        //{
+        //    result.AddRange(splitCandidate.Split("pp"));
+        //    result[0] = result[0] + "_";
+        //    result[1] = "pp" + result[1];
+        //}
+        //else if (splitCandidate.Contains("p"))
+        //{
+        //    result.AddRange(splitCandidate.Split("p"));
+        //    result[0] = result[0] + "_";
+        //    result[1] = "p" + result[1];
+        //}
+        //else if (splitCandidate.Contains("v"))
+        //{
+        //    result.AddRange(splitCandidate.Split("v"));
+        //    result[0] = result[0] + "_";
+        //    result[1] = "v" + result[1];
+        //}
+        //else if (splitCandidate.Contains("w"))
+        //{
+        //    result.AddRange(splitCandidate.Split("w"));
+        //    result[0] = result[0] + "_";
+        //    result[1] = "w" + result[1];
+        //}
+        //else if (splitCandidate.Contains("<"))
+        //{
+        //    result.AddRange(splitCandidate.Split("<"));
+        //    result[0] = result[0] + "_";
+        //    result[1] = "<" + result[1];
+        //}
+        //else if (splitCandidate.Contains(">"))
+        //{
+        //    result.AddRange(splitCandidate.Split(">"));
+        //    result[0] = result[0] + "_";
+        //    result[1] = ">" + result[1];
+        //}
+        //else if (splitCandidate.Contains("s"))
+        //{
+        //    result.AddRange(splitCandidate.Split("s"));
+        //    result[0] = result[0] + "_";
+        //    result[1] = "s" + result[1];
+        //}
+        //else if (splitCandidate.Contains("z"))
+        //{
+        //    result.AddRange(splitCandidate.Split("z"));
+        //    result[0] = result[0] + "_";
+        //    result[1] = "z" + result[1];
+        //}
+        //else if (splitCandidate.Contains("V"))
+        //{
+        //    result.AddRange(splitCandidate.Split("V"));
+        //    result[0] = result[0] + "_";
+        //    result[1] = "V" + result[1];
+        //}
+        //else if (splitCandidate.Contains("-"))
+        //{
+        //    result.AddRange(splitCandidate.Split("-"));
+        //    result[0] = result[0] + "_";
+        //    result[1] = "-" + result[1];
+        //}
     }
 
     public Slide SlideOfToken(string token)
