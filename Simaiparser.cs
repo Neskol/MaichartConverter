@@ -30,11 +30,14 @@ public class SimaiParser : IParser
     /// </summary>
     private static double CurrentBPM = 0;
 
+    private Tap PreviousSlideStart;
+
     /// <summary>
     /// Constructor of simaiparser
     /// </summary>
     public SimaiParser()
     {
+        PreviousSlideStart = new Tap();
     }
 
     /// <summary>
@@ -235,7 +238,7 @@ public class SimaiParser : IParser
         bool isHold = !isSlide && token.Contains("[");
         if (isSlide)
         {
-            result = SlideOfToken(token, bar, tick, bpm);
+            result = SlideOfToken(token, bar, tick, PreviousSlideStart, bpm);
         }
         else if (isHold)
         {
@@ -258,87 +261,198 @@ public class SimaiParser : IParser
         else
         {
             result = TapOfToken(token);
+            if (result.NoteSpecificType.Equals("SLIDE_START"))
+            {
+                PreviousSlideStart = (Tap)result;
+            }
         }
         return result;
     }
 
-    public Slide SlideOfToken(string token, int bar, int tick, double bpm)
+    public Slide SlideOfToken(string token, int bar, int tick, Note slideStart, double bpm)
     {
-        throw new NotImplementedException();
-        //Note result;
-        ////Parse first section
-        //if (token.Contains("qq"))
-        //{
-        //    string keyCandidate = token.Substring(2, 1);
-        //    int sustainSymbol = token.IndexOf("[");
-        //    string sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
-        //}
-        //else if (splitCandidate.Contains("q"))
-        //{
-        //    result.AddRange(splitCandidate.Split("q"));
-        //    result[0] = result[0] + "_";
-        //    result[1] = "q" + result[1];
-        //}
-        //else if (splitCandidate.Contains("pp"))
-        //{
-        //    result.AddRange(splitCandidate.Split("pp"));
-        //    result[0] = result[0] + "_";
-        //    result[1] = "pp" + result[1];
-        //}
-        //else if (splitCandidate.Contains("p"))
-        //{
-        //    result.AddRange(splitCandidate.Split("p"));
-        //    result[0] = result[0] + "_";
-        //    result[1] = "p" + result[1];
-        //}
-        //else if (splitCandidate.Contains("v"))
-        //{
-        //    result.AddRange(splitCandidate.Split("v"));
-        //    result[0] = result[0] + "_";
-        //    result[1] = "v" + result[1];
-        //}
-        //else if (splitCandidate.Contains("w"))
-        //{
-        //    result.AddRange(splitCandidate.Split("w"));
-        //    result[0] = result[0] + "_";
-        //    result[1] = "w" + result[1];
-        //}
-        //else if (splitCandidate.Contains("<"))
-        //{
-        //    result.AddRange(splitCandidate.Split("<"));
-        //    result[0] = result[0] + "_";
-        //    result[1] = "<" + result[1];
-        //}
-        //else if (splitCandidate.Contains(">"))
-        //{
-        //    result.AddRange(splitCandidate.Split(">"));
-        //    result[0] = result[0] + "_";
-        //    result[1] = ">" + result[1];
-        //}
-        //else if (splitCandidate.Contains("s"))
-        //{
-        //    result.AddRange(splitCandidate.Split("s"));
-        //    result[0] = result[0] + "_";
-        //    result[1] = "s" + result[1];
-        //}
-        //else if (splitCandidate.Contains("z"))
-        //{
-        //    result.AddRange(splitCandidate.Split("z"));
-        //    result[0] = result[0] + "_";
-        //    result[1] = "z" + result[1];
-        //}
-        //else if (splitCandidate.Contains("V"))
-        //{
-        //    result.AddRange(splitCandidate.Split("V"));
-        //    result[0] = result[0] + "_";
-        //    result[1] = "V" + result[1];
-        //}
-        //else if (splitCandidate.Contains("-"))
-        //{
-        //    result.AddRange(splitCandidate.Split("-"));
-        //    result[0] = result[0] + "_";
-        //    result[1] = "-" + result[1];
-        //}
+        
+        Note result;
+        string keyCandidate = "";
+        int sustainSymbol = 0;
+        string sustainCandidate = "";
+        string noteType = "";
+        //Parse first section
+        if (token.Contains("qq"))
+        {
+            keyCandidate = token.Substring(2, 1);
+            sustainSymbol = token.IndexOf("[");
+            sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
+            noteType = "SXR";
+        }
+        else if (token.Contains("q"))
+        {
+            keyCandidate = token.Substring(1, 1);
+            sustainSymbol = token.IndexOf("[");
+            sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
+            noteType = "SUR";
+        }
+        else if (token.Contains("pp"))
+        {
+            keyCandidate = token.Substring(2, 1);
+            sustainSymbol = token.IndexOf("[");
+            sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
+            noteType = "SXL";
+        }
+        else if (token.Contains("p"))
+        {
+            keyCandidate = token.Substring(1, 1);
+            sustainSymbol = token.IndexOf("[");
+            sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
+            noteType = "SUL";
+        }
+        else if (token.Contains("v"))
+        {
+            keyCandidate = token.Substring(1, 1);
+            sustainSymbol = token.IndexOf("[");
+            sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
+            noteType = "SV_";
+        }
+        else if (token.Contains("w"))
+        {
+            keyCandidate = token.Substring(1, 1);
+            sustainSymbol = token.IndexOf("[");
+            sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
+            noteType = "SF_";
+        }
+        else if (token.Contains("<"))
+        {
+            keyCandidate = token.Substring(1, 1);
+            sustainSymbol = token.IndexOf("[");
+            sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
+            if (PreviousSlideStart.Key.Equals("0") ||
+                PreviousSlideStart.Key.Equals("1") ||
+                PreviousSlideStart.Key.Equals("6") ||
+                PreviousSlideStart.Key.Equals("7"))
+            {
+                noteType = "SCL";
+            }
+            else noteType = "SCR";
+            
+        }
+        else if (token.Contains(">"))
+        {
+            keyCandidate = token.Substring(1, 1);
+            sustainSymbol = token.IndexOf("[");
+            sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
+            if (PreviousSlideStart.Key.Equals("0") ||
+                PreviousSlideStart.Key.Equals("1") ||
+                PreviousSlideStart.Key.Equals("6") ||
+                PreviousSlideStart.Key.Equals("7"))
+            {
+                noteType = "SCR";
+            }
+            else noteType = "SCL";
+
+        }
+        else if (token.Contains("s"))
+        {
+            keyCandidate = token.Substring(1, 1);
+            sustainSymbol = token.IndexOf("[");
+            sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
+            noteType = "SSL";
+        }
+        else if (token.Contains("z"))
+        {
+            keyCandidate = token.Substring(1, 1);
+            sustainSymbol = token.IndexOf("[");
+            sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
+            noteType = "SSR";
+        }
+        else if (token.Contains("V"))
+        {
+            keyCandidate = token.Substring(2, 1);
+            int sllCandidate = int.Parse(slideStart.Key) + 2;
+            int slrCandidate = int.Parse(slideStart.Key) - 2;
+            int inflectionCandidate = int.Parse(token.Substring(1, 1))-1;
+            if (inflectionCandidate < 0)
+            {
+                inflectionCandidate += 8;
+            }
+            else if (inflectionCandidate>7)
+            {
+                inflectionCandidate -= 8;
+            }
+            if (sllCandidate < 0)
+            {
+                sllCandidate += 8;
+            }
+            else if (sllCandidate > 7)
+            {
+                sllCandidate -= 8;
+            }
+            if (slrCandidate < 0)
+            {
+                sllCandidate += 8;
+            }
+            else if (slrCandidate > 7)
+            {
+                slrCandidate -= 8;
+            }
+            bool isSLL = sllCandidate == inflectionCandidate || sllCandidate + 8 == inflectionCandidate || sllCandidate - 8 == inflectionCandidate;
+            bool isSLR = slrCandidate == inflectionCandidate || slrCandidate + 8 == inflectionCandidate || slrCandidate - 8 == inflectionCandidate;
+            sustainSymbol = token.IndexOf("[");
+            sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
+            if (isSLL)
+            {
+                noteType = "SLL";
+            }
+            else if (isSLR)
+            {
+                noteType = "SLR";
+            }
+            if (!(isSLL||isSLR))
+            {
+                Console.WriteLine("Start Key:"+slideStart.Key);
+                Console.WriteLine("Expected inflection point: SSL for " + sllCandidate +" and SSR for " + slrCandidate);
+                Console.WriteLine("Actual: "+inflectionCandidate);
+                throw new InvalidDataException("THE INFLECTION POINT GIVEN IS NOT MATCHING!");
+            }
+        }
+
+        else if (token.Contains("-"))
+        {
+            keyCandidate = token.Substring(1, 1);
+            sustainSymbol = token.IndexOf("[");
+            sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
+            noteType = "SI_";
+        }
+
+        int fixedKeyCandidate = int.Parse(keyCandidate) - 1;
+        if (fixedKeyCandidate<0)
+        {
+            keyCandidate += 8;
+        }
+        bool isSecond = sustainCandidate.Contains("##");
+        if (!isSecond)
+        {
+            string[] lastTimeCandidates = sustainCandidate.Split(":");
+            int quaver = int.Parse(lastTimeCandidates[0]);
+            int lastTick = 384 / quaver;
+            int times = int.Parse(lastTimeCandidates[1]);
+            lastTick *= times;
+            result = new Slide(noteType, bar, tick, slideStart.Key, 96, lastTick, fixedKeyCandidate.ToString());
+            result.SlideStart = slideStart;
+        }
+        else
+        {
+            string[] timeCandidates = sustainCandidate.Split("##");
+            double waitLengthCandidate = double.Parse(timeCandidates[0]);
+            double lastLengthCandidate = double.Parse(timeCandidates[1]);
+            double tickUnit = Chart.GetBPMTimeUnit(bpm);
+            int waitLength = (int)(waitLengthCandidate / tickUnit);
+            int lastLength = (int)(lastLengthCandidate / tickUnit);
+            result = new Slide(noteType, bar, tick, slideStart.Key, waitLength, lastLength, fixedKeyCandidate.ToString());
+            result.SlideStart = slideStart;
+        }
+
+        result.BPM = bpm;
+        return (Slide)result;
     }
 
     public Slide SlideOfToken(string token)

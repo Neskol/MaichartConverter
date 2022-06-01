@@ -82,8 +82,8 @@ namespace MaichartConverter
 
             // CompileUtageChartDatabase();
             // TestSpecificChart();
-            //TestSpecificChart("011379", "3");
-            CompileChartDatabase();
+            TestSpecificChart("011379", "3");
+            //CompileChartDatabase();
             // CompileAssignedChartDatabase();
         }
 

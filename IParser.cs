@@ -85,9 +85,10 @@
         /// <param name="token">Token to take in</param>
         /// <param name="bar">Bar of this note</param>
         /// <param name="tick">Tick of this note</param>
+        /// <param name="slideStart">The start note of this slide</param>
         /// <param name="bpm">BPM of this note</param>
         /// <returns>Specific Slide Note</returns>
-        public Slide SlideOfToken(string token,int bar, int tick, double bpm);
+        public Slide SlideOfToken(string token,int bar, int tick, Note slideStart, double bpm);
 
         /// <summary>
         /// Return correct Slide note.

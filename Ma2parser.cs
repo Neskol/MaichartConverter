@@ -7,11 +7,13 @@ namespace MaichartConverter
     /// </summary>
     public class Ma2Parser : IParser
     {
+        private Tap PreviousSlideStart;
         /// <summary>
         /// Empty constructor
         /// </summary>
         public Ma2Parser()
         {
+            PreviousSlideStart = new Tap();
         }
 
         public Chart ChartOfToken(string[] token)
@@ -158,7 +160,11 @@ namespace MaichartConverter
             {
                 if (isTap)
                 {
-                    result = TapOfToken(token);
+                    result = TapOfToken(token); 
+                    if (result.NoteSpecificType.Equals("SLIDE_START"))
+                    {
+                        PreviousSlideStart = (Tap)result;
+                    }
                 }
                 else if (isHold)
                 {
@@ -167,6 +173,7 @@ namespace MaichartConverter
                 else if (isSlide)
                 {
                     result = SlideOfToken(token);
+                    result.SlideStart = PreviousSlideStart;
                 }
             }
             if (result.Tick == 384)
@@ -216,7 +223,7 @@ namespace MaichartConverter
                 }
                 else if (isSlide)
                 {
-                    result = SlideOfToken(token, bar, tick, bpm);
+                    result = SlideOfToken(token, bar, tick,PreviousSlideStart, bpm);
                 }
             }
             if (result.Tick == 384)
@@ -292,17 +299,21 @@ namespace MaichartConverter
                             Int32.Parse(candidate[4]));
         }
 
-        public Slide SlideOfToken(string token, int bar, int tick, double bpm)
+        public Slide SlideOfToken(string token, int bar, int tick, Note slideStart, double bpm)
         {
-            Note result = new Rest();
+            Note result;
             string[] candidate = token.Split('\t');
             result = new Slide(candidate[0],
                                    bar,
                                    tick,
-                                   candidate[3],
+                                   slideStart.Key,
                                    Int32.Parse(candidate[4]),
                                    Int32.Parse(candidate[5]),
                                    candidate[6]);
+            if (!slideStart.Key.Equals(candidate[3]))
+            {
+                throw new Exception("THE SLIDE START DOES NOT MATCH WITH THE DEFINITION OF THIS NOTE!");
+            }
             result.BPM = bpm;
             return (Slide)result;
         }
@@ -312,10 +323,17 @@ namespace MaichartConverter
             string[] candidate = token.Split('\t');
             int bar = Int32.Parse(candidate[1]);
             int tick = Int32.Parse(candidate[2]);
+            if (!PreviousSlideStart.Key.Equals(candidate[3]))
+            {
+                Console.WriteLine("Expected key: "+candidate[3]);
+                Console.WriteLine("Actual key: "+PreviousSlideStart.Key);
+                Console.WriteLine("Previous Slide Start: "+ PreviousSlideStart.Compose(1));
+                throw new Exception("THE SLIDE START DOES NOT MATCH WITH THE DEFINITION OF THIS NOTE!");
+            }
             return new Slide(candidate[0],
                         bar,
                         tick,
-                        candidate[3],
+                        PreviousSlideStart.Key,
                         Int32.Parse(candidate[4]),
                         Int32.Parse(candidate[5]),
                         candidate[6]);
