@@ -68,12 +68,9 @@ public class SimaiParser : IParser
                 bool containsBPM = tokens[i].Contains("(");
                 bool containsMeasure = tokens[i].Contains("{");
                 bool ended = tokens[i].Equals("E");
-                if (currentBPM > 0.0)
-                {
-                    notes.Add(NoteOfToken(eachNote, bar, tick, currentBPM));
-                }
-                containsBPM = NoteOfToken(eachNote,bar,tick,currentBPM).NoteSpecificType.Equals("BPM");
-                containsMeasure = NoteOfToken(eachNote,bar,tick,currentBPM).NoteSpecificType.Equals("MEASURE");
+
+                containsBPM = NoteOfToken(eachNote, bar, tick, currentBPM).NoteSpecificType.Equals("BPM");
+                containsMeasure = NoteOfToken(eachNote, bar, tick, currentBPM).NoteSpecificType.Equals("MEASURE");
                 if (containsBPM)
                 {
                     string bpmCandidate = eachNote.Split("(")[1].Split(")")[0];
@@ -92,6 +89,11 @@ public class SimaiParser : IParser
                     tickStep = MaximumDefinition / Int32.Parse(quaverCandidate);
                     MeasureChange changeNote = new MeasureChange(bar, tick, tickStep);
                     notes.Add(changeNote);
+                }
+
+                if (currentBPM > 0.0)
+                {
+                    notes.Add(NoteOfToken(eachNote, bar, tick, currentBPM));
                 }
             }
 
@@ -153,7 +155,7 @@ public class SimaiParser : IParser
         int times = int.Parse(lastTimeCandidates[1]);
         lastTick *= times;
         Hold candidate;
-        key.Replace("h","");
+        key.Replace("h", "");
         //Console.WriteLine(key);
         if (holdType.Equals("THO"))
         {
@@ -250,33 +252,31 @@ public class SimaiParser : IParser
         }
         else if (isBPM)
         {
-            string bpmCandidate = token.Split("(")[1].Split(")")[0];
-            //Console.WriteLine(token);
-            //bpmCandidate.Replace("(", "");
-            //bpmCandidate.Replace(")", "");
-            //Console.WriteLine(bpmCandidate);
+            string bpmCandidate = token.Replace("(", "").Replace(")", "");
             result = new BPMChange(bar, tick, Double.Parse(bpmCandidate));
         }
         else if (isMeasure)
         {
-            string quaverCandidate = token.Split("{")[1].Split("}")[0];            
-            //quaverCandidate.Replace("{", "");
-            //quaverCandidate.Replace("}", "");
+            string quaverCandidate = token.Replace("{", "").Replace("}", "");
             result = new MeasureChange(bar, tick, Int32.Parse(quaverCandidate));
         }
-        else if(!token.Equals("E"))
+        else if (!token.Equals("E"))
         {
-            result = TapOfToken(token,bar,tick,bpm);
+            result = TapOfToken(token, bar, tick, bpm);
             if (result.NoteSpecificType.Equals("SLIDE_START"))
             {
                 PreviousSlideStart = (Tap)result;
             }
         }
+        else
+        {
+            result = new Rest("RST", bar, tick);
+        }
         return result;
     }
 
     public Slide SlideOfToken(string token, int bar, int tick, Note slideStart, double bpm)
-    {   
+    {
         Note result;
         string keyCandidate = "";
         int sustainSymbol = 0;
@@ -338,7 +338,7 @@ public class SimaiParser : IParser
                 noteType = "SCL";
             }
             else noteType = "SCR";
-            
+
         }
         else if (token.Contains(">"))
         {
@@ -374,12 +374,12 @@ public class SimaiParser : IParser
             keyCandidate = token.Substring(2, 1);
             int sllCandidate = int.Parse(slideStart.Key) + 2;
             int slrCandidate = int.Parse(slideStart.Key) - 2;
-            int inflectionCandidate = int.Parse(token.Substring(1, 1))-1;
+            int inflectionCandidate = int.Parse(token.Substring(1, 1)) - 1;
             if (inflectionCandidate < 0)
             {
                 inflectionCandidate += 8;
             }
-            else if (inflectionCandidate>7)
+            else if (inflectionCandidate > 7)
             {
                 inflectionCandidate -= 8;
             }
@@ -411,11 +411,11 @@ public class SimaiParser : IParser
             {
                 noteType = "SLR";
             }
-            if (!(isSLL||isSLR))
+            if (!(isSLL || isSLR))
             {
-                Console.WriteLine("Start Key:"+slideStart.Key);
-                Console.WriteLine("Expected inflection point: SSL for " + sllCandidate +" and SSR for " + slrCandidate);
-                Console.WriteLine("Actual: "+inflectionCandidate);
+                Console.WriteLine("Start Key:" + slideStart.Key);
+                Console.WriteLine("Expected inflection point: SSL for " + sllCandidate + " and SSR for " + slrCandidate);
+                Console.WriteLine("Actual: " + inflectionCandidate);
                 throw new InvalidDataException("THE INFLECTION POINT GIVEN IS NOT MATCHING!");
             }
         }
@@ -430,7 +430,7 @@ public class SimaiParser : IParser
 
         //Console.WriteLine("Key Candidate: "+keyCandidate);
         int fixedKeyCandidate = int.Parse(keyCandidate) - 1;
-        if (fixedKeyCandidate<0)
+        if (fixedKeyCandidate < 0)
         {
             keyCandidate += 8;
         }
@@ -514,7 +514,7 @@ public class SimaiParser : IParser
             {
                 result = new Tap("TAP", bar, tick, token.Substring(0, 1));
             }
-                
+
         }
         result.BPM = bpm;
         return result;
@@ -551,7 +551,7 @@ public class SimaiParser : IParser
                 result.AddRange(EachGroupOfToken(tokenCandidate));
             }
         }
-        else if (token.Contains(")")|| token.Contains("}"))
+        else if (token.Contains(")") || token.Contains("}"))
         {
             List<string> resultCandidate = ExtractParentheses(token);
             foreach (string candidate in resultCandidate)
@@ -569,7 +569,11 @@ public class SimaiParser : IParser
         }
         else if (isSlide)
         {
-            result.AddRange(ExtractEachSlides(token));
+            List<string> candidate = EachGroupOfToken(token);
+            foreach (string item in candidate)
+            {
+                result.AddRange(ExtractEachSlides(item));
+            }
         }
         else result.Add(token);
         return result;
@@ -590,7 +594,7 @@ public class SimaiParser : IParser
         {
             string[] tokenCandidate = token.Split(")");
             List<string> tokenResult = new();
-            for (int i = 0;i<tokenCandidate.Length;i++)
+            for (int i = 0; i < tokenCandidate.Length; i++)
             {
                 string x = tokenCandidate[i];
                 if (x.Contains("("))
@@ -604,7 +608,7 @@ public class SimaiParser : IParser
             }
             result.AddRange(tokenResult);
         }
-        else if(containsMeasure)
+        else if (containsMeasure)
         {
             string[] tokenCandidate = token.Split("}");
             List<string> tokenResult = new();

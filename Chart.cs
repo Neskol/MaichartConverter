@@ -374,10 +374,10 @@ namespace MaichartConverter
                                 break;
                             case "SLIDE":
                                 this.slideNumber++;
-                                x.TickBPMDisagree = (GetBPMByTick(x.TickStamp) != GetBPMByTick(x.WaitTickStamp) || 
-                                    GetBPMByTick(x.WaitTickStamp) != GetBPMByTick(x.LastTickStamp) || 
+                                x.TickBPMDisagree = (GetBPMByTick(x.TickStamp) != GetBPMByTick(x.WaitTickStamp) ||
+                                    GetBPMByTick(x.WaitTickStamp) != GetBPMByTick(x.LastTickStamp) ||
                                     GetBPMByTick(x.TickStamp) != GetBPMByTick(x.LastTickStamp) ||
-                                    HasBPMChangeInBetween(x.TickStamp,x.WaitTickStamp));
+                                    HasBPMChangeInBetween(x.TickStamp, x.WaitTickStamp));
                                 x.Update();
                                 x.TickTimeStamp = this.GetTimeStamp(x.TickStamp);
                                 x.WaitTimeStamp = this.GetTimeStamp(x.WaitTickStamp);
@@ -620,7 +620,7 @@ namespace MaichartConverter
                 if (writeRest)
                 {
                     //Console.WriteLine("There is no note at tick " + i + " of bar " + barNumber + ", Adding one");
-                    eachSet.Add(new Rest("RST", barNumber, i, bpmChanges));
+                    eachSet.Add(new Rest("RST", barNumber, i));
                 }
                 result.AddRange(eachSet);
             }

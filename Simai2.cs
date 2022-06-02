@@ -30,7 +30,7 @@ namespace MaichartConverter
             this.Update();
         }
 
-        public Simai2(Simai2 takenIn)
+        public Simai2(Chart takenIn)
         {
             this.Notes = takenIn.Notes;
             this.BPMChanges = takenIn.BPMChanges;
@@ -139,13 +139,13 @@ namespace MaichartConverter
         {
             BPMChanges sourceBPM = this.BPMChanges;
             MeasureChanges sourceMeasures = this.MeasureChanges;
-            this.BPMChanges=bpm;
-            this.MeasureChanges=measure;
+            this.BPMChanges = bpm;
+            this.MeasureChanges = measure;
             this.Update();
 
             string result = this.Compose();
-            this.BPMChanges=sourceBPM;
-            this.MeasureChanges=sourceMeasures;
+            this.BPMChanges = sourceBPM;
+            this.MeasureChanges = sourceMeasures;
             this.Update();
             return result;
         }

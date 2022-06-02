@@ -23,12 +23,11 @@
         /// <param name="noteType">Note Type to take in</param>
         /// <param name="bar">Bar to take in</param>
         /// <param name="startTime">Start to take in</param>
-        public Rest(string noteType, int bar, int startTime, List<BPMChange> changeNotes)
+        public Rest(string noteType, int bar, int startTime)
         {
             this.NoteType = noteType;
             this.Bar = bar;
             this.Tick = startTime;
-            this.BPMChangeNotes = changeNotes;
             this.Update();
         }
 
