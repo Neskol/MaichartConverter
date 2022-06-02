@@ -260,7 +260,7 @@ public class SimaiParser : IParser
             string quaverCandidate = token.Replace("{", "").Replace("}", "");
             result = new MeasureChange(bar, tick, Int32.Parse(quaverCandidate));
         }
-        else if (!token.Equals("E"))
+        else if (!token.Equals("E")&&!token.Equals(""))
         {
             result = TapOfToken(token, bar, tick, bpm);
             if (result.NoteSpecificType.Equals("SLIDE_START"))
@@ -480,39 +480,43 @@ public class SimaiParser : IParser
         if (isTouch)
         {
             bool hasSpecialEffect = token.Contains("f");
+            int keyCandidate = Int32.Parse(token.Substring(1, 1))-1;
             if (hasSpecialEffect)
             {
-                result = new Tap("TTP", bar, tick, token.Substring(0, 1) + Int32.Parse(token.Substring(1, 1) + 1), 1, "M1");
+                result = new Tap("TTP", bar, tick, token.Substring(0, 1) + keyCandidate.ToString(), 1, "M1");
             }
-            else result = new Tap("TTP", bar, tick, token.Substring(0, 1) + Int32.Parse(token.Substring(1, 1) + 1), 0, "M1");
+            else result = new Tap("TTP", bar, tick, token.Substring(0, 1) + keyCandidate.ToString(), 0, "M1");
         }
         else if (isEXTap)
         {
+            int keyCandidate = Int32.Parse(token.Substring(0, 1)) - 1;
             if (token.Contains("_"))
             {
-                result = new Tap("XST", bar, tick, token.Substring(0, 1));
+                result = new Tap("XST", bar, tick, keyCandidate.ToString());
             }
             else
-                result = new Tap("XTP", bar, tick, token.Substring(0, 1));
+                result = new Tap("XTP", bar, tick, keyCandidate.ToString());
         }
         else if (isBreak)
         {
+            int keyCandidate = Int32.Parse(token.Substring(0, 1)) - 1;
             if (token.Contains("_"))
             {
-                result = new Tap("BST", bar, tick, token.Substring(0, 1));
+                result = new Tap("BST", bar, tick, keyCandidate.ToString());
             }
             else
-                result = new Tap("BRK", bar, tick, token.Substring(0, 1));
+                result = new Tap("BRK", bar, tick, keyCandidate.ToString());
         }
         else
         {
+            int keyCandidate = Int32.Parse(token.Substring(0, 1)) - 1;
             if (token.Contains("_"))
             {
-                result = new Tap("STR", bar, tick, token.Substring(0, 1));
+                result = new Tap("STR", bar, tick, keyCandidate.ToString());
             }
             else if (!token.Equals(""))
             {
-                result = new Tap("TAP", bar, tick, token.Substring(0, 1));
+                result = new Tap("TAP", bar, tick, keyCandidate.ToString());
             }
 
         }
@@ -569,11 +573,12 @@ public class SimaiParser : IParser
         }
         else if (isSlide)
         {
-            List<string> candidate = EachGroupOfToken(token);
-            foreach (string item in candidate)
-            {
-                result.AddRange(ExtractEachSlides(item));
-            }
+            //List<string> candidate = EachGroupOfToken(token);
+            //foreach (string item in candidate)
+            //{
+            //    result.AddRange(ExtractEachSlides(item));
+            //}
+            result.AddRange(ExtractEachSlides(token));
         }
         else result.Add(token);
         return result;

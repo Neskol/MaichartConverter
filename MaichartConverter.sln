@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaichartConverter", "Maicha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaichartConverterXTest", "..\MaichartConverterXTest\MaichartConverterXTest.csproj", "{4FD3245C-0104-4EBD-AE58-39BF3D303996}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaichartConverterUnitTest", "..\MaichartConverterUnitTest\MaichartConverterUnitTest.csproj", "{59F9215B-ACF2-491B-9FB7-5CB568356A75}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4FD3245C-0104-4EBD-AE58-39BF3D303996}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FD3245C-0104-4EBD-AE58-39BF3D303996}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FD3245C-0104-4EBD-AE58-39BF3D303996}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59F9215B-ACF2-491B-9FB7-5CB568356A75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59F9215B-ACF2-491B-9FB7-5CB568356A75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59F9215B-ACF2-491B-9FB7-5CB568356A75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59F9215B-ACF2-491B-9FB7-5CB568356A75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
