@@ -100,9 +100,9 @@
             {
                 result = this.NoteType + "\t" + this.Bar + "\t" + this.Tick + "\t" + this.Key + "\t" + this.LastLength;
             }
-            else if (format == 1 && (this.NoteType.Equals("THO") || this.NoteType.Equals("XHO")))
+            else if (format == 1 && this.NoteType.Equals("THO"))
             {
-                result = this.NoteType + "\t" + this.Bar + "\t" + this.Tick + "\t" + this.Key.ToCharArray()[1] + "\t" + this.LastLength + "\t" + this.Key.ToCharArray()[0] + "\t0\tM1"; //M1 for regular note and L1 for Larger Note
+                result = this.NoteType + "\t" + this.Bar + "\t" + this.Tick + "\t" + this.Key.ToCharArray()[0] + "\t" + this.LastLength + "\t" + this.Key.ToCharArray()[1] + "\t"+this.SpecialEffect+"\tM1"; //M1 for regular note and L1 for Larger Note
             }
             else if (format == 0)
             {

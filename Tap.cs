@@ -113,8 +113,8 @@
                 result = this.NoteType + "\t" +
                     this.Bar + "\t" +
                     this.Tick + "\t" +
-                    this.Key.ToCharArray()[0] + "\t" +
                     this.Key.ToCharArray()[1] + "\t" +
+                    this.Key.ToCharArray()[0] + "\t" +
                     this.specialEffect + "\t" +
                     this.touchSize; //M1 for regular note and L1 for Larger Note
             }

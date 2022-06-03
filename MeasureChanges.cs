@@ -136,9 +136,16 @@
         public string Compose()
         {
             string result = "";
-            for (int i = 0; i < bar.Count; i++)
+            if (bar.Count == 0)
             {
-                result += "MET" + "\t" + bar[i] + "\t" + tick[i] + "\t" + quavers[i] + "\t" + beats[i] + "\n";
+                result += "MET" + "\t" + 0 + "\t" + 0 + "\t" + 4 + "\t" + 4 + "\n";
+            }
+            else
+            {
+                for (int i = 0; i < bar.Count; i++)
+                {
+                    result += "MET" + "\t" + bar[i] + "\t" + tick[i] + "\t" + quavers[i] + "\t" + beats[i] + "\n";
+                }
             }
             return result;
         }

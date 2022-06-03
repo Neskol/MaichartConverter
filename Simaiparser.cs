@@ -55,7 +55,7 @@ public class SimaiParser : IParser
     {
         List<Note> notes = new List<Note>();
         BPMChanges bpmChanges = new BPMChanges();
-        MeasureChanges measureChanges = new MeasureChanges();
+        MeasureChanges measureChanges = new MeasureChanges(4,4);
         int bar = 0;
         int tick = 0;
         double currentBPM = 0.0;
@@ -65,35 +65,29 @@ public class SimaiParser : IParser
             List<string> eachPairCandidates = EachGroupOfToken(tokens[i]);
             foreach (string eachNote in eachPairCandidates)
             {
-                bool containsBPM = tokens[i].Contains("(");
-                bool containsMeasure = tokens[i].Contains("{");
-                bool ended = tokens[i].Equals("E");
+                Note noteCandidate = NoteOfToken(eachNote, bar, tick, currentBPM);
+                bool containsBPM = noteCandidate.NoteSpecificType.Equals("BPM");
+                bool containsMeasure = noteCandidate.NoteSpecificType.Equals("MEASURE");
 
-                containsBPM = NoteOfToken(eachNote, bar, tick, currentBPM).NoteSpecificType.Equals("BPM");
-                containsMeasure = NoteOfToken(eachNote, bar, tick, currentBPM).NoteSpecificType.Equals("MEASURE");
                 if (containsBPM)
                 {
-                    string bpmCandidate = eachNote.Split("(")[1].Split(")")[0];
-                    //bpmCandidate.Replace("(", "");
-                    //bpmCandidate.Replace(")", "");
-                    BPMChange changeNote = new BPMChange(bar, tick, Double.Parse(bpmCandidate));
-                    notes.Add(changeNote);
-                    bpmChanges.Add(changeNote);
-                    currentBPM = Double.Parse(bpmCandidate);
+                    string bpmCandidate = eachNote.Replace("(", "").Replace(")", "");
+                    noteCandidate = new BPMChange(bar, tick, Double.Parse(bpmCandidate));
+                    //notes.Add(changeNote);
+                    currentBPM = noteCandidate.BPM;
+                    bpmChanges.Add((BPMChange)noteCandidate);
                 }
                 else if (containsMeasure)
                 {
-                    string quaverCandidate = eachNote.Split("{")[1].Split("}")[0];
-                    //quaverCandidate.Replace("{", "");
-                    //quaverCandidate.Replace("}", "");
+                    string quaverCandidate = eachNote.Replace("{", "").Replace("}", "");
                     tickStep = MaximumDefinition / Int32.Parse(quaverCandidate);
                     MeasureChange changeNote = new MeasureChange(bar, tick, tickStep);
-                    notes.Add(changeNote);
+                    //notes.Add(changeNote);
                 }
 
-                if (currentBPM > 0.0)
+                else /*if (currentBPM > 0.0)*/
                 {
-                    notes.Add(NoteOfToken(eachNote, bar, tick, currentBPM));
+                    notes.Add(noteCandidate);
                 }
             }
 
@@ -182,6 +176,7 @@ public class SimaiParser : IParser
     public Note NoteOfToken(string token)
     {
         Note result = new Rest();
+        bool isRest = token.Equals("");
         bool isBPM = token.Contains(")");
         bool isMeasure = token.Contains("}");
         bool isSlide = token.Contains("-") ||
@@ -228,7 +223,8 @@ public class SimaiParser : IParser
 
     public Note NoteOfToken(string token, int bar, int tick, double bpm)
     {
-        Note result = new Rest();
+        Note result = new Rest("RST",bar,tick);
+        bool isRest = token.Equals("");
         bool isBPM = token.Contains(")");
         bool isMeasure = token.Contains("}");
         bool isSlide = token.Contains("-") ||
@@ -242,36 +238,37 @@ public class SimaiParser : IParser
         token.Contains("z") ||
         token.Contains("V");
         bool isHold = !isSlide && token.Contains("[");
-        if (isSlide)
+        
+        if (!isRest)
         {
-            result = SlideOfToken(token, bar, tick, PreviousSlideStart, bpm);
-        }
-        else if (isHold)
-        {
-            result = HoldOfToken(token, bar, tick, bpm);
-        }
-        else if (isBPM)
-        {
-            string bpmCandidate = token.Replace("(", "").Replace(")", "");
-            result = new BPMChange(bar, tick, Double.Parse(bpmCandidate));
-        }
-        else if (isMeasure)
-        {
-            string quaverCandidate = token.Replace("{", "").Replace("}", "");
-            result = new MeasureChange(bar, tick, Int32.Parse(quaverCandidate));
-        }
-        else if (!token.Equals("E")&&!token.Equals(""))
-        {
-            result = TapOfToken(token, bar, tick, bpm);
-            if (result.NoteSpecificType.Equals("SLIDE_START"))
+            if (isSlide)
             {
-                PreviousSlideStart = (Tap)result;
+                result = SlideOfToken(token, bar, tick, PreviousSlideStart, bpm);
+            }
+            else if (isHold)
+            {
+                result = HoldOfToken(token, bar, tick, bpm);
+            }
+            else if (isBPM)
+            {
+                string bpmCandidate = token.Replace("(", "").Replace(")", "");
+                result = new BPMChange(bar, tick, Double.Parse(bpmCandidate));
+            }
+            else if (isMeasure)
+            {
+                string quaverCandidate = token.Replace("{", "").Replace("}", "");
+                result = new MeasureChange(bar, tick, Int32.Parse(quaverCandidate));
+            }
+            else if (!token.Equals("E") && !token.Equals(""))
+            {
+                result = TapOfToken(token, bar, tick, bpm);
+                if (result.NoteSpecificType.Equals("SLIDE_START"))
+                {
+                    PreviousSlideStart = (Tap)result;
+                }
             }
         }
-        else
-        {
-            result = new Rest("RST", bar, tick);
-        }
+
         return result;
     }
 
@@ -558,9 +555,14 @@ public class SimaiParser : IParser
         else if (token.Contains(")") || token.Contains("}"))
         {
             List<string> resultCandidate = ExtractParentheses(token);
+            List<string> fixedCandidate = new();
             foreach (string candidate in resultCandidate)
             {
-                result.AddRange(ExtractParentheses(candidate));
+                fixedCandidate.AddRange(ExtractParentheses(candidate));
+            }
+            foreach(string candidate in fixedCandidate)
+            {
+                result.AddRange(ExtractEachSlides(candidate));
             }
         } //lol this is the most stupid code I have ever wrote
         else if (Int32.TryParse(token, out int eachPair))
@@ -645,92 +647,189 @@ public class SimaiParser : IParser
     /// <returns>A list of slides extracts each note</returns>
     public static List<string> ExtractEachSlides(string token)
     {
+        bool isSlide = token.Contains("-") ||
+        token.Contains("v") ||
+        token.Contains("w") ||
+        token.Contains("<") ||
+        token.Contains(">") ||
+        token.Contains("p") ||
+        token.Contains("q") ||
+        token.Contains("s") ||
+        token.Contains("z") ||
+        token.Contains("V");
         List<string> result = new List<string>();
-        string[] components = token.Split("*");
-        if (components.Length < 1)
+        if (!isSlide)
         {
-            throw new Exception("SLIDE TOKEN NOT VALID: \n" + token);
+            result.Add(token);
         }
-        string splitCandidate = components[0];
-        //Parse first section
-        if (splitCandidate.Contains("qq"))
+        else
         {
-            result.AddRange(splitCandidate.Split("qq"));
-            result[0] = result[0] + "_";
-            result[1] = "qq" + result[1];
-        }
-        else if (splitCandidate.Contains("q"))
-        {
-            result.AddRange(splitCandidate.Split("q"));
-            result[0] = result[0] + "_";
-            result[1] = "q" + result[1];
-        }
-        else if (splitCandidate.Contains("pp"))
-        {
-            result.AddRange(splitCandidate.Split("pp"));
-            result[0] = result[0] + "_";
-            result[1] = "pp" + result[1];
-        }
-        else if (splitCandidate.Contains("p"))
-        {
-            result.AddRange(splitCandidate.Split("p"));
-            result[0] = result[0] + "_";
-            result[1] = "p" + result[1];
-        }
-        else if (splitCandidate.Contains("v"))
-        {
-            result.AddRange(splitCandidate.Split("v"));
-            result[0] = result[0] + "_";
-            result[1] = "v" + result[1];
-        }
-        else if (splitCandidate.Contains("w"))
-        {
-            result.AddRange(splitCandidate.Split("w"));
-            result[0] = result[0] + "_";
-            result[1] = "w" + result[1];
-        }
-        else if (splitCandidate.Contains("<"))
-        {
-            result.AddRange(splitCandidate.Split("<"));
-            result[0] = result[0] + "_";
-            result[1] = "<" + result[1];
-        }
-        else if (splitCandidate.Contains(">"))
-        {
-            result.AddRange(splitCandidate.Split(">"));
-            result[0] = result[0] + "_";
-            result[1] = ">" + result[1];
-        }
-        else if (splitCandidate.Contains("s"))
-        {
-            result.AddRange(splitCandidate.Split("s"));
-            result[0] = result[0] + "_";
-            result[1] = "s" + result[1];
-        }
-        else if (splitCandidate.Contains("z"))
-        {
-            result.AddRange(splitCandidate.Split("z"));
-            result[0] = result[0] + "_";
-            result[1] = "z" + result[1];
-        }
-        else if (splitCandidate.Contains("V"))
-        {
-            result.AddRange(splitCandidate.Split("V"));
-            result[0] = result[0] + "_";
-            result[1] = "V" + result[1];
-        }
-        else if (splitCandidate.Contains("-"))
-        {
-            result.AddRange(splitCandidate.Split("-"));
-            result[0] = result[0] + "_";
-            result[1] = "-" + result[1];
-        }
-        //Add rest of slide: components after * is always 
-        if (components.Length > 1)
-        {
-            for (int i = 1; i < components.Length; i++)
+            if (!token.Contains("*"))
             {
-                result.Add(components[i]);
+                string splitCandidate = token;
+                //Parse first section
+                if (splitCandidate.Contains("qq"))
+                {
+                    result.AddRange(splitCandidate.Split("qq"));
+                    result[0] = result[0] + "_";
+                    result[1] = "qq" + result[1];
+                }
+                else if (splitCandidate.Contains("q"))
+                {
+                    result.AddRange(splitCandidate.Split("q"));
+                    result[0] = result[0] + "_";
+                    result[1] = "q" + result[1];
+                }
+                else if (splitCandidate.Contains("pp"))
+                {
+                    result.AddRange(splitCandidate.Split("pp"));
+                    result[0] = result[0] + "_";
+                    result[1] = "pp" + result[1];
+                }
+                else if (splitCandidate.Contains("p"))
+                {
+                    result.AddRange(splitCandidate.Split("p"));
+                    result[0] = result[0] + "_";
+                    result[1] = "p" + result[1];
+                }
+                else if (splitCandidate.Contains("v"))
+                {
+                    result.AddRange(splitCandidate.Split("v"));
+                    result[0] = result[0] + "_";
+                    result[1] = "v" + result[1];
+                }
+                else if (splitCandidate.Contains("w"))
+                {
+                    result.AddRange(splitCandidate.Split("w"));
+                    result[0] = result[0] + "_";
+                    result[1] = "w" + result[1];
+                }
+                else if (splitCandidate.Contains("<"))
+                {
+                    result.AddRange(splitCandidate.Split("<"));
+                    result[0] = result[0] + "_";
+                    result[1] = "<" + result[1];
+                }
+                else if (splitCandidate.Contains(">"))
+                {
+                    result.AddRange(splitCandidate.Split(">"));
+                    result[0] = result[0] + "_";
+                    result[1] = ">" + result[1];
+                }
+                else if (splitCandidate.Contains("s"))
+                {
+                    result.AddRange(splitCandidate.Split("s"));
+                    result[0] = result[0] + "_";
+                    result[1] = "s" + result[1];
+                }
+                else if (splitCandidate.Contains("z"))
+                {
+                    result.AddRange(splitCandidate.Split("z"));
+                    result[0] = result[0] + "_";
+                    result[1] = "z" + result[1];
+                }
+                else if (splitCandidate.Contains("V"))
+                {
+                    result.AddRange(splitCandidate.Split("V"));
+                    result[0] = result[0] + "_";
+                    result[1] = "V" + result[1];
+                }
+                else if (splitCandidate.Contains("-"))
+                {
+                    result.AddRange(splitCandidate.Split("-"));
+                    result[0] = result[0] + "_";
+                    result[1] = "-" + result[1];
+                }
+            }
+            else
+            {
+                string[] components = token.Split("*");
+                if (components.Length < 1)
+                {
+                    throw new Exception("SLIDE TOKEN NOT VALID: \n" + token);
+                }
+                string splitCandidate = components[0];
+                //Parse first section
+                if (splitCandidate.Contains("qq"))
+                {
+                    result.AddRange(splitCandidate.Split("qq"));
+                    result[0] = result[0] + "_";
+                    result[1] = "qq" + result[1];
+                }
+                else if (splitCandidate.Contains("q"))
+                {
+                    result.AddRange(splitCandidate.Split("q"));
+                    result[0] = result[0] + "_";
+                    result[1] = "q" + result[1];
+                }
+                else if (splitCandidate.Contains("pp"))
+                {
+                    result.AddRange(splitCandidate.Split("pp"));
+                    result[0] = result[0] + "_";
+                    result[1] = "pp" + result[1];
+                }
+                else if (splitCandidate.Contains("p"))
+                {
+                    result.AddRange(splitCandidate.Split("p"));
+                    result[0] = result[0] + "_";
+                    result[1] = "p" + result[1];
+                }
+                else if (splitCandidate.Contains("v"))
+                {
+                    result.AddRange(splitCandidate.Split("v"));
+                    result[0] = result[0] + "_";
+                    result[1] = "v" + result[1];
+                }
+                else if (splitCandidate.Contains("w"))
+                {
+                    result.AddRange(splitCandidate.Split("w"));
+                    result[0] = result[0] + "_";
+                    result[1] = "w" + result[1];
+                }
+                else if (splitCandidate.Contains("<"))
+                {
+                    result.AddRange(splitCandidate.Split("<"));
+                    result[0] = result[0] + "_";
+                    result[1] = "<" + result[1];
+                }
+                else if (splitCandidate.Contains(">"))
+                {
+                    result.AddRange(splitCandidate.Split(">"));
+                    result[0] = result[0] + "_";
+                    result[1] = ">" + result[1];
+                }
+                else if (splitCandidate.Contains("s"))
+                {
+                    result.AddRange(splitCandidate.Split("s"));
+                    result[0] = result[0] + "_";
+                    result[1] = "s" + result[1];
+                }
+                else if (splitCandidate.Contains("z"))
+                {
+                    result.AddRange(splitCandidate.Split("z"));
+                    result[0] = result[0] + "_";
+                    result[1] = "z" + result[1];
+                }
+                else if (splitCandidate.Contains("V"))
+                {
+                    result.AddRange(splitCandidate.Split("V"));
+                    result[0] = result[0] + "_";
+                    result[1] = "V" + result[1];
+                }
+                else if (splitCandidate.Contains("-"))
+                {
+                    result.AddRange(splitCandidate.Split("-"));
+                    result[0] = result[0] + "_";
+                    result[1] = "-" + result[1];
+                }
+                //Add rest of slide: components after * is always 
+                if (components.Length > 1)
+                {
+                    for (int i = 1; i < components.Length; i++)
+                    {
+                        result.Add(components[i]);
+                    }
+                }
             }
         }
         return result;

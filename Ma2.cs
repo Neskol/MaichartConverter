@@ -95,7 +95,10 @@
 
             foreach (Note x in this.Notes)
             {
-                result += x.Compose(1) + "\n";
+                if (!x.Compose(1).Equals(""))
+                {
+                    result += x.Compose(1) + "\n";
+                }
             }
             result += "\n";
             return result;
