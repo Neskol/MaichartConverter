@@ -133,19 +133,11 @@
             int result = Int32.Parse(x.Key) + 1;
             if (x.NoteType.Equals("SLR"))
             {
-                if (result == 1 || result == 2 || result == 7 || result == 8)
-                {
-                    result -= 2;
-                }
-                else result += 2;
+                result += 2;
             }
             else if (x.NoteType.Equals("SLL"))
             {
-                if (result == 1 || result == 2 || result == 7 || result == 8)
-                {
-                    result += 2;
-                }
-                else result -= 2;
+                result -= 2;
             }
 
             if (result > 8)
@@ -156,6 +148,34 @@
             {
                 result += 8;
             }
+
+            if (result == Int32.Parse(x.Key) + 1 || (result == Int32.Parse(x.EndKey) + 1))
+            {
+                //Deal with result;
+                if (result>4)
+                {
+                    result -= 4;
+                }
+                else if (result<=4)
+                {
+                    result += 4;
+                }
+
+                //Deal with note type;
+                if (x.NoteType.Equals("SLL"))
+                {
+                    x.NoteType = "SLR";
+                }
+                else if (x.NoteType.Equals("SLR"))
+                {
+                    x.NoteType = "SLL";
+                }
+                else
+                {
+                    throw new InvalidDataException("INFLECTION POINT IS THE SAME WITH ONE OF THE KEY!");
+                }
+            }
+
             return result;
         }
 

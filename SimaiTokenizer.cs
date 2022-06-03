@@ -10,37 +10,22 @@ namespace MaichartConverter
 
         public string[] Tokens(string location)
         {
-            try
+
+            string[] takeIn = File.ReadAllLines(location);
+            string storage = "";
+            foreach (string line in takeIn)
             {
-                string[] takeIn = File.ReadAllLines(location);
-                string storage = "";
-                foreach (string line in takeIn)
-                {
-                    storage += line;
-                }
-                string[] result = storage.Split(",");
-                return result;
+                storage += line;
             }
-            catch (DirectoryNotFoundException ex)
-            {
-                Console.WriteLine("Exception raised: " + ex.Message);
-                throw ex;
-            }
+            string[] result = storage.Split(",");
+            return result;
         }
 
         public string[] TokensFromText(string text)
         {
-            try
-            {
-                string storage = text;
-                string[] result = storage.Split(",");
-                return result;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Exception raised: " + ex.Message);
-                throw ex;
-            }
+            string storage = text;
+            string[] result = storage.Split(",");
+            return result;
         }
     }
 }

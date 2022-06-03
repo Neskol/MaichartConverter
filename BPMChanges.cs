@@ -18,7 +18,7 @@ namespace MaichartConverter
             this.changeNotes = new HashSet<BPMChange>();
             for (int i = 0; i < bar.Count; i++)
             {
-                BPMChange candidate = new BPMChange(bar[i], tick[i], bpm[i]);
+                BPMChange candidate = new(bar[i], tick[i], bpm[i]);
                 changeNotes.Add(candidate);
             }
             this.Update();
@@ -37,7 +37,7 @@ namespace MaichartConverter
         {
             get
             {
-                List<BPMChange> result = new List<BPMChange>();
+                List<BPMChange> result = new();
                 result.AddRange(this.changeNotes);
                 return result;
             }
@@ -58,7 +58,7 @@ namespace MaichartConverter
         /// </summary>
         public void Update()
         {
-            List<BPMChange> adjusted = new List<BPMChange>();
+            List<BPMChange> adjusted = new();
             Note lastNote = new Rest();
             foreach (BPMChange x in this.changeNotes)
             {

@@ -9,26 +9,9 @@ namespace MaichartConverter;
 public class SimaiParser : IParser
 {
     /// <summary>
-    /// Enums of variables in Simai file
-    /// </summary>
-    /// <value>Common variables</value>
-    public readonly string[] State = { "Note", "Tap", "Break", "Touch", "EXTap", "Slide", "Hold", "EXHold", "TouchHold", "BPM", "Quaver", "Information" };
-
-    /// <summary>
-    /// Enums of parser state
-    /// </summary>
-    /// <value></value>
-    public readonly string[] Status = { "Ready", "Submit" };
-
-    /// <summary>
     /// The maximum definition of a chart
     /// </summary>
     public static int MaximumDefinition = 384;
-
-    /// <summary>
-    /// For easy access - Don't want to rewrite the interface
-    /// </summary>
-    private static double CurrentBPM = 0;
 
     private Tap PreviousSlideStart;
 
@@ -275,56 +258,56 @@ public class SimaiParser : IParser
     public Slide SlideOfToken(string token, int bar, int tick, Note slideStart, double bpm)
     {
         Note result;
-        string keyCandidate = "";
+        string endKeyCandidate = "";
         int sustainSymbol = 0;
         string sustainCandidate = "";
         string noteType = "";
         //Parse first section
         if (token.Contains("qq"))
         {
-            keyCandidate = token.Substring(2, 1);
+            endKeyCandidate = token.Substring(2, 1);
             sustainSymbol = token.IndexOf("[");
             sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
             noteType = "SXR";
         }
         else if (token.Contains("q"))
         {
-            keyCandidate = token.Substring(1, 1);
+            endKeyCandidate = token.Substring(1, 1);
             sustainSymbol = token.IndexOf("[");
             sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
             noteType = "SUR";
         }
         else if (token.Contains("pp"))
         {
-            keyCandidate = token.Substring(2, 1);
+            endKeyCandidate = token.Substring(2, 1);
             sustainSymbol = token.IndexOf("[");
             sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
             noteType = "SXL";
         }
         else if (token.Contains("p"))
         {
-            keyCandidate = token.Substring(1, 1);
+            endKeyCandidate = token.Substring(1, 1);
             sustainSymbol = token.IndexOf("[");
             sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
             noteType = "SUL";
         }
         else if (token.Contains("v"))
         {
-            keyCandidate = token.Substring(1, 1);
+            endKeyCandidate = token.Substring(1, 1);
             sustainSymbol = token.IndexOf("[");
             sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
             noteType = "SV_";
         }
         else if (token.Contains("w"))
         {
-            keyCandidate = token.Substring(1, 1);
+            endKeyCandidate = token.Substring(1, 1);
             sustainSymbol = token.IndexOf("[");
             sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
             noteType = "SF_";
         }
         else if (token.Contains("<"))
         {
-            keyCandidate = token.Substring(1, 1);
+            endKeyCandidate = token.Substring(1, 1);
             sustainSymbol = token.IndexOf("[");
             sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
             if (PreviousSlideStart.Key.Equals("0") ||
@@ -339,7 +322,7 @@ public class SimaiParser : IParser
         }
         else if (token.Contains(">"))
         {
-            keyCandidate = token.Substring(1, 1);
+            endKeyCandidate = token.Substring(1, 1);
             sustainSymbol = token.IndexOf("[");
             sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
             if (PreviousSlideStart.Key.Equals("0") ||
@@ -354,21 +337,21 @@ public class SimaiParser : IParser
         }
         else if (token.Contains("s"))
         {
-            keyCandidate = token.Substring(1, 1);
+            endKeyCandidate = token.Substring(1, 1);
             sustainSymbol = token.IndexOf("[");
             sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
             noteType = "SSL";
         }
         else if (token.Contains("z"))
         {
-            keyCandidate = token.Substring(1, 1);
+            endKeyCandidate = token.Substring(1, 1);
             sustainSymbol = token.IndexOf("[");
             sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
             noteType = "SSR";
         }
         else if (token.Contains("V"))
         {
-            keyCandidate = token.Substring(2, 1);
+            endKeyCandidate = token.Substring(2, 1);
             int sllCandidate = int.Parse(slideStart.Key) + 2;
             int slrCandidate = int.Parse(slideStart.Key) - 2;
             int inflectionCandidate = int.Parse(token.Substring(1, 1)) - 1;
@@ -423,17 +406,17 @@ public class SimaiParser : IParser
 
         else if (token.Contains("-"))
         {
-            keyCandidate = token.Substring(1, 1);
+            endKeyCandidate = token.Substring(1, 1);
             sustainSymbol = token.IndexOf("[");
             sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
             noteType = "SI_";
         }
 
         //Console.WriteLine("Key Candidate: "+keyCandidate);
-        int fixedKeyCandidate = int.Parse(keyCandidate) - 1;
+        int fixedKeyCandidate = int.Parse(endKeyCandidate) - 1;
         if (fixedKeyCandidate < 0)
         {
-            keyCandidate += 8;
+            endKeyCandidate += 8;
         }
         bool isSecond = sustainCandidate.Contains("##");
         if (!isSecond)
