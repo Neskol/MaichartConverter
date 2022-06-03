@@ -372,14 +372,17 @@ public class SimaiParser : IParser
             int sllCandidate = int.Parse(slideStart.Key) + 2;
             int slrCandidate = int.Parse(slideStart.Key) - 2;
             int inflectionCandidate = int.Parse(token.Substring(1, 1)) - 1;
-            if (inflectionCandidate < 0)
-            {
-                inflectionCandidate += 8;
-            }
-            else if (inflectionCandidate > 7)
-            {
-                inflectionCandidate -= 8;
-            }
+            ////Revalue inflection candidate
+            //if (inflectionCandidate < 0)
+            //{
+            //    inflectionCandidate += 8;
+            //}
+            //else if (inflectionCandidate > 7)
+            //{
+            //    inflectionCandidate -= 8;
+            //}
+            
+            //Revalue SLL and SLR candidate
             if (sllCandidate < 0)
             {
                 sllCandidate += 8;
@@ -390,14 +393,15 @@ public class SimaiParser : IParser
             }
             if (slrCandidate < 0)
             {
-                sllCandidate += 8;
+                slrCandidate += 8;
             }
             else if (slrCandidate > 7)
             {
                 slrCandidate -= 8;
             }
-            bool isSLL = sllCandidate == inflectionCandidate || sllCandidate + 8 == inflectionCandidate || sllCandidate - 8 == inflectionCandidate;
-            bool isSLR = slrCandidate == inflectionCandidate || slrCandidate + 8 == inflectionCandidate || slrCandidate - 8 == inflectionCandidate;
+
+            bool isSLL = sllCandidate == inflectionCandidate;
+            bool isSLR = slrCandidate == inflectionCandidate;
             sustainSymbol = token.IndexOf("[");
             sustainCandidate = token.Substring(sustainSymbol + 1).Split("]")[0]; //sustain candidate is like 1:2
             if (isSLL)
@@ -411,7 +415,7 @@ public class SimaiParser : IParser
             if (!(isSLL || isSLR))
             {
                 Console.WriteLine("Start Key:" + slideStart.Key);
-                Console.WriteLine("Expected inflection point: SSL for " + sllCandidate + " and SSR for " + slrCandidate);
+                Console.WriteLine("Expected inflection point: SLL for " + sllCandidate + " and SLR for " + slrCandidate);
                 Console.WriteLine("Actual: " + inflectionCandidate);
                 throw new InvalidDataException("THE INFLECTION POINT GIVEN IS NOT MATCHING!");
             }
