@@ -8,7 +8,7 @@
         /// <summary>
         /// Convert note to string for writing
         /// </summary>
-        /// <param name="format">0 if maiData, 1 if GoodBrother</param>
+        /// <param name="format">0 if Simai, 1 if Ma2</param>
         string Compose(int format);
 
         /// <summary>

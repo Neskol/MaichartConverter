@@ -77,14 +77,7 @@ namespace MaichartConverter
         
         public override string Compose()
         {
-            XmlDeclaration xmlDecl = this.StoredXMailL.CreateXmlDeclaration("1.0","UTF-8",null);
-            this.StoredXMailL.AppendChild(xmlDecl);
-            XmlElement root = this.StoredXMailL.CreateElement("XMaiL");
-            XmlAttribute rootVersion = this.StoredXMailL.CreateAttribute("1.0");
-            root.Attributes.Append(rootVersion);
-            this.StoredXMailL.AppendChild(root);
-            XmlElement information = this.StoredXMailL.CreateElement("TrackInformation");
-            throw new NotImplementedException();
+            return this.StoredXMailL.ToString() ?? throw new NullReferenceException();
         }
 
         public override string Compose(BPMChanges bpm, MeasureChanges measure)
@@ -94,7 +87,13 @@ namespace MaichartConverter
 
         public override void Update()
         {
-            
+            XmlDeclaration xmlDecl = this.StoredXMailL.CreateXmlDeclaration("1.0", "UTF-8", null);
+            this.StoredXMailL.AppendChild(xmlDecl);
+            XmlElement root = this.StoredXMailL.CreateElement("XMaiL");
+            XmlAttribute rootVersion = this.StoredXMailL.CreateAttribute("1.0");
+            root.Attributes.Append(rootVersion);
+            this.StoredXMailL.AppendChild(root);
+            XmlElement information = this.StoredXMailL.CreateElement("TrackInformation");
         }
     }
 }
