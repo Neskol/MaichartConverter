@@ -379,9 +379,20 @@ namespace MaichartConverter
                                     GetBPMByTick(x.TickStamp) != GetBPMByTick(x.LastTickStamp) ||
                                     HasBPMChangeInBetween(x.TickStamp, x.WaitTickStamp));
                                 x.Update();
-                                x.TickTimeStamp = this.GetTimeStamp(x.TickStamp);
-                                x.WaitTimeStamp = this.GetTimeStamp(x.WaitTickStamp);
-                                x.LastTimeStamp = this.GetTimeStamp(x.LastTickStamp);
+                                if (x.TickTimeStamp==0)
+                                {
+                                    x.TickTimeStamp = this.GetTimeStamp(x.TickStamp);
+                                }
+                                if (x.CalculatedWaitTime ==0)
+                                {
+                                    x.WaitTimeStamp = this.GetTimeStamp(x.WaitTickStamp);
+                                    x.CalculatedWaitTime = x.WaitTimeStamp - x.TickTimeStamp;
+                                }
+                                if (x.CalculatedLastTime == 0)
+                                {
+                                    x.LastTimeStamp = this.GetTimeStamp(x.LastTickStamp);
+                                    x.CalculatedLastTime = x.LastTimeStamp - x.WaitTimeStamp;
+                                }
                                 if (lastNote.NoteSpecificType.Equals("SLIDE_START"))
                                 {
                                     x.SlideStart = lastNote;

@@ -257,6 +257,7 @@ public class SimaiParser : IParser
 
     public Slide SlideOfToken(string token, int bar, int tick, Note slideStart, double bpm)
     {
+        Note slideStartCandidate = new Tap(slideStart);
         Note result;
         string endKeyCandidate = "";
         int sustainSymbol = 0;
@@ -352,8 +353,8 @@ public class SimaiParser : IParser
         else if (token.Contains("V"))
         {
             endKeyCandidate = token.Substring(2, 1);
-            int sllCandidate = int.Parse(slideStart.Key) + 2;
-            int slrCandidate = int.Parse(slideStart.Key) - 2;
+            int sllCandidate = int.Parse(slideStartCandidate.Key) + 2;
+            int slrCandidate = int.Parse(slideStartCandidate.Key) - 2;
             int inflectionCandidate = int.Parse(token.Substring(1, 1)) - 1;
             ////Revalue inflection candidate
             //if (inflectionCandidate < 0)
@@ -397,7 +398,7 @@ public class SimaiParser : IParser
             }
             if (!(isSLL || isSLR))
             {
-                Console.WriteLine("Start Key:" + slideStart.Key);
+                Console.WriteLine("Start Key:" + slideStartCandidate.Key);
                 Console.WriteLine("Expected inflection point: SLL for " + sllCandidate + " and SLR for " + slrCandidate);
                 Console.WriteLine("Actual: " + inflectionCandidate);
                 throw new InvalidDataException("THE INFLECTION POINT GIVEN IS NOT MATCHING!");
@@ -426,8 +427,8 @@ public class SimaiParser : IParser
             int lastTick = 384 / quaver;
             int times = int.Parse(lastTimeCandidates[1]);
             lastTick *= times;
-            result = new Slide(noteType, bar, tick, slideStart.Key, 96, lastTick, fixedKeyCandidate.ToString());
-            result.SlideStart = slideStart;
+            result = new Slide(noteType, bar, tick, slideStartCandidate.Key, 96, lastTick, fixedKeyCandidate.ToString());
+            result.SlideStart = slideStartCandidate;
         }
         else
         {
@@ -437,10 +438,10 @@ public class SimaiParser : IParser
             double tickUnit = Chart.GetBPMTimeUnit(bpm);
             int waitLength = (int)(waitLengthCandidate / tickUnit);
             int lastLength = (int)(lastLengthCandidate / tickUnit);
-            result = new Slide(noteType, bar, tick, slideStart.Key, waitLength, lastLength, fixedKeyCandidate.ToString());
+            result = new Slide(noteType, bar, tick, slideStartCandidate.Key, waitLength, lastLength, fixedKeyCandidate.ToString());
             result.CalculatedWaitTime = waitLengthCandidate;
             result.CalculatedLastTime = lastLengthCandidate;
-            result.SlideStart = slideStart;
+            result.SlideStart = slideStartCandidate;
         }
 
         result.BPM = bpm;

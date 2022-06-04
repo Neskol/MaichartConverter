@@ -59,8 +59,45 @@
             this.Tick = startTime;
             this.LastLength = lastTime;
             this.specialEffect = specialEffect;
-            this.touchSize = "touchSize";
+            this.touchSize = touchSize;
             this.Update();
+        }
+
+        /// <summary>
+        /// Construct a Hold from another note
+        /// </summary>
+        /// <param name="inTake">The intake note</param>
+        /// <exception cref="NullReferenceException">Will raise exception if touch size is null</exception>
+        public Hold(Note inTake)
+        {
+            this.NoteType = inTake.NoteType;
+            this.Key = inTake.Key;
+            this.EndKey = inTake.EndKey;
+            this.Bar = inTake.Bar;
+            this.Tick = inTake.Tick;
+            this.TickStamp = inTake.TickStamp;
+            this.TickTimeStamp = inTake.TickTimeStamp;
+            this.LastLength = inTake.LastLength;
+            this.LastTickStamp = inTake.LastTickStamp;
+            this.LastTimeStamp = inTake.LastTimeStamp;
+            this.WaitLength = inTake.WaitLength;
+            this.WaitTickStamp = inTake.WaitTickStamp;
+            this.WaitTimeStamp = inTake.WaitTimeStamp;
+            this.CalculatedLastTime = inTake.CalculatedLastTime;
+            this.CalculatedLastTime = inTake.CalculatedLastTime;
+            this.TickBPMDisagree = inTake.TickBPMDisagree;
+            this.BPM = inTake.BPM;
+            this.BPMChangeNotes = inTake.BPMChangeNotes;
+            if (inTake.NoteGenre == "HOLD")
+            {
+                this.touchSize = ((Hold)inTake).TouchSize ?? throw new NullReferenceException();
+                this.specialEffect = ((Hold)inTake).SpecialEffect;
+            }
+            else
+            {
+                this.touchSize = "M1";
+                this.specialEffect = 0;
+            }
         }
 
         /// <summary>

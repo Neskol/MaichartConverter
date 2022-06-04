@@ -26,7 +26,7 @@
         /// </summary>
         public Tap()
         {
-            this.touchSize="";
+            this.touchSize="M1";
             this.Update();
         }
 
@@ -67,6 +67,43 @@
             this.touchSize = touchSize;
             this.Update();
         }
+        
+        /// <summary>
+        /// Construct a Tap note form another note
+        /// </summary>
+        /// <param name="inTake">The intake note</param>
+        /// <exception cref="NullReferenceException">Will raise exception if touch size is null</exception>
+        public Tap(Note inTake)
+        {
+            this.NoteType = inTake.NoteType;
+            this.Key = inTake.Key;
+            this.EndKey = inTake.EndKey;
+            this.Bar = inTake.Bar;
+            this.Tick = inTake.Tick;
+            this.TickStamp = inTake.TickStamp;
+            this.TickTimeStamp = inTake.TickTimeStamp;
+            this.LastLength = inTake.LastLength;
+            this.LastTickStamp = inTake.LastTickStamp;
+            this.LastTimeStamp = inTake.LastTimeStamp;
+            this.WaitLength = inTake.WaitLength;
+            this.WaitTickStamp = inTake.WaitTickStamp;
+            this.WaitTimeStamp = inTake.WaitTimeStamp;
+            this.CalculatedLastTime = inTake.CalculatedLastTime;
+            this.CalculatedLastTime = inTake.CalculatedLastTime;
+            this.TickBPMDisagree = inTake.TickBPMDisagree;
+            this.BPM = inTake.BPM;
+            this.BPMChangeNotes = inTake.BPMChangeNotes;
+            if (inTake.NoteGenre == "TAP")
+            {
+                this.touchSize = ((Tap)inTake).TouchSize ?? throw new NullReferenceException();
+                this.SpecialEffect = ((Tap)inTake).SpecialEffect;
+            }
+            else
+            {
+                this.touchSize = "M1";
+                this.SpecialEffect = 0;
+            }
+        }
 
 
         /// <summary>
@@ -75,6 +112,7 @@
         public int SpecialEffect
         {
             get { return this.specialEffect; }
+            set { this.specialEffect = value; }
         }
 
         /// <summary>
@@ -83,6 +121,7 @@
         public string TouchSize
         {
             get { return this.touchSize; }
+            set {  this.touchSize = value; }
         }
 
         public override bool CheckValidity()

@@ -14,7 +14,7 @@ namespace MaichartConverter
         public static string WindowsPathSep = "\\";
 
         /// <summary>
-        /// Defines MacOS path seperator
+        /// Defines MacOS path separator
         /// </summary>
         public static string MacPathSep = "/";
 
@@ -32,14 +32,14 @@ namespace MaichartConverter
         @"/Users/neskol/MaiAnalysis/Output/"};
 
         /// <summary>
-        /// Defines which seperator is using in programs
+        /// Defines which separator is using in programs
         /// </summary>
-        public static string GlobalSep = MacPathSep;
+        public static string GlobalSep = WindowsPathSep;
 
         /// <summary>
         /// Defines which path is using in programs
         /// </summary>
-        public static string[] GlobalPaths = MacPaths;
+        public static string[] GlobalPaths = WinPaths;
 
         /// <summary>
         /// Defines possible sorting scheme
@@ -82,8 +82,8 @@ namespace MaichartConverter
 
             // CompileUtageChartDatabase();
             // TestSpecificChart();
-            TestSpecificChart(@"D:\PandoraCandidate.ma2");
-            //TestSpecificChart("000799", "4");
+            // TestSpecificChart(@"D:\PandoraCandidate.ma2");
+            TestSpecificChart("000799", "4");
             //CompileChartDatabase();
             // CompileAssignedChartDatabase();
         }
@@ -96,7 +96,7 @@ namespace MaichartConverter
         public static void TestSpecificChart(string musicID, string difficulty)
         {
             Chart good = new Ma2(@"/Users/neskol/MaiAnalysis/A000/music/music" + musicID + "/" + musicID + "_0" + difficulty + ".ma2");
-            MaidataCompiler compiler = new MaidataCompiler();
+            SimaiCompiler compiler = new SimaiCompiler();
             Console.WriteLine(good.Compose());
             Console.WriteLine(compiler.Compose(good));
             Console.WriteLine(good.Information);
@@ -109,7 +109,7 @@ namespace MaichartConverter
         public static void TestSpecificChart(string path)
         {
             Chart good = new Ma2(path);
-            MaidataCompiler compiler = new MaidataCompiler();
+            SimaiCompiler compiler = new SimaiCompiler();
             Console.WriteLine(good.Compose());
             Console.WriteLine(compiler.Compose(good));
             Console.WriteLine(good.Information);
@@ -123,7 +123,7 @@ namespace MaichartConverter
             Console.WriteLine("Give the path to ma2");
             string path = Console.ReadLine() ?? throw new NullReferenceException();
             Chart good = new Ma2(path);
-            MaidataCompiler compiler = new MaidataCompiler();
+            SimaiCompiler compiler = new SimaiCompiler();
             Console.WriteLine(good.Compose());
             Console.WriteLine(compiler.Compose(good));
             Console.WriteLine(good.Information);
@@ -282,7 +282,7 @@ namespace MaichartConverter
                     {
                         Console.WriteLine("Already exist song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
                     }
-                    MaidataCompiler compiler = new MaidataCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                    SimaiCompiler compiler = new SimaiCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
                     Console.WriteLine("Finished compiling maidata " + trackInfo.TrackName + " to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "maidata.txt");
 
                     if (exportAudio)
@@ -549,7 +549,7 @@ namespace MaichartConverter
                     {
                         Console.WriteLine("Already exist song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + "_Utage");
                     }
-                    MaidataCompiler compiler = new MaidataCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + "_Utage", true);
+                    SimaiCompiler compiler = new SimaiCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + "_Utage", true);
                     Console.WriteLine("Finished compiling maidata " + trackInfo.TrackName + " to: " + defaultCategorizedPath + sep + trackNameSubstitute + "_Utage" + sep + "maidata.txt");
 
                     if (exportAudio)
@@ -815,7 +815,7 @@ namespace MaichartConverter
                     {
                         Console.WriteLine("Already exist song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
                     }
-                    MaidataCompiler compiler = new MaidataCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                    SimaiCompiler compiler = new SimaiCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
                     Console.WriteLine("Finished compiling maidata " + trackInfo.TrackName + " to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "maidata.txt");
 
                     if (exportAudio)

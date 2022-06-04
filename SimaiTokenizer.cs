@@ -4,8 +4,10 @@ namespace MaichartConverter
 {
     public class SimaiTokenizer : ITokenizer
     {
+        TrackInformation trackInformation;
         public SimaiTokenizer()
         {
+            trackInformation = new SimaiInformation();
         }
 
         public string[] Tokens(string location)

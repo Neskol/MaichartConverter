@@ -7,7 +7,7 @@ namespace MaichartConverter
     /// <summary>
     /// Compile various Ma2 charts
     /// </summary>
-    public class MaidataCompiler : ICompiler
+    public class SimaiCompiler : ICompiler
     {
         /// <summary>
         /// Store difficulty keywords
@@ -35,7 +35,7 @@ namespace MaichartConverter
         /// </summary>
         /// <param name="location">Folder</param>
         /// <param name="targetLocation">Output folder</param>
-        public MaidataCompiler(string location, string targetLocation)
+        public SimaiCompiler(string location, string targetLocation)
         {
             charts = new List<Chart>();
             for (int i = 0; i < 5; i++)
@@ -83,7 +83,7 @@ namespace MaichartConverter
         /// <param name="location">Folder</param>
         /// <param name="targetLocation">Output folder</param>
         /// <param name="forUtage">True if for utage</param>
-        public MaidataCompiler(string location, string targetLocation, bool forUtage)
+        public SimaiCompiler(string location, string targetLocation, bool forUtage)
         {
             string[] ma2files = Directory.GetFiles(location, "*.ma2");
             charts = new List<Chart>();
@@ -109,7 +109,7 @@ namespace MaichartConverter
         /// <summary>
         /// Empty constructor.
         /// </summary>
-        public MaidataCompiler()
+        public SimaiCompiler()
         {
             charts = new List<Chart>();
             information = new Dictionary<string, string>();
