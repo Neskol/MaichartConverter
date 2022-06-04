@@ -7,7 +7,7 @@ namespace MaichartConverter
         TrackInformation trackInformation;
         public SimaiTokenizer()
         {
-            trackInformation = new SimaiInformation();
+            trackInformation = new XmlInformation();
         }
 
         public string[] Tokens(string location)
