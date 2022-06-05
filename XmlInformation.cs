@@ -31,6 +31,47 @@ namespace MaichartConverter
             }
         }
 
+        public void GenerateNewStoredXML()
+        {
+            this.TakeInValue = new XmlDocument();
+            //Create declaration
+            XmlDeclaration dec = this.TakeInValue.CreateXmlDeclaration("1.0","utf-8","yes");
+            this.TakeInValue.AppendChild(dec);
+            //Create Root and append attributes
+            XmlElement root = this.TakeInValue.CreateElement("MusicData");
+            XmlAttribute xsi = this.TakeInValue.CreateAttribute("xmlns:xsi");
+            xsi.Value = "http://www.w3.org/2001/XMLSchema-instance";
+            XmlAttribute xsd = this.TakeInValue.CreateAttribute("xmlns:xsd");
+            xsd.Value = "http://www.w3.org/2001/XMLSchema";
+            root.AppendChild(xsi);
+            root.AppendChild(xsd);
+            //Create data name: inner text = music0xxxxx
+            XmlElement dataName = this.TakeInValue.CreateElement("dataName");
+            XmlElement netOpenName = this.TakeInValue.CreateElement("netOpenName");
+            XmlElement releaseTagName = this.TakeInValue.CreateElement("releaseTagName");
+            XmlElement disable = this.TakeInValue.CreateElement("disable");
+            XmlElement name = this.TakeInValue.CreateElement("name");
+            XmlElement rightsInfoName = this.TakeInValue.CreateElement("rightsInfoName");
+            XmlElement sortName = this.TakeInValue.CreateElement("sortName"); 
+            XmlElement artistName = this.TakeInValue.CreateElement("artistName");
+            XmlElement genreName = this.TakeInValue.CreateElement("genreName");
+            XmlElement bpm = this.TakeInValue.CreateElement("bpm");
+            XmlElement version = this.TakeInValue.CreateElement("version");
+            XmlElement addVersion = this.TakeInValue.CreateElement("addVersion");
+            XmlElement movieName = this.TakeInValue.CreateElement("movieName");
+            XmlElement cueName = this.TakeInValue.CreateElement("cueName");
+            XmlElement dressCode = this.TakeInValue.CreateElement("dressCode");
+            XmlElement eventName = this.TakeInValue.CreateElement("eventName");
+            XmlElement subEventName = this.TakeInValue.CreateElement("subEventName");
+            XmlElement lockType = this.TakeInValue.CreateElement("lockType");
+            XmlElement subLockType = this.TakeInValue.CreateElement("subLockType");
+            XmlElement dotNetListView = this.TakeInValue.CreateElement("dotNetListView");
+            XmlElement notesData = this.TakeInValue.CreateElement("dataName");
+
+
+
+        }
+
         public override void Update()
         {
             XmlNodeList nameCandidate = this.TakeInValue.GetElementsByTagName("name");
