@@ -31,7 +31,10 @@ namespace MaichartConverter
             }
         }
 
-        public void GenerateNewStoredXML()
+        /// <summary>
+        /// Generate new music.xml for export
+        /// </summary>
+        public void GenerateEmptyStoredXML()
         {
             this.TakeInValue = new XmlDocument();
             //Create declaration
@@ -45,31 +48,69 @@ namespace MaichartConverter
             xsd.Value = "http://www.w3.org/2001/XMLSchema";
             root.AppendChild(xsi);
             root.AppendChild(xsd);
-            //Create data name: inner text = music0xxxxx
+
+            //Create tags. *data name: inner text = music0xxxxx
             XmlElement dataName = this.TakeInValue.CreateElement("dataName");
             XmlElement netOpenName = this.TakeInValue.CreateElement("netOpenName");
+            XmlElement netOpenNameId = this.TakeInValue.CreateElement("id");
+            XmlElement netOpenNameStr = this.TakeInValue.CreateElement("str");
             XmlElement releaseTagName = this.TakeInValue.CreateElement("releaseTagName");
+            XmlElement releaseTagNameId = this.TakeInValue.CreateElement("id");
+            XmlElement releaseTagNameStr = this.TakeInValue.CreateElement("str");
             XmlElement disable = this.TakeInValue.CreateElement("disable");
+            disable.InnerText = "false";
             XmlElement name = this.TakeInValue.CreateElement("name");
+            XmlElement nameId = this.TakeInValue.CreateElement("id");
+            XmlElement nameStr = this.TakeInValue.CreateElement("str");
             XmlElement rightsInfoName = this.TakeInValue.CreateElement("rightsInfoName");
+            XmlElement rightsInfoNameId = this.TakeInValue.CreateElement("id");
+            XmlElement rightsInfoNameStr = this.TakeInValue.CreateElement("str");
             XmlElement sortName = this.TakeInValue.CreateElement("sortName"); 
             XmlElement artistName = this.TakeInValue.CreateElement("artistName");
+            XmlElement artistNameId = this.TakeInValue.CreateElement("id");
+            XmlElement artistNameStr = this.TakeInValue.CreateElement("str");
             XmlElement genreName = this.TakeInValue.CreateElement("genreName");
+            XmlElement genreNameId = this.TakeInValue.CreateElement("id");
+            XmlElement genreNameStr = this.TakeInValue.CreateElement("str");
             XmlElement bpm = this.TakeInValue.CreateElement("bpm");
             XmlElement version = this.TakeInValue.CreateElement("version");
+            XmlElement versionId = this.TakeInValue.CreateElement("id");
+            XmlElement versionStr = this.TakeInValue.CreateElement("str");
             XmlElement addVersion = this.TakeInValue.CreateElement("addVersion");
+            XmlElement addVersionId = this.TakeInValue.CreateElement("id");
+            XmlElement addVersionStr = this.TakeInValue.CreateElement("str");
             XmlElement movieName = this.TakeInValue.CreateElement("movieName");
+            XmlElement movieNameId = this.TakeInValue.CreateElement("id");
+            XmlElement movieNameStr = this.TakeInValue.CreateElement("str");
             XmlElement cueName = this.TakeInValue.CreateElement("cueName");
+            XmlElement cueNameId = this.TakeInValue.CreateElement("id");
+            XmlElement cueNameStr = this.TakeInValue.CreateElement("str");
             XmlElement dressCode = this.TakeInValue.CreateElement("dressCode");
             XmlElement eventName = this.TakeInValue.CreateElement("eventName");
+            XmlElement eventNameId = this.TakeInValue.CreateElement("id");
+            XmlElement eventNameStr = this.TakeInValue.CreateElement("str");
             XmlElement subEventName = this.TakeInValue.CreateElement("subEventName");
+            XmlElement subEventNameId = this.TakeInValue.CreateElement("id");
+            XmlElement subEventNameStr = this.TakeInValue.CreateElement("str");
             XmlElement lockType = this.TakeInValue.CreateElement("lockType");
             XmlElement subLockType = this.TakeInValue.CreateElement("subLockType");
             XmlElement dotNetListView = this.TakeInValue.CreateElement("dotNetListView");
             XmlElement notesData = this.TakeInValue.CreateElement("dataName");
+            XmlElement jacketFile = this.TakeInValue.CreateElement("jacketFile");
+            XmlElement thumbnailName = this.TakeInValue.CreateElement("thumbnailName");
+            XmlElement rightFile = this.TakeInValue.CreateElement("rightFile");
+            XmlElement priority = this.TakeInValue.CreateElement("priority");
 
 
 
+
+        }
+
+        public XmlElement CreateNotesInformation(Dictionary<string, string> information, int chartIndex)
+        {
+            XmlElement result = this.TakeInValue.CreateElement("Notes");
+
+            return result;
         }
 
         public override void Update()

@@ -138,7 +138,7 @@ namespace MaichartConverter
                 beginning += "&des=" + this.information.GetValueOrDefault("Master Chart Maker") + "\n";
                 beginning += "&shortid=" + this.information.GetValueOrDefault("Music ID") + "\n";
                 beginning += "&genre=" + this.information.GetValueOrDefault("Genre") + "\n";
-                beginning += "&cabinate=";
+                beginning += "&cabinet=";
                 if (this.musicXml.IsDXChart)
                 {
                     beginning += "DX\n";
