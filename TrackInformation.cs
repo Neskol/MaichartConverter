@@ -1,3 +1,4 @@
+using System.Data;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -14,16 +15,30 @@ namespace MaichartConverter
         /// <value>1-15 Maimai level</value>
         public static readonly string[] level = { "1", "2", "3", "4", "5", "6", "7", "7+", "8", "8+", "9", "9+", "10", "10+", "11", "11+", "12", "12+", "13", "13+", "14", "14+", "15", "15+" };
 
+        public static readonly string[] difficulty = { "Basic", "Advance", "Expert", "Master","Remaster","Utage", "Easy"};
+
+        public static readonly string[] addVersion = { "Ver1.00.00" };
+
+        /// <summary>
+        /// Stores the genre name used in information
+        /// </summary>
+        /// <value>103 = Touhou, 105 = maimai</value>
+        public static readonly string[] genre = {"東方Project","maimai"};
+
         /// <summary>
         /// Stores prover maimai versions
         /// </summary>
         /// <value>Version name of each generation of Maimai</value>
         public static readonly string[] version = { "maimai", "maimai PLUS", "maimai GreeN", "maimai GreeN PLUS", "maimai ORANGE", "maimai ORANGE PLUS", "maimai PiNK", "maimai PiNK PLUS", "maimai MURASAKi", "maimai MURASAKi PLUS", "maimai MiLK", "maimai MiLK PLUS", "maimai FiNALE", "maimai DX", "maimai DX PLUS", "maimai DX Splash", "maimai DX Splash PLUS", "maimai DX UNiVERSE", "maimai DX UNiVERSE PLUS" };
 
-        /// <summary>
-        /// Set of track information stored
-        /// </summary>
-        private Dictionary<string, string> information;
+        public static readonly string[] shortVersion = {"maimai","PLUS","GreeN","GreeN PLUS","ORANGE","ORANGE PLUS","PiNK","PiNK PLUS","MURASAKi","MURASAKi PLUS","MiLK","MiLK PLUS","FiNALE","DX","DX PLUS","DX Splash","DX Splash PLUS","DX UNiVERSE","DX UNiVERSE PLUS"};
+
+        
+
+    /// <summary>
+    /// Set of track information stored
+    /// </summary>
+    private Dictionary<string, string> information;
 
         /// <summary>
         /// Internal stored information set

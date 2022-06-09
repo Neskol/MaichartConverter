@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 namespace MaichartConverter
 {
     /// <summary>
-    /// Tokenizes input file into tokens that parser can read
+    /// Tokenize input file into tokens that parser can read
     /// </summary>
     public class SimaiTokenizer : ITokenizer
     {

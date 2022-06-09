@@ -225,7 +225,7 @@ namespace MaichartConverter
                 foreach (string bgaFile in bgaFiles)
                 {
                     string musicID = bgaFile.Substring(bgaLocation.Length).Substring(0, 6).Substring(2, 4);
-                    bgaMap.Add(ComponsateZero(musicID), bgaFile);
+                    bgaMap.Add(CompensateZero(musicID), bgaFile);
                     bgaMap.Add("01" + musicID, bgaFile);
                 }
             }
@@ -250,7 +250,7 @@ namespace MaichartConverter
                 {
                     TrackInformation trackInfo = new XmlInformation(track + sep + "");
                     Console.WriteLine("There is Music.xml in " + track);
-                    string shortID = ComponsateZero(trackInfo.TrackID).Substring(2);
+                    string shortID = CompensateZero(trackInfo.TrackID).Substring(2);
                     Console.WriteLine("Name: " + trackInfo.TrackName);
                     Console.WriteLine("ID:" + trackInfo.TrackID);
                     Console.WriteLine("Genre: " + trackInfo.TrackGenre);
@@ -331,7 +331,7 @@ namespace MaichartConverter
                     // Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart);
 
                     string? originalBGALocation = "";
-                    bool bgaExists = bgaMap.TryGetValue(ComponsateZero(trackInfo.TrackID), out originalBGALocation);
+                    bool bgaExists = bgaMap.TryGetValue(CompensateZero(trackInfo.TrackID), out originalBGALocation);
                     if (!bgaExists)
                     {
                         if (trackInfo.TrackID.Length == 5)
@@ -347,7 +347,7 @@ namespace MaichartConverter
                     {
                         Console.WriteLine("BGA NOT FOUND");
                         Console.WriteLine(trackInfo.TrackID);
-                        Console.WriteLine(ComponsateZero(trackInfo.TrackID));
+                        Console.WriteLine(CompensateZero(trackInfo.TrackID));
                         Console.WriteLine(originalBGALocation);
                         Console.ReadKey();
                     }
@@ -492,7 +492,7 @@ namespace MaichartConverter
                 foreach (string bgaFile in bgaFiles)
                 {
                     string musicID = bgaFile.Substring(bgaLocation.Length).Substring(0, 6).Substring(2, 4);
-                    bgaMap.Add(ComponsateZero(musicID), bgaFile);
+                    bgaMap.Add(CompensateZero(musicID), bgaFile);
                     bgaMap.Add("01" + musicID, bgaFile);
                 }
             }
@@ -517,7 +517,7 @@ namespace MaichartConverter
                 {
                     TrackInformation trackInfo = new XmlInformation(track + sep + "");
                     Console.WriteLine("There is Music.xml in " + track);
-                    string shortID = ComponsateZero(trackInfo.TrackID).Substring(2);
+                    string shortID = CompensateZero(trackInfo.TrackID).Substring(2);
                     Console.WriteLine("Name: " + trackInfo.TrackName);
                     Console.WriteLine("ID:" + trackInfo.TrackID);
                     Console.WriteLine("Genre: " + trackInfo.TrackGenre);
@@ -598,7 +598,7 @@ namespace MaichartConverter
                     // Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart);
 
                     string? originalBGALocation = "";
-                    bool bgaExists = bgaMap.TryGetValue(ComponsateZero(trackInfo.TrackID), out originalBGALocation);
+                    bool bgaExists = bgaMap.TryGetValue(CompensateZero(trackInfo.TrackID), out originalBGALocation);
                     if (!bgaExists)
                     {
                         if (trackInfo.TrackID.Length == 5)
@@ -614,7 +614,7 @@ namespace MaichartConverter
                     {
                         Console.WriteLine("BGA NOT FOUND");
                         Console.WriteLine(trackInfo.TrackID);
-                        Console.WriteLine(ComponsateZero(trackInfo.TrackID));
+                        Console.WriteLine(CompensateZero(trackInfo.TrackID));
                         Console.WriteLine(originalBGALocation);
                         Console.ReadKey();
                     }
@@ -758,7 +758,7 @@ namespace MaichartConverter
                 foreach (string bgaFile in bgaFiles)
                 {
                     string musicID = bgaFile.Substring(bgaLocation.Length).Substring(0, 6).Substring(2, 4);
-                    bgaMap.Add(ComponsateZero(musicID), bgaFile);
+                    bgaMap.Add(CompensateZero(musicID), bgaFile);
                     bgaMap.Add("01" + musicID, bgaFile);
                 }
             }
@@ -783,7 +783,7 @@ namespace MaichartConverter
                 {
                     TrackInformation trackInfo = new XmlInformation(track + sep + "");
                     Console.WriteLine("There is Music.xml in " + track);
-                    string shortID = ComponsateZero(trackInfo.TrackID).Substring(2);
+                    string shortID = CompensateZero(trackInfo.TrackID).Substring(2);
                     Console.WriteLine("Name: " + trackInfo.TrackName);
                     Console.WriteLine("ID:" + trackInfo.TrackID);
                     Console.WriteLine("Genre: " + trackInfo.TrackGenre);
@@ -864,7 +864,7 @@ namespace MaichartConverter
                     // Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart);
 
                     string? originalBGALocation = "";
-                    bool bgaExists = bgaMap.TryGetValue(ComponsateZero(trackInfo.TrackID), out originalBGALocation);
+                    bool bgaExists = bgaMap.TryGetValue(CompensateZero(trackInfo.TrackID), out originalBGALocation);
                     if (!bgaExists)
                     {
                         if (trackInfo.TrackID.Length == 5)
@@ -880,7 +880,7 @@ namespace MaichartConverter
                     {
                         Console.WriteLine("BGA NOT FOUND");
                         Console.WriteLine(trackInfo.TrackID);
-                        Console.WriteLine(ComponsateZero(trackInfo.TrackID));
+                        Console.WriteLine(CompensateZero(trackInfo.TrackID));
                         Console.WriteLine(originalBGALocation);
                         Console.ReadKey();
                     }
@@ -928,11 +928,11 @@ namespace MaichartConverter
         }
 
         /// <summary>
-        /// Componsate 0 for music IDs
+        /// Compensate 0 for music IDs
         /// </summary>
         /// <param name="intake">Music ID</param>
         /// <returns>0..+#Music ID and |Music ID|==6</returns>
-        public static string ComponsateZero(string intake)
+        public static string CompensateZero(string intake)
         {
             try
             {
