@@ -34,6 +34,7 @@ namespace MaichartConverter
         public static readonly string[] shortVersion = {"maimai","PLUS","GreeN","GreeN PLUS","ORANGE","ORANGE PLUS","PiNK","PiNK PLUS","MURASAKi","MURASAKi PLUS","MiLK","MiLK PLUS","FiNALE","DX","DX PLUS","DX Splash","DX Splash PLUS","DX UNiVERSE","DX UNiVERSE PLUS"};
 
         
+        
 
     /// <summary>
     /// Set of track information stored
