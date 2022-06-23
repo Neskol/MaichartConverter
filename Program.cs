@@ -9,7 +9,7 @@ namespace MaichartConverter
     class Program
     {
         /// <summary>
-        /// Defines Windows path seperator
+        /// Defines Windows path separator
         /// </summary>
         public static string WindowsPathSep = "\\";
 
@@ -34,12 +34,12 @@ namespace MaichartConverter
         /// <summary>
         /// Defines which separator is using in programs
         /// </summary>
-        public static string GlobalSep = WindowsPathSep;
+        public static string GlobalSep = MacPathSep;
 
         /// <summary>
         /// Defines which path is using in programs
         /// </summary>
-        public static string[] GlobalPaths = WinPaths;
+        public static string[] GlobalPaths = MacPaths;
 
         /// <summary>
         /// Defines possible sorting scheme
@@ -135,7 +135,7 @@ namespace MaichartConverter
         public static void CompileChartDatabase()
         {
             string sep = Program.GlobalSep;
-            Console.WriteLine("Specify the path seperator this script is running on");
+            Console.WriteLine("Specify the path separator this script is running on");
             sep = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
             if (sep.Equals(""))
             {

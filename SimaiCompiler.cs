@@ -329,56 +329,56 @@ namespace MaichartConverter
             string result = "";
             //Add information
 
-                string beginning = "";
-                beginning += "&title=" + this.information.GetValueOrDefault("Name") + "[宴]" + "\n";
-                beginning += "&wholebpm=" + this.information.GetValueOrDefault("BPM") + "\n";
-                beginning += "&artist=" + this.information.GetValueOrDefault("Composer") + "\n";
-                beginning += "&des=" + this.information.GetValueOrDefault("Master Chart Maker") + "\n";
-                beginning += "&shortid=" + this.information.GetValueOrDefault("Music ID") + "\n";
-                beginning += "&genre=" + this.information.GetValueOrDefault("Genre") + "\n";
-                beginning += "&cabinate=SD";
-                beginning += "&version=" + this.musicXml.TrackVersion + "\n";
-                beginning += "&chartconverter=Neskol\n";
+            string beginning = "";
+            beginning += "&title=" + this.information.GetValueOrDefault("Name") + "[宴]" + "\n";
+            beginning += "&wholebpm=" + this.information.GetValueOrDefault("BPM") + "\n";
+            beginning += "&artist=" + this.information.GetValueOrDefault("Composer") + "\n";
+            beginning += "&des=" + this.information.GetValueOrDefault("Master Chart Maker") + "\n";
+            beginning += "&shortid=" + this.information.GetValueOrDefault("Music ID") + "\n";
+            beginning += "&genre=" + this.information.GetValueOrDefault("Genre") + "\n";
+            beginning += "&cabinate=SD";
+            beginning += "&version=" + this.musicXml.TrackVersion + "\n";
+            beginning += "&chartconverter=Neskol\n";
+            beginning += "\n";
+
+            int defaultChartIndex = 7;
+            if (ma2files.Count > 1)
+            {
+                defaultChartIndex = 0;
+            }
+
+            foreach (string ma2file in ma2files)
+            {
+                beginning += "&lv_" + defaultChartIndex + "=" + "宴" + "\n";
                 beginning += "\n";
+            }
 
-                int defaultChartIndex = 7;
-                if (ma2files.Count > 1)
-                {
-                    defaultChartIndex = 0;
-                }
-                
-                foreach (string ma2file in ma2files)
-                {
-                    beginning += "&lv_"+ defaultChartIndex+ "=" + "宴"+ "\n";
-                    beginning += "\n";
-                }
-
-                result += beginning;
+            result += beginning;
             Console.WriteLine("Finished writing header of " + this.information.GetValueOrDefault("Name"));
 
             //Compose charts
 
-                if (defaultChartIndex<7)
+            if (defaultChartIndex < 7)
+            {
+                for (int i = 0; i < this.charts.Count; i++)
                 {
-                    for (int i = 0; i < this.charts.Count; i++)
+                    // Console.WriteLine("Processing chart: " + i);
+                    if (!this.information[difficulty[i]].Equals(""))
                     {
-                        // Console.WriteLine("Processing chart: " + i);
-                        if (!this.information[difficulty[i]].Equals(""))
-                        {
-                            string? isDxChart = "Utage";
-                            result += "&inote_" + (i + 2) + "=\n";
-                            result += this.Compose(charts[i]);
-                            Program.CompiledChart.Add(this.information.GetValueOrDefault("Name") + isDxChart + " [" + difficulty[i] + "]");
-                        }
-                        result += "\n";
+                        string? isDxChart = "Utage";
+                        result += "&inote_" + (i + 2) + "=\n";
+                        result += this.Compose(charts[i]);
+                        Program.CompiledChart.Add(this.information.GetValueOrDefault("Name") + isDxChart + " [" + difficulty[i] + "]");
                     }
+                    result += "\n";
                 }
-                else
-                {
+            }
+            else
+            {
                 result += "&inote_7=\n";
                 result += this.Compose(charts[0]);
                 Program.CompiledChart.Add(this.information.GetValueOrDefault("Name") + "Utage" + " [宴]");
-                }
+            }
 
             Console.WriteLine("Finished composing.");
             return result;
@@ -397,15 +397,30 @@ namespace MaichartConverter
         {
             BPMChanges bpmTable = new BPMChanges();
             bool foundTable = false;
-            for (int i = 0; i<this.charts.Count && !foundTable; i++)
+            for (int i = 0; i < this.charts.Count && !foundTable; i++)
             {
-                if (this.charts[i]!=null)
+                if (this.charts[i] != null)
                 {
                     bpmTable = this.charts[i].BPMChanges;
                     foundTable = true;
                 }
             }
             return bpmTable;
+        }
+
+        /// <summary>
+        /// Generate one line summary of this track with ID, name, genere and difficulty
+        /// </summary>
+        /// <returns></returns>
+        public string GenerateOneLineSummary()
+        {
+            string result = "";
+            if (this.charts.Equals(null) || !this.CheckValidity())
+            {
+                throw new NullReferenceException("This compiler has empty chat list!");
+            }
+            result += "(" + this.information["Music ID"] + ")";
+            return result;
         }
     }
 }
