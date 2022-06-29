@@ -985,7 +985,7 @@ namespace MaichartConverter
             result += (@"  \____|__  (____  /__|\___  >___|  (____  /__|   |__|   \______  /\____/|___|  /\_/  \___  >__|   |__|  \___  >__|   " + "\n");
             result += (@"          \/     \/        \/     \/     \/                     \/            \/          \/                 \/       " + "\n");
             result += "a GUtils component for rhythm games\n";
-            result += "Rev 1.03a by Neskol\n";
+            result += "Rev 1.03 by Neskol\n";
             result += "Check https://github.com/Neskol/MaichartConverter for updates and instructions\n";
             return result;
         }
