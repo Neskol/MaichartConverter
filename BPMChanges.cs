@@ -33,6 +33,19 @@ namespace MaichartConverter
             this.Update();
         }
 
+        /// <summary>
+        /// Construct BPMChanges with existing one
+        /// </summary>
+        /// <param name="takenIn"></param>
+        public BPMChanges(BPMChanges takenIn)
+        {
+            this.changeNotes = new HashSet<BPMChange>();
+            foreach (BPMChange candidate in takenIn.ChangeNotes)
+            {
+                this.changeNotes.Add(candidate);
+            }
+        }
+
         public List<BPMChange> ChangeNotes
         {
             get

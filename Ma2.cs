@@ -25,9 +25,9 @@
         /// <param name="measureChanges">Measure Changes: Initial Measure is NEEDED!</param>
         public Ma2(List<Note> notes, BPMChanges bpmChanges, MeasureChanges measureChanges)
         {
-            this.Notes = notes;
-            this.BPMChanges = bpmChanges;
-            this.MeasureChanges = measureChanges;
+            this.Notes = new List<Note>(notes);
+            this.BPMChanges = new BPMChanges(bpmChanges);
+            this.MeasureChanges = new MeasureChanges(measureChanges);
             this.StoredChart = new List<List<Note>>();
             this.Information = new Dictionary<string, string>();
             this.Update();
@@ -41,11 +41,11 @@
         {
             string[] tokens = new Ma2Tokenizer().Tokens(location);
             Chart takenIn = new Ma2Parser().ChartOfToken(tokens);
-            this.Notes = takenIn.Notes;
-            this.BPMChanges = takenIn.BPMChanges;
-            this.MeasureChanges = takenIn.MeasureChanges;
-            this.StoredChart = new List<List<Note>>();
-            this.Information = new Dictionary<string, string>();
+            this.Notes = new List<Note>(takenIn.Notes);
+            this.BPMChanges = new BPMChanges(takenIn.BPMChanges);
+            this.MeasureChanges = new MeasureChanges(takenIn.MeasureChanges);
+            this.StoredChart = new List<List<Note>>(takenIn.StoredChart);
+            this.Information = new Dictionary<string, string>(takenIn.Information);
             this.Update();
         }
 
@@ -59,8 +59,8 @@
             this.Notes = takenIn.Notes;
             this.BPMChanges = takenIn.BPMChanges;
             this.MeasureChanges = takenIn.MeasureChanges;
-            this.StoredChart = new List<List<Note>>();
-            this.Information = new Dictionary<string, string>();
+            this.StoredChart = new List<List<Note>>(takenIn.StoredChart);
+            this.Information = new Dictionary<string, string>(takenIn.Information);
             this.Update();
         }
 
@@ -70,11 +70,11 @@
         /// <param name="takenIn">Existing good brother</param>
         public Ma2(Chart takenIn)
         {
-            this.Notes = takenIn.Notes;
-            this.BPMChanges = takenIn.BPMChanges;
-            this.MeasureChanges = takenIn.MeasureChanges;
-            this.StoredChart = new List<List<Note>>();
-            this.Information = new Dictionary<string, string>();
+            this.Notes = new List<Note>(takenIn.Notes);
+            this.BPMChanges = new BPMChanges(takenIn.BPMChanges);
+            this.MeasureChanges = new MeasureChanges(takenIn.MeasureChanges);
+            this.StoredChart = new List<List<Note>>(takenIn.StoredChart);
+            this.Information = new Dictionary<string, string>(takenIn.Information);
             this.Update();
         }
 

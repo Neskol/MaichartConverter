@@ -26,6 +26,18 @@
         }
 
         /// <summary>
+        /// Construct Measure Change with existing one
+        /// </summary>
+        public MeasureChanges(MeasureChanges takeIn)
+        {
+            bar = new List<int>(takeIn.Bar);
+            tick = new List<int>(takeIn.Tick);
+            quavers = new List<int>(takeIn.Quavers);
+            beats = new List<int>(takeIn.Beats);
+            changeNotes = new List<MeasureChange>(takeIn.ChangeNotes);
+        }
+
+        /// <summary>
         /// Take in initial quavers and beats, incase MET_CHANGE is not specified
         /// </summary>
         /// <param name="initialQuaver">Initial Quaver</param>

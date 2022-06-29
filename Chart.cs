@@ -18,6 +18,8 @@ namespace MaichartConverter
         //Stores definitions of Measure Changes
         private MeasureChanges measureChanges;
 
+        private int totalNoteNumber;
+
         //Counts number of Tap
         private int tapNumber;
 
@@ -202,6 +204,14 @@ namespace MaichartConverter
         }
 
         /// <summary>
+        /// Access to the total note number
+        /// </summary>
+        public int TotalNoteNumber
+        {
+            get { return this.totalNoteNumber; }
+        }
+
+        /// <summary>
         /// Access to Unit Score
         /// </summary>
         public int[] UnitScore
@@ -354,7 +364,6 @@ namespace MaichartConverter
                                 break;
                             case "HOLD":
                                 this.holdNumber++;
-                                this.slideNumber++;
                                 x.TickBPMDisagree = (GetBPMByTick(x.TickStamp) != GetBPMByTick(x.WaitTickStamp) || GetBPMByTick(x.WaitTickStamp) != GetBPMByTick(x.LastTickStamp) || GetBPMByTick(x.TickStamp) != GetBPMByTick(x.LastTickStamp));
                                 x.Update();
                                 if (delay > this.TotalDelay)
@@ -458,6 +467,7 @@ namespace MaichartConverter
             {
                 this.totalDelay -= this.chart.Count * 384;
             }
+            this.totalNoteNumber += (this.tapNumber+this.holdNumber+this.slideNumber);
         }
 
         /// <summary>
