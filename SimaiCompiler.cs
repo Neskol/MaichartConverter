@@ -419,7 +419,8 @@ namespace MaichartConverter
             {
                 throw new NullReferenceException("This compiler has empty chat list!");
             }
-            result += "(" + this.information["Music ID"] + ")";
+            result += "(" + this.information["Music ID"] + ")"+this.information["Name"]+", "+this.information["Genre"]+", ";
+            
             return result;
         }
     }
