@@ -83,8 +83,8 @@ namespace MaichartConverter
             // CompileUtageChartDatabase();
             // TestSpecificChart();
             // TestSpecificChart(@"D:\PandoraCandidate.ma2");
-            //TestSpecificChart("000799", "4");
-            CompileChartDatabase();
+            TestSpecificChart("000799", "4");
+            // CompileChartDatabase();
             // CompileAssignedChartDatabase();
         }
 
@@ -99,7 +99,8 @@ namespace MaichartConverter
             SimaiCompiler compiler = new SimaiCompiler();
             Console.WriteLine(good.Compose());
             Console.WriteLine(compiler.Compose(good));
-            Console.WriteLine(good.Information);
+            Console.WriteLine(good.FirstNote.Compose(1));
+
         }
 
         /// <summary>

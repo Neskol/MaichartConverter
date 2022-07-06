@@ -41,6 +41,11 @@ namespace MaichartConverter
         //Defines if the chart is DX chart
         private bool isDxChart;
 
+        /// <summary>
+        /// The first note of the chart
+        /// </summary>
+        private Note? firstNote;
+
         //Defines 
         private int[] unitScore = { 500, 1000, 1500, 2500 };
         private int achievement = 0;
@@ -275,6 +280,12 @@ namespace MaichartConverter
             set => this.isDxChart = value;
         }
 
+        public Note? FirstNote
+        {
+            get => this.firstNote;
+            set => this.firstNote = value;
+        }
+
         /// <summary>
         /// Empty constructor
         /// </summary>
@@ -291,7 +302,7 @@ namespace MaichartConverter
         /// <summary>
         /// Check if every item is valid for exporting
         /// </summary>
-        /// <returns>True if every element is valid, false elsewise</returns>
+        /// <returns>True if every element is valid, false else</returns>
         public bool CheckValidity()
         {
             throw new NotImplementedException();
@@ -324,6 +335,11 @@ namespace MaichartConverter
                 }
                 foreach (Note x in this.Notes)
                 {
+                    if (this.FirstNote==null&&!(x.NoteType.Equals("BPM")||x.NoteType.Equals("MEASURE")))
+                    {
+                        this.FirstNote = x;
+                        Console.WriteLine(x.Compose(0));
+                    }
                     //x.BPMChangeNotes = this.bpmChanges.ChangeNotes;
                     //x.Update();
                     //x.TickTimeStamp = this.GetTimeStamp(x.TickStamp);
