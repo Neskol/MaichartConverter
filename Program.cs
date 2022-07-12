@@ -83,7 +83,7 @@ namespace MaichartConverter
             // CompileUtageChartDatabase();
             // TestSpecificChart();
             // TestSpecificChart(@"D:\PandoraCandidate.ma2");
-            TestSpecificChart("000799", "4");
+            TestSpecificChart("000389", "4");
             // CompileChartDatabase();
             // CompileAssignedChartDatabase();
         }

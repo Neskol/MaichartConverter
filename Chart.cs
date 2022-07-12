@@ -313,6 +313,7 @@ namespace MaichartConverter
         /// </summary>
         public virtual void Update()
         {
+            this.StoredChart = new List<List<Note>>();
             int maxBar = 0;
             double timeStamp = 0.0;
             if (notes.Count > 0)

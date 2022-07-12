@@ -93,11 +93,21 @@
             result += MeasureChanges.Compose();
             result += "\n";
 
-            foreach (Note x in this.Notes)
+            //foreach (Note x in this.Notes)
+            //{
+            //    if (!x.Compose(1).Equals(""))
+            //    {
+            //        result += x.Compose(1) + "\n";
+            //    }
+            //}
+            foreach (List<Note> bar in this.StoredChart)
             {
-                if (!x.Compose(1).Equals(""))
+                foreach (Note x in bar)
                 {
-                    result += x.Compose(1) + "\n";
+                    if (!x.Compose(1).Equals(""))
+                    {
+                        result += x.Compose(1) + "\n";
+                    }
                 }
             }
             result += "\n";

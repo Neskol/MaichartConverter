@@ -59,7 +59,7 @@
                 result += "(" + this.BPM + ")";
                 //result += "(" + this.BPM + "_" + this.Bar + "_" + this.Tick + ")";
             }
-            else result += "(" + this.BPM + "_" + this.Bar + "_" + this.Tick + ")";
+            //else result += "(" + this.BPM + "_" + this.Bar + "_" + this.Tick + ")";
             return result;
         }
 
