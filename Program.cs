@@ -1022,7 +1022,7 @@ namespace MaichartConverter
             }
             sw.Close();
             BPMCollection.Save(outputLocation + "bpm.xml");
-            DebugInformationTable.Save(outputLocation + "bpm_table.xml");
+            DebugInformationTable.Save(outputLocation + "debug.xml");
         }
 
         /// <summary>
@@ -1059,6 +1059,7 @@ namespace MaichartConverter
             firstNote.InnerText = firstNoteValue.Bar.ToString();
             node.AppendChild(id);
             node.AppendChild(bpm);
+            node.AppendChild(firstNote);
             foreach (BPMChange note in bpmTable.ChangeNotes)
             {
                 XmlElement changeNote = DebugInformationTable.CreateElement("Note");
