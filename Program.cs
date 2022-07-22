@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Security.Principal;
+using System.Xml;
 using Microsoft.Win32.SafeHandles;
 
 namespace MaichartConverter
@@ -56,12 +57,12 @@ namespace MaichartConverter
         /// Records total track number compiled by program
         /// </summary>
         public static int NumberTotalTrackCompiled;
-        public static List<string> CompiledTracks = new();
+        public static Dictionary<int, string> CompiledTracks = new();
         public static List<string> CompiledChart = new();
         public static Dictionary<string, string[]> CompiledTrackDetailSet = new Dictionary<string, string[]>();
 
         public static XmlDocument BPMCollection = new XmlDocument();
-        public static XmlDocument BPMChangeTable = new XmlDocument();
+        public static XmlDocument DebugInformationTable = new XmlDocument();
 
         /// <summary>
         /// Main method to process charts
@@ -72,19 +73,19 @@ namespace MaichartConverter
             Console.WriteLine(ComposeHeader());
 
             XmlDeclaration xmlDecl = BPMCollection.CreateXmlDeclaration("1.0", "UTF-8", null);
-            XmlDeclaration xmlDeclBPM = BPMChangeTable.CreateXmlDeclaration("1.0", "UTF-8", null);
+            XmlDeclaration xmlDeclBPM = DebugInformationTable.CreateXmlDeclaration("1.0", "UTF-8", null);
             BPMCollection.AppendChild(xmlDecl);
-            BPMChangeTable.AppendChild(xmlDeclBPM);
+            DebugInformationTable.AppendChild(xmlDeclBPM);
             XmlElement root = BPMCollection.CreateElement("BPM");
-            XmlElement btRoot = BPMChangeTable.CreateElement("BPM-Table");
+            XmlElement btRoot = DebugInformationTable.CreateElement("BPM-Table");
             BPMCollection.AppendChild(root);
-            BPMChangeTable.AppendChild(btRoot);
+            DebugInformationTable.AppendChild(btRoot);
 
             // CompileUtageChartDatabase();
             // TestSpecificChart();
             // TestSpecificChart(@"D:\PandoraCandidate.ma2");
-            TestSpecificChart("000389", "4");
-            // CompileChartDatabase();
+            // TestSpecificChart("000389", "4");
+            CompileChartDatabase();
             // CompileAssignedChartDatabase();
         }
 
@@ -99,8 +100,7 @@ namespace MaichartConverter
             SimaiCompiler compiler = new SimaiCompiler();
             Console.WriteLine(good.Compose());
             Console.WriteLine(compiler.Compose(good));
-            Console.WriteLine(good.FirstNote.Compose(1));
-
+            // Console.WriteLine(good.FirstNote.Compose(1));
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace MaichartConverter
                 a000Location = GlobalPaths[0];
             }
 
-            string musiclocation = a000Location + @"music" + sep;
+            string musicLocation = a000Location + @"music" + sep;
             Console.WriteLine("Specify Audio location: *Be sure to add " + sep + " in the end or type n if have not");
             string audioLocation = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
             if (audioLocation.Equals(""))
@@ -230,12 +230,12 @@ namespace MaichartConverter
                     bgaMap.Add("01" + musicID, bgaFile);
                 }
             }
-            string[] musicFolders = Directory.GetDirectories(musiclocation);
+            string[] musicFolders = Directory.GetDirectories(musicLocation);
 
             //Create output directory
             DirectoryInfo output = new DirectoryInfo(outputLocation);
             // XmlInformation test = new XmlInformation(a000Location+ "music" + sep + "music010706" + sep + "");
-            //string shortID = ComponsateZero(test.TrackID).Substring(2);
+            //string shortID = CompensateZero(test.TrackID).Substring(2);
             //Console.WriteLine(shortID);
             //Console.ReadLine();
             //string oldName = imageLocation + "UI_Jacket_00" + shortID + ".png";
@@ -243,7 +243,7 @@ namespace MaichartConverter
             //File.Copy(oldName, newName);
 
             NumberTotalTrackCompiled = 0;
-            CompiledTracks = new List<string>();
+            CompiledTracks = new Dictionary<int, string>();
             //Iterate music folders
             foreach (string track in musicFolders)
             {
@@ -341,7 +341,7 @@ namespace MaichartConverter
                         }
                         else if (trackInfo.TrackID.Length == 3)
                         {
-                            bgaExists = bgaMap.TryGetValue(ComponsateShortZero(trackInfo.TrackID), out originalBGALocation);
+                            bgaExists = bgaMap.TryGetValue(CompensateShortZero(trackInfo.TrackID), out originalBGALocation);
                         }
                     }
                     if (exportBGA && !bgaExists)
@@ -374,9 +374,9 @@ namespace MaichartConverter
                         }
                     }
                     NumberTotalTrackCompiled++;
-                    CompiledTracks.Add(trackInfo.TrackName + trackInfo.TrackID);
-                    AppendKeyValue(trackInfo.TrackID, trackInfo.TrackBPM);
-                    AppendBPMTable(trackInfo.TrackID, trackInfo.TrackBPM, compiler.SymbolicBPMTable());
+                    CompiledTracks.Add(int.Parse(trackInfo.TrackID), trackInfo.TrackName);
+                    AppendBPM(trackInfo.TrackID, trackInfo.TrackBPM);
+                    AppendDebugInformation(trackInfo.TrackID, compiler.SymbolicBPMTable(),compiler.SymbolicFirstNote(false));
                     string[] compiledTrackDetail = { trackInfo.TrackName, trackInfo.TrackGenre, trackInfo.TrackVersion, trackInfo.TrackVersionNumber };
                     CompiledTrackDetailSet.Add(trackInfo.TrackName + trackInfo.TrackID, compiledTrackDetail);
                     Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
@@ -389,9 +389,9 @@ namespace MaichartConverter
             }
             Console.WriteLine("Total music compiled: " + NumberTotalTrackCompiled);
             int index = 1;
-            foreach (string title in CompiledTracks)
+            foreach (KeyValuePair<int, string> pair in CompiledTracks)
             {
-                Console.WriteLine("[" + index + "]: " + title);
+                Console.WriteLine("[" + index + "]: " + pair.Key + " " + pair.Value);
                 index++;
             }
             Log(outputLocation);
@@ -403,7 +403,7 @@ namespace MaichartConverter
         public static void CompileUtageChartDatabase()
         {
             string sep = Program.GlobalSep;
-            Console.WriteLine("Specify the path seperator this script is running on");
+            Console.WriteLine("Specify the path separator this script is running on");
             sep = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
             if (sep.Equals(""))
             {
@@ -420,7 +420,7 @@ namespace MaichartConverter
                 a000Location = GlobalPaths[0];
             }
 
-            string musiclocation = a000Location + @"music" + sep;
+            string musicLocation = a000Location + @"music" + sep;
             Console.WriteLine("Specify Audio location: *Be sure to add " + sep + " in the end or type n if have not");
             string audioLocation = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
             if (audioLocation.Equals(""))
@@ -497,12 +497,12 @@ namespace MaichartConverter
                     bgaMap.Add("01" + musicID, bgaFile);
                 }
             }
-            string[] musicFolders = Directory.GetDirectories(musiclocation);
+            string[] musicFolders = Directory.GetDirectories(musicLocation);
 
             //Create output directory
             DirectoryInfo output = new DirectoryInfo(outputLocation);
             // XmlInformation test = new XmlInformation(a000Location+ "music" + sep + "music010706" + sep + "");
-            //string shortID = ComponsateZero(test.TrackID).Substring(2);
+            //string shortID = CompensateZero(test.TrackID).Substring(2);
             //Console.WriteLine(shortID);
             //Console.ReadLine();
             //string oldName = imageLocation + "UI_Jacket_00" + shortID + ".png";
@@ -510,7 +510,7 @@ namespace MaichartConverter
             //File.Copy(oldName, newName);
 
             NumberTotalTrackCompiled = 0;
-            CompiledTracks = new List<string>();
+            CompiledTracks = new Dictionary<int, string>();
             //Iterate music folders
             foreach (string track in musicFolders)
             {
@@ -608,7 +608,7 @@ namespace MaichartConverter
                         }
                         else if (trackInfo.TrackID.Length == 3)
                         {
-                            bgaExists = bgaMap.TryGetValue(ComponsateShortZero(trackInfo.TrackID), out originalBGALocation);
+                            bgaExists = bgaMap.TryGetValue(CompensateShortZero(trackInfo.TrackID), out originalBGALocation);
                         }
                     }
                     if (exportBGA && !bgaExists)
@@ -641,8 +641,8 @@ namespace MaichartConverter
                         }
                     }
                     NumberTotalTrackCompiled++;
-                    CompiledTracks.Add(trackInfo.TrackName + trackInfo.TrackID);
-                    AppendKeyValue(trackInfo.TrackID, trackInfo.TrackBPM);
+                    CompiledTracks.Add(int.Parse(trackInfo.TrackID), trackInfo.TrackName + trackInfo.TrackID);
+                    AppendBPM(trackInfo.TrackID, trackInfo.TrackBPM);
                     string[] compiledTrackDetail = { trackInfo.TrackName, trackInfo.TrackGenre, trackInfo.TrackVersion, trackInfo.TrackVersionNumber };
                     CompiledTrackDetailSet.Add(trackInfo.TrackName + trackInfo.TrackID, compiledTrackDetail);
                     Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + "_Utage");
@@ -655,9 +655,9 @@ namespace MaichartConverter
             }
             Console.WriteLine("Total music compiled: " + NumberTotalTrackCompiled);
             int index = 1;
-            foreach (string title in CompiledTracks)
+            foreach (KeyValuePair<int, string> pair in CompiledTracks)
             {
-                Console.WriteLine("[" + index + "]: " + title);
+                Console.WriteLine("[" + index + "]: " + pair.Key + "," + pair.Value);
                 index++;
             }
             Log(outputLocation);
@@ -669,7 +669,7 @@ namespace MaichartConverter
         public static void CompileAssignedChartDatabase()
         {
             string sep = Program.GlobalSep;
-            Console.WriteLine("Specify the path seperator this script is running on");
+            Console.WriteLine("Specify the path separator this script is running on");
             sep = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
             if (sep.Equals(""))
             {
@@ -686,7 +686,7 @@ namespace MaichartConverter
                 a000Location = @"/Users/neskol/MaiAnalysis/A000/";
             }
 
-            string musiclocation = a000Location + @"music" + sep;
+            string musicLocation = a000Location + @"music" + sep;
             Console.WriteLine("Specify Audio location: *Be sure to add " + sep + " in the end or type n if have not");
             string audioLocation = Console.ReadLine() ?? throw new NullReferenceException("Null For Console.ReadLine");
             if (audioLocation.Equals(""))
@@ -763,12 +763,12 @@ namespace MaichartConverter
                     bgaMap.Add("01" + musicID, bgaFile);
                 }
             }
-            string[] musicFolders = Directory.GetDirectories(musiclocation);
+            string[] musicFolders = Directory.GetDirectories(musicLocation);
 
             //Create output directory
             DirectoryInfo output = new DirectoryInfo(outputLocation);
             // XmlInformation test = new XmlInformation(a000Location+ "music" + sep + "music010706" + sep + "");
-            //string shortID = ComponsateZero(test.TrackID).Substring(2);
+            //string shortID = CompensateZero(test.TrackID).Substring(2);
             //Console.WriteLine(shortID);
             //Console.ReadLine();
             //string oldName = imageLocation + "UI_Jacket_00" + shortID + ".png";
@@ -776,7 +776,7 @@ namespace MaichartConverter
             //File.Copy(oldName, newName);
 
             NumberTotalTrackCompiled = 0;
-            CompiledTracks = new List<string>();
+            CompiledTracks = new Dictionary<int,string>();
             //Iterate music folders
             foreach (string track in musicFolders)
             {
@@ -874,7 +874,7 @@ namespace MaichartConverter
                         }
                         else if (trackInfo.TrackID.Length == 3)
                         {
-                            bgaExists = bgaMap.TryGetValue(ComponsateShortZero(trackInfo.TrackID), out originalBGALocation);
+                            bgaExists = bgaMap.TryGetValue(CompensateShortZero(trackInfo.TrackID), out originalBGALocation);
                         }
                     }
                     if (exportBGA && !bgaExists)
@@ -907,7 +907,7 @@ namespace MaichartConverter
                         }
                     }
                     NumberTotalTrackCompiled++;
-                    CompiledTracks.Add(trackInfo.TrackName + trackInfo.TrackID);
+                    CompiledTracks.Add(int.Parse(trackInfo.TrackID),trackInfo.TrackName + trackInfo.TrackID);
                     string[] compiledTrackDetail = { trackInfo.TrackName, trackInfo.TrackGenre, trackInfo.TrackVersion, trackInfo.TrackVersionNumber };
                     CompiledTrackDetailSet.Add(trackInfo.TrackName + trackInfo.TrackID, compiledTrackDetail);
                     Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
@@ -920,9 +920,9 @@ namespace MaichartConverter
             }
             Console.WriteLine("Total music compiled: " + NumberTotalTrackCompiled);
             int index = 1;
-            foreach (string title in CompiledTracks)
+            foreach (KeyValuePair<int,string> pair in CompiledTracks)
             {
-                Console.WriteLine("[" + index + "]: " + title);
+                Console.WriteLine("[" + index + "]: " + pair.Key+", "+pair.Value);
                 index++;
             }
             Log(outputLocation);
@@ -951,11 +951,11 @@ namespace MaichartConverter
         }
 
         /// <summary>
-        /// Componsate 0 for short music IDs
+        /// Compensate 0 for short music IDs
         /// </summary>
         /// <param name="intake">Music ID</param>
         /// <returns>0..+#Music ID and |Music ID|==4</returns>
-        public static string ComponsateShortZero(string intake)
+        public static string CompensateShortZero(string intake)
         {
             try
             {
@@ -975,7 +975,7 @@ namespace MaichartConverter
         /// <summary>
         /// Compose fancy header
         /// </summary>
-        /// <returns>Maiconverter.fancy</returns>
+        /// <returns>MaichartConverter.fancy</returns>
         public static string ComposeHeader()
         {
             string result = "";
@@ -998,20 +998,20 @@ namespace MaichartConverter
         public static void Log(string outputLocation)
         {
             StreamWriter sw = new StreamWriter(outputLocation + "log.txt", false);
-            sw.WriteLine("Total music compiled: " + NumberTotalTrackCompiled);
+            // sw.WriteLine("Total music compiled: " + NumberTotalTrackCompiled);
             int index = 1;
-            sw.WriteLine("Index\tTitle\tGenre\tVersion\tPatch Number");
-            foreach (string title in CompiledTracks)
-            {
-                string[]? compiledDetailArray = new string[0];
-                CompiledTrackDetailSet.TryGetValue(title, out compiledDetailArray);
-                if (compiledDetailArray == null)
-                {
-                    compiledDetailArray = new string[0];
-                }
-                sw.WriteLine("[" + index + "]\t" + compiledDetailArray[0] + "\t" + compiledDetailArray[1] + "\t" + compiledDetailArray[2] + "\t" + compiledDetailArray[3] ?? throw new NullReferenceException());
-                index++;
-            }
+            // sw.WriteLine("Index\tTitle\tGenre\tVersion\tPatch Number");
+            // foreach (KeyValuePair<int,string> pair in CompiledTracks)
+            // {
+            //     string[]? compiledDetailArray = new string[0];
+            //     CompiledTrackDetailSet.TryGetValue(pair.Key.ToString(), out compiledDetailArray);
+            //     if (compiledDetailArray == null)
+            //     {
+            //         compiledDetailArray = new string[0];
+            //     }
+            //     sw.WriteLine("[" + index + "]\t" + compiledDetailArray[0] + "\t" + compiledDetailArray[1] + "\t" + compiledDetailArray[2] + "\t" + compiledDetailArray[3] ?? throw new NullReferenceException());
+            //     index++;
+            // }
             index = 1;
 
             sw.WriteLine("Total chart compiled: " + CompiledChart.Count);
@@ -1022,20 +1022,21 @@ namespace MaichartConverter
             }
             sw.Close();
             BPMCollection.Save(outputLocation + "bpm.xml");
-            BPMChangeTable.Save(outputLocation + "bpm_table.xml");
+            DebugInformationTable.Save(outputLocation + "bpm_table.xml");
         }
 
         /// <summary>
         /// Append Nodes to BPMCollection
         /// </summary>
-        /// <param name="key">ID</param>
-        /// <param name="value">BPM</param>
-        public static void AppendKeyValue(string key, string value)
+        /// <param name="idValue">ID</param>
+        /// <param name="bpmValue">BPM</param>
+        public static void AppendBPM(string idValue, string bpmValue)
         {
             XmlElement node = BPMCollection.CreateElement("Node");
             XmlElement id = BPMCollection.CreateElement("ID");
-            id.InnerText = key;
+            id.InnerText = idValue;
             XmlElement bpm = BPMCollection.CreateElement("BPM");
+            bpm.InnerText = bpmValue;
             node.AppendChild(id);
             node.AppendChild(bpm);
             XmlNode root = BPMCollection.ChildNodes[1] ?? throw new NullReferenceException();
@@ -1043,32 +1044,36 @@ namespace MaichartConverter
         }
 
         /// <summary>
-        /// Append Nodes to BPM Table
+        /// Append debug information to save
         /// </summary>
-        /// <param name="bpmTable">ID</param>
-        public static void AppendBPMTable(string key, string value, BPMChanges bpmTable)
+        /// <param name = "idValue">ID of the chart</param>
+        /// <param name="bpmTable">BPMTable</param>
+        /// <param name="firstNoteValue">First note of the Master Chart</param>
+        public static void AppendDebugInformation(string idValue, BPMChanges bpmTable,Note firstNoteValue)
         {
-            XmlElement node = BPMChangeTable.CreateElement("Node");
-            XmlElement id = BPMChangeTable.CreateElement("ID");
-            id.InnerText = key;
-            XmlElement bpm = BPMChangeTable.CreateElement("BPM");
+            XmlElement node = DebugInformationTable.CreateElement("Node");
+            XmlElement id = DebugInformationTable.CreateElement("ID");
+            id.InnerText = idValue;
+            XmlElement bpm = DebugInformationTable.CreateElement("BPM");
+            XmlElement firstNote = DebugInformationTable.CreateElement("FirstNoteStartBar");
+            firstNote.InnerText = firstNoteValue.Bar.ToString();
             node.AppendChild(id);
             node.AppendChild(bpm);
             foreach (BPMChange note in bpmTable.ChangeNotes)
             {
-                XmlElement changeNote = BPMChangeTable.CreateElement("Note");
-                XmlElement bar = BPMChangeTable.CreateElement("Bar");
+                XmlElement changeNote = DebugInformationTable.CreateElement("Note");
+                XmlElement bar = DebugInformationTable.CreateElement("Bar");
                 bar.InnerText = note.Bar.ToString();
-                XmlElement tick = BPMChangeTable.CreateElement("Tick");
+                XmlElement tick = DebugInformationTable.CreateElement("Tick");
                 tick.InnerText = note.Tick.ToString();
-                XmlElement noteBPM = BPMChangeTable.CreateElement("BPM");
+                XmlElement noteBPM = DebugInformationTable.CreateElement("BPM");
                 noteBPM.InnerText = note.BPM.ToString();
                 changeNote.AppendChild(bar);
                 changeNote.AppendChild(tick);
                 changeNote.AppendChild(noteBPM);
                 bpm.AppendChild(changeNote);
             }
-            XmlNode root = BPMChangeTable.ChildNodes[1] ?? throw new NullReferenceException();
+            XmlNode root = DebugInformationTable.ChildNodes[1] ?? throw new NullReferenceException();
             root.AppendChild(node);
         }
     }

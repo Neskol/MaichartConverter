@@ -390,7 +390,7 @@ namespace MaichartConverter
         }
 
         /// <summary>
-        /// Return the first bpm change table of maicompiler
+        /// Return the chart bpm change table of MaiCompiler
         /// </summary>
         /// <returns>First BPM change table of this.charts</returns>
         public BPMChanges SymbolicBPMTable()
@@ -406,6 +406,24 @@ namespace MaichartConverter
                 }
             }
             return bpmTable;
+        }
+
+        /// <summary>
+        /// Return the first note of master chart
+        /// </summary>
+        /// <returns>The first note of the master chart, or first note of the Utage chart if isUtage is turned true</returns>
+        /// <exception cref="System.NullReferenceException">Throws null reference exception if the chart does not exist</exception>
+        public Note SymbolicFirstNote(bool isUtage)
+        {
+            if (!isUtage && this.charts[3].CheckValidity())
+            {
+                return this.charts[3].FirstNote ?? throw new NullReferenceException("Null first note: master chart is invalid");
+            }
+            else if(isUtage)
+            {
+                return this.charts[0].FirstNote ?? throw new NullReferenceException("Null first note: utage chart is invalid");
+            }
+            else throw new NullReferenceException("This compiler contains invalid Master Chart and is not Utage Chart: no first note is returned");
         }
 
         /// <summary>

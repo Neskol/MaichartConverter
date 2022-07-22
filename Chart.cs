@@ -305,7 +305,8 @@ namespace MaichartConverter
         /// <returns>True if every element is valid, false else</returns>
         public bool CheckValidity()
         {
-            throw new NotImplementedException();
+            return true;
+            // throw new NotImplementedException();
         }
 
         /// <summary>
@@ -339,7 +340,7 @@ namespace MaichartConverter
                     if (this.FirstNote==null&&!(x.NoteType.Equals("BPM")||x.NoteType.Equals("MEASURE")))
                     {
                         this.FirstNote = x;
-                        Console.WriteLine(x.Compose(0));
+                        // Console.WriteLine(x.Compose(0));
                     }
                     //x.BPMChangeNotes = this.bpmChanges.ChangeNotes;
                     //x.Update();
