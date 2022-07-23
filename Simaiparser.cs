@@ -38,7 +38,7 @@ public class SimaiParser : IParser
     {
         List<Note> notes = new List<Note>();
         BPMChanges bpmChanges = new BPMChanges();
-        MeasureChanges measureChanges = new MeasureChanges(4,4);
+        MeasureChanges measureChanges = new MeasureChanges(4, 4);
         int bar = 0;
         int tick = 0;
         double currentBPM = 0.0;
@@ -82,7 +82,7 @@ public class SimaiParser : IParser
                 bar++;
             }
         }
-        Chart result = new Simai2(notes, bpmChanges, measureChanges);
+        Chart result = new Simai(notes, bpmChanges, measureChanges);
         return result;
     }
 
@@ -206,7 +206,7 @@ public class SimaiParser : IParser
 
     public Note NoteOfToken(string token, int bar, int tick, double bpm)
     {
-        Note result = new Rest("RST",bar,tick);
+        Note result = new Rest("RST", bar, tick);
         bool isRest = token.Equals("");
         bool isBPM = token.Contains(")");
         bool isMeasure = token.Contains("}");
@@ -221,7 +221,7 @@ public class SimaiParser : IParser
         token.Contains("z") ||
         token.Contains("V");
         bool isHold = !isSlide && token.Contains("[");
-        
+
         if (!isRest)
         {
             if (isSlide)
@@ -365,7 +365,7 @@ public class SimaiParser : IParser
             //{
             //    inflectionCandidate -= 8;
             //}
-            
+
             //Revalue SLL and SLR candidate
             if (sllCandidate < 0)
             {
@@ -465,7 +465,7 @@ public class SimaiParser : IParser
         if (isTouch)
         {
             bool hasSpecialEffect = token.Contains("f");
-            int keyCandidate = Int32.Parse(token.Substring(1, 1))-1;
+            int keyCandidate = Int32.Parse(token.Substring(1, 1)) - 1;
             if (hasSpecialEffect)
             {
                 result = new Tap("TTP", bar, tick, token.Substring(0, 1) + keyCandidate.ToString(), 1, "M1");
@@ -548,7 +548,7 @@ public class SimaiParser : IParser
             {
                 fixedCandidate.AddRange(ExtractParentheses(candidate));
             }
-            foreach(string candidate in fixedCandidate)
+            foreach (string candidate in fixedCandidate)
             {
                 result.AddRange(ExtractEachSlides(candidate));
             }

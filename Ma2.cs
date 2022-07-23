@@ -1,4 +1,6 @@
-﻿namespace MaichartConverter
+﻿using System.Linq.Expressions;
+
+namespace MaichartConverter
 {
     /// <summary>
     /// Implementation of chart in ma2 format.
@@ -76,6 +78,13 @@
             this.StoredChart = new List<List<Note>>(takenIn.StoredChart);
             this.Information = new Dictionary<string, string>(takenIn.Information);
             this.Update();
+        }
+
+        public override bool CheckValidity()
+        {
+            bool result = this == null;
+            // Not yet implemented
+            return result;
         }
 
         public override string Compose()

@@ -1,4 +1,5 @@
-﻿using System.Security.Principal;
+﻿using System.Diagnostics;
+using System.Security.Principal;
 using System.Xml;
 using Microsoft.Win32.SafeHandles;
 
@@ -1055,8 +1056,11 @@ namespace MaichartConverter
             XmlElement id = DebugInformationTable.CreateElement("ID");
             id.InnerText = idValue;
             XmlElement bpm = DebugInformationTable.CreateElement("BPM");
-            XmlElement firstNote = DebugInformationTable.CreateElement("FirstNoteStartBar");
-            firstNote.InnerText = firstNoteValue.Bar.ToString();
+            XmlElement firstNote = DebugInformationTable.CreateElement("FirstNote");
+            XmlElement firstNoteType = DebugInformationTable.CreateElement("Type");
+            firstNoteType.InnerText = firstNoteValue.Compose(1);
+            firstNote.AppendChild(firstNoteType);
+            Console.WriteLine(firstNoteValue.ToString());
             node.AppendChild(id);
             node.AppendChild(bpm);
             node.AppendChild(firstNote);

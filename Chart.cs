@@ -299,15 +299,7 @@ namespace MaichartConverter
             this.isDxChart = false;
         }
 
-        /// <summary>
-        /// Check if every item is valid for exporting
-        /// </summary>
-        /// <returns>True if every element is valid, false else</returns>
-        public bool CheckValidity()
-        {
-            return true;
-            // throw new NotImplementedException();
-        }
+        public abstract bool CheckValidity();
 
         /// <summary>
         /// Update properties in Good Brother for exporting

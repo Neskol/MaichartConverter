@@ -74,6 +74,13 @@ namespace MaichartConverter
             this.StoredXMailL = new XmlDocument();
             this.Update();
         }
+
+        public override bool CheckValidity()
+        {
+            bool result = this == null;
+            // Not yet implemented
+            return result;
+        }
         
         public override string Compose()
         {
