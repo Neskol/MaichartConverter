@@ -672,7 +672,7 @@ namespace MaichartConverter
                     double tickTimeUnit = GetBPMTimeUnit(this.bpmChangeNotes[maximumBPMIndex].BPM);
                     result += (overallTick - this.bpmChangeNotes[maximumBPMIndex].TickStamp) * tickTimeUnit;
                 }
-            }
+            } //A serious improvement is needed for this method
             return result;
         }
     }

@@ -415,7 +415,7 @@ namespace MaichartConverter
         /// <exception cref="System.NullReferenceException">Throws null reference exception if the chart does not exist</exception>
         public Note SymbolicFirstNote(bool isUtage)
         {
-            if (!isUtage && this.charts[3].CheckValidity())
+            if (!isUtage)
             {
                 return this.charts[3].FirstNote ?? throw new NullReferenceException("Null first note: master chart is invalid");
             }

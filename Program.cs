@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Xml;
 using Microsoft.Win32.SafeHandles;
@@ -21,13 +22,13 @@ namespace MaichartConverter
         public static string MacPathSep = "/";
 
 
-        public readonly static string[] WinPaths = { @"C:\Users\Neskol\MaiAnalysis\A000\",
+        public static string[] WinPaths = { @"C:\Users\Neskol\MaiAnalysis\A000\",
         @"C:\Users\Neskol\MaiAnalysis\Sound\",
         @"C:\Users\Neskol\MaiAnalysis\Image\Texture2D\",
         @"C:\Users\Neskol\MaiAnalysis\DXBGA_HEVC\",
         @"C:\Users\Neskol\MaiAnalysis\Output\"};
 
-        public readonly static string[] MacPaths = { @"/Users/neskol/MaiAnalysis/A000/",
+        public static string[] MacPaths = { @"/Users/neskol/MaiAnalysis/A000/",
         @"/Users/neskol/MaiAnalysis/Sound/",
         @"/Users/neskol/MaiAnalysis/Image/Texture2D/",
         @"/Users/neskol/MaiAnalysis/DXBGA_HEVC/",
@@ -71,6 +72,17 @@ namespace MaichartConverter
         /// <param name="args">Parameters to take in</param>     
         public static void Main(string[] args)
         {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                GlobalPaths = WinPaths;
+                GlobalSep = WindowsPathSep;
+            }
+            else
+            {
+                GlobalPaths = MacPaths;
+                GlobalSep = MacPathSep;
+            }
+
             Console.WriteLine(ComposeHeader());
 
             XmlDeclaration xmlDecl = BPMCollection.CreateXmlDeclaration("1.0", "UTF-8", null);
@@ -82,12 +94,57 @@ namespace MaichartConverter
             BPMCollection.AppendChild(root);
             DebugInformationTable.AppendChild(btRoot);
 
-            // CompileUtageChartDatabase();
-            // TestSpecificChart();
-            // TestSpecificChart(@"D:\PandoraCandidate.ma2");
-            // TestSpecificChart("000389", "4");
+            //foreach (string s in args)
+            //{
+            //    Console.WriteLine(s);
+            //}
+
+
+            //if (args.Length == 0)
+            //{
+            //    Console.WriteLine("usage: MaichartConverter [-s --simai simai_chart] [-m --ma2 ma2_chart] [-i --id ma2_chart_id]" +
+            //        "[-d --diff difficulty] [-a --all compile_all_chart] [-u --all-utage compile_all_] " +
+            //        "[-s --source override_a000_path] [-p --pic override_pic_path] [-v --video override_video_path] " +
+            //        "[-b --bgm override_bgm_path] [-o --output override_output_pat] [-c --category categorize_method]");
+            //}
+
+            //for (int i = 0; i < args.Count(); i++)
+            //{
+            //    switch (args[i])
+            //    {
+            //        case "-s":
+            //        case "--simai":
+            //            if (i + 1 < args.Length && File.Exists(args[i+1]))
+            //            {
+            //                string path = args[i + 1];
+            //                TestSpecificChart(path);
+            //            }
+            //            break;
+            //        case "-m":
+            //        case "--ma2":
+            //            if (i + 1 < args.Length && File.Exists(args[i + 1]))
+            //            {
+            //                string path = args[i + 1];
+            //                TestSpecificChart(path);
+            //            }
+            //            break;
+            //        case "-i":
+            //        case "--id":
+            //            if (i + 1 < args.Length && File.Exists(args[i + 1]))
+            //            {
+            //                string path = args[i + 1];
+            //                TestSpecificChart(path);
+            //            }
+            //            break;
+            //    }
+
+            //TestSpecificChart();
+            //TestSpecificChart(@"D:\PandoraCandidate.ma2");
+            //TestSpecificChart("000389", "4");
             CompileChartDatabase();
-            // CompileAssignedChartDatabase();
+            //CompileAssignedChartDatabase();
+            //CompileUtageChartDatabase();
+            //}
         }
 
         /// <summary>

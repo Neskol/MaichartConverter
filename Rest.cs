@@ -55,6 +55,7 @@
         }
 
         public override string NoteGenre => "REST";
+
         public override bool IsNote => false;
 
         public override string NoteSpecificType => "REST";
