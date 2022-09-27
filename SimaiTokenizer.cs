@@ -198,6 +198,11 @@ namespace MaichartConverter
                     string noteCandidate = item.Replace("inote_7=", "");
                     this.chartCandidates.Add("7", this.TokensFromText(noteCandidate));
                 }
+                else if (item.Contains("inote_"))
+                {
+                    string noteCandidate = item.Replace("inote_=", "");
+                    this.chartCandidates.Add("Default", this.TokensFromText(noteCandidate));
+                }
             }
         }
 

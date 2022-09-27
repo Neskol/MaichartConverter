@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Security.Principal;
 using System.Xml;
-using Microsoft.Win32.SafeHandles;
+using ManyConsole;
+using Mono.Options;
 
 namespace MaichartConverter
 {
@@ -70,7 +70,7 @@ namespace MaichartConverter
         /// Main method to process charts
         /// </summary>
         /// <param name="args">Parameters to take in</param>     
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
@@ -94,18 +94,33 @@ namespace MaichartConverter
             BPMCollection.AppendChild(root);
             DebugInformationTable.AppendChild(btRoot);
 
+            //string simaiChart = "";
+            //string ma2Chart = "";
+            //string ma2ChartID = "";
+            //string difficulty = "";
+            //string a000Location = "";
+            //string imageLocation = "";
+            //string bgaLocation = "";
+            //string musicLocation = "";
+            //string outputLocation = "";
+            //string categorize_method = "";
+            //bool compileAllChart = false;
+            //bool utageChart = false;
+            //bool exportBGA = false;
+
             //foreach (string s in args)
             //{
             //    Console.WriteLine(s);
             //}
 
 
+
             //if (args.Length == 0)
             //{
-            //    Console.WriteLine("usage: MaichartConverter [-s --simai simai_chart] [-m --ma2 ma2_chart] [-i --id ma2_chart_id]" +
-            //        "[-d --diff difficulty] [-a --all compile_all_chart] [-u --all-utage compile_all_] " +
-            //        "[-s --source override_a000_path] [-p --pic override_pic_path] [-v --video override_video_path] " +
-            //        "[-b --bgm override_bgm_path] [-o --output override_output_pat] [-c --category categorize_method]");
+            //   Console.WriteLine("usage: MaichartConverter [-s --simai simai_chart] [-m --ma2 ma2_chart] [-i --id ma2_chart_id]" +
+            //       "[-d --diff difficulty] [-a --all compile_all_chart] [-u --all-utage compile_all_] " +
+            //       "[-s --source override_a000_path] [-p --pic override_pic_path] [-v --video override_video_path] " +
+            //       "[-b --bgm override_bgm_path] [-o --output override_output_pat] [-c --category categorize_method] [-e --export-bga export bga]");
             //}
 
             //for (int i = 0; i < args.Count(); i++)
@@ -141,10 +156,352 @@ namespace MaichartConverter
             //TestSpecificChart();
             //TestSpecificChart(@"D:\PandoraCandidate.ma2");
             //TestSpecificChart("000389", "4");
-            CompileChartDatabase();
+            //CompileChartDatabase();
             //CompileAssignedChartDatabase();
             //CompileUtageChartDatabase();
             //}
+            //return 0;
+            var commands = GetCommands();
+            return ConsoleCommandDispatcher.DispatchCommand(commands, args, Console.Out);
+        }
+
+        /// <summary>
+        /// Get commands
+        /// </summary>
+        /// <returns>ProperCommands</returns>
+        public static IEnumerable<ConsoleCommand> GetCommands()
+        {
+            return ConsoleCommandDispatcher.FindCommandsInSameAssemblyAs(typeof(Program));
+        }
+
+        /// <summary>
+        /// Compile Simai Command
+        /// </summary>
+        public class CompileSimai:ConsoleCommand
+        {
+            /// <summary>
+            /// Retrurn when command successfully executed
+            /// </summary>
+            private const int Success = 0;
+            /// <summary>
+            /// Retrurn when command failed to execute
+            /// </summary>
+            private const int Failed = 2;
+
+            /// <summary>
+            /// Source file path
+            /// </summary>
+            public string? FileLocation { get; set; }
+            /// <summary>
+            /// Difficulty
+            /// </summary>
+            public string? Difficulty { get; set; }
+            /// <summary>
+            /// Destination of output
+            /// </summary>
+            public string? Destination { get; set; }
+            /// <summary>
+            /// Target Format of the file
+            /// </summary>
+            public string? TargetFormat { get; set; }
+
+            /// <summary>
+            /// Construct Command
+            /// </summary>
+            public CompileSimai()
+            {
+                IsCommand("CompileSimai", "Compile assigned simai chart to assigned format");
+                HasLongDescription("This function enables user to compile simai chart specified to the format they want. By default is ma2 for simai.");
+                HasRequiredOption("p|path=", "The path to file", path => FileLocation = path);             
+                HasOption("d|difficulty=", "The number representing the difficuty of chart -- 1-6 for Easy to Re:Master, 7 for Original/Utage",diff => Difficulty = diff);
+                HasOption("f|format=", "The target format - simai or ma2", format => TargetFormat = format);
+                HasOption("o|output=","Export compiled chart to location specified", dest => Destination = dest);
+            }
+
+            /// <summary>
+            /// Execute the command
+            /// </summary>
+            /// <param name="remainingArguments">Rest of the arguments</param>
+            /// <returns>Code of execution indicates if the commands is successfully executed</returns>
+            /// <exception cref="FileNotFoundException">Raised when the file is not found</exception>
+            public override int Run(string[] remainingArguments)
+            {
+                try
+                {
+                    SimaiTokenizer tokenizer = new SimaiTokenizer();
+                    tokenizer.UpdateFromPath(FileLocation ?? throw new FileNotFoundException());
+                    SimaiParser parser = new SimaiParser();
+                    string[] tokensCandidates;
+                    if (Difficulty != null)
+                    {
+                        tokensCandidates = tokenizer.ChartCandidates[Difficulty];
+                    }
+                    else
+                    {
+                        tokensCandidates = tokenizer.ChartCandidates.Values.First();
+                    }
+                    Chart candidate = parser.ChartOfToken(tokensCandidates);
+                    SimaiCompiler compiler = new SimaiCompiler();
+                    string result = "";
+                    switch (TargetFormat)
+                    {
+                        case "simai":
+                            Simai resultChart = new Simai(candidate);
+                            result = resultChart.Compose();
+                            if (Destination != null && !Destination.Equals(""))
+                            {
+                                StreamWriter sw = new StreamWriter(Destination + Program.GlobalSep + "maidata.txt", false);
+                                {
+                                    sw.WriteLine(result);
+                                }
+                                sw.Close();
+                            }
+                            else Console.WriteLine(result);
+                            break;
+                        case "ma2":
+                            if (result.Equals(""))
+                            {
+                                Ma2 defaultChart = new Ma2(candidate);
+                                result = defaultChart.Compose();
+                            }
+                            if (Destination != null && !Destination.Equals(""))
+                            {
+                                StreamWriter sw = new StreamWriter(Destination + Program.GlobalSep + "result.ma2", false);
+                                {
+                                    sw.WriteLine(result);
+                                }
+                                sw.Close();
+                            }
+                            else Console.WriteLine(result);
+                            break;
+                    }
+                    
+                    return Success;
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine(ex.Message);
+                    Console.Error.WriteLine(ex.StackTrace);
+                    return Failed;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Compile Ma2 Command
+        /// </summary>
+        public class CompileMa2 : ConsoleCommand
+        {
+            /// <summary>
+            /// Retrurn when command successfully executed
+            /// </summary>
+            private const int Success = 0;
+            /// <summary>
+            /// Retrurn when command failed to execute
+            /// </summary>
+            private const int Failed = 2;
+
+            /// <summary>
+            /// Source file path
+            /// </summary>
+            public string? FileLocation { get; set; }
+            /// <summary>
+            /// Difficulty
+            /// </summary>
+            public string Difficulty { get; set; }
+            /// <summary>
+            /// ID
+            /// </summary>
+            public string? ID { get; set; }
+            /// <summary>
+            /// Destination of output
+            /// </summary>
+            public string? Destination { get; set; }
+            /// <summary>
+            /// Target Format of the file
+            /// </summary>
+            public string? TargetFormat { get; set; }
+
+            /// <summary>
+            /// Construct Command
+            /// </summary>
+            public CompileMa2()
+            {
+                IsCommand("CompileMa2", "Compile assigned Ma2 chart to assigned format");
+                HasLongDescription("This function enables user to compile simai chart specified to the format they want. By default is simai for ma2.");
+                HasRequiredOption("p|path=", "The path to file", path => FileLocation = path);
+                Difficulty = "Default";
+                HasOption("d|difficulty=", "The number representing the difficuty of chart -- 0-5 for Basic to Re:Master", diff => Difficulty = diff);
+                HasOption("f|format=", "The target format - simai or ma2", format => TargetFormat = format);
+                HasOption("o|output=", "Export compiled chart to location specified", dest => Destination = dest);
+            }
+
+            /// <summary>
+            /// Execute the command
+            /// </summary>
+            /// <param name="remainingArguments">Rest of the arguments</param>
+            /// <returns>Code of execution indicates if the commands is successfully executed</returns>
+            /// <exception cref="FileNotFoundException">Raised when the file is not found</exception>
+            public override int Run(string[] remainingArguments)
+            {
+                try
+                {
+                    Ma2Tokenizer tokenizer = new Ma2Tokenizer();
+                    Ma2Parser parser = new Ma2Parser();
+                    Chart candidate = parser.ChartOfToken(tokenizer.Tokens(FileLocation ?? throw new FileNotFoundException()));
+                    string result = "";
+                    switch (TargetFormat)
+                    {
+                        case "simai":
+                            Simai resultChart = new Simai(candidate);
+                            result = resultChart.Compose();
+                            if (Destination != null && !Destination.Equals(""))
+                            {
+                                StreamWriter sw = new StreamWriter(Destination + Program.GlobalSep + "maidata.txt", false);
+                                {
+                                    sw.WriteLine(result);
+                                }
+                                sw.Close();
+                            }
+                            else Console.WriteLine(result);
+                            break;
+                        case "ma2":
+                            if (result.Equals(""))
+                            {
+                                Ma2 defaultChart = new Ma2(candidate);
+                                result = defaultChart.Compose();
+                            }
+                            if (Destination != null && !Destination.Equals(""))
+                            {
+                                StreamWriter sw = new StreamWriter(Destination + Program.GlobalSep + "result.ma2", false);
+                                {
+                                    sw.WriteLine(result);
+                                }
+                                sw.Close();
+                            }
+                            else Console.WriteLine(result);
+                            break;
+                    }
+
+                    return Success;
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine(ex.Message);
+                    Console.Error.WriteLine(ex.StackTrace);
+                    return Failed;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Compile Ma2 Command
+        /// </summary>
+        public class CompileMa2ID : ConsoleCommand
+        {
+            /// <summary>
+            /// Retrurn when command successfully executed
+            /// </summary>
+            private const int Success = 0;
+            /// <summary>
+            /// Retrurn when command failed to execute
+            /// </summary>
+            private const int Failed = 2;
+
+            /// <summary>
+            /// Source file path
+            /// </summary>
+            public string? FileLocation { get; set; }
+            /// <summary>
+            /// Difficulty
+            /// </summary>
+            public string? Difficulty { get; set; }
+            /// <summary>
+            /// ID
+            /// </summary>
+            public string? ID { get; set; }
+            /// <summary>
+            /// Destination of output
+            /// </summary>
+            public string? Destination { get; set; }
+            /// <summary>
+            /// Target Format of the file
+            /// </summary>
+            public string? TargetFormat { get; set; }
+
+            /// <summary>
+            /// Construct Command
+            /// </summary>
+            public CompileMa2ID()
+            {
+                IsCommand("CompileMa2", "Compile assigned Ma2 chart to assigned format");
+                HasLongDescription("This function enables user to compile simai chart specified to the format they want. By default is simai for ma2.");
+                HasRequiredOption("d|difficulty=", "The number representing the difficuty of chart -- 0-5 for Basic to Re:Master", diff => Difficulty = diff);
+                HasRequiredOption("id=", "The id of the ma2", diff => Difficulty = diff);
+                FileLocation = GlobalPaths[0];
+                HasOption("a|a000=", "Folder of A000 to override - end with a path separator", path => FileLocation = path);
+                HasOption("f|format=", "The target format - simai or ma2", format => TargetFormat = format);
+                HasOption("o|output=", "Export compiled chart to location specified", dest => Destination = dest);
+            }
+
+            /// <summary>
+            /// Execute the command
+            /// </summary>
+            /// <param name="remainingArguments">Rest of the arguments</param>
+            /// <returns>Code of execution indicates if the commands is successfully executed</returns>
+            /// <exception cref="FileNotFoundException">Raised when the file is not found</exception>
+            public override int Run(string[] remainingArguments)
+            {
+                try
+                {
+                    Ma2Tokenizer tokenizer = new Ma2Tokenizer();
+                    Ma2Parser parser = new Ma2Parser();
+                    //Chart good = new Ma2(@"/Users/neskol/MaiAnalysis/A000/music/music" + musicID + "/" + musicID + "_0" + difficulty + ".ma2");
+                    string tokenLocation = FileLocation ?? throw new FileNotFoundException();
+                    Chart candidate = parser.ChartOfToken(tokenizer.Tokens(tokenLocation+"music"+GlobalSep+"music"+CompensateZero(ID??throw new NullReferenceException("ID shall not be null"))+"_0"+Difficulty+".ma2"));
+                    string result = "";
+                    switch (TargetFormat)
+                    {
+                        case "simai":
+                            Simai resultChart = new Simai(candidate);
+                            result = resultChart.Compose();
+                            if (Destination != null && !Destination.Equals(""))
+                            {
+                                StreamWriter sw = new StreamWriter(Destination + Program.GlobalSep + "maidata.txt", false);
+                                {
+                                    sw.WriteLine(result);
+                                }
+                                sw.Close();
+                            }
+                            else Console.WriteLine(result);
+                            break;
+                        case "ma2":
+                            if (result.Equals(""))
+                            {
+                                Ma2 defaultChart = new Ma2(candidate);
+                                result = defaultChart.Compose();
+                            }
+                            if (Destination != null && !Destination.Equals(""))
+                            {
+                                StreamWriter sw = new StreamWriter(Destination + Program.GlobalSep + "result.ma2", false);
+                                {
+                                    sw.WriteLine(result);
+                                }
+                                sw.Close();
+                            }
+                            else Console.WriteLine(result);
+                            break;
+                    }
+
+                    return Success;
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine(ex.Message);
+                    Console.Error.WriteLine(ex.StackTrace);
+                    return Failed;
+                }
+            }
         }
 
         /// <summary>
