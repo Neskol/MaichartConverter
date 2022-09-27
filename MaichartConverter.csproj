@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ManyConsole" Version="2.0.1" />
     <PackageReference Include="ManyConsole.Standard" Version="2.0.0" />
   </ItemGroup>
 
