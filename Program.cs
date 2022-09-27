@@ -255,9 +255,18 @@ namespace MaichartConverter
                                     sw.WriteLine(result);
                                 }
                                 sw.Close();
+                                if (File.Exists(Destination + Program.GlobalSep + "maidata.txt"))
+                                {
+                                    Console.WriteLine("Successfully compiled at: " + Destination + Program.GlobalSep + "result.ma2");
+                                }
+                                else
+                                {
+                                    throw new FileNotFoundException("THE FILE IS NOT SUCCESSFULLY COMPILED.");
+                                }
                             }
                             else Console.WriteLine(result);
                             break;
+                        case null:
                         case "ma2":
                             if (result.Equals(""))
                             {
@@ -271,11 +280,19 @@ namespace MaichartConverter
                                     sw.WriteLine(result);
                                 }
                                 sw.Close();
+                                if (File.Exists(Destination + Program.GlobalSep + "result.ma2"))
+                                {
+                                    Console.WriteLine("Successfully compiled at: " + Destination + Program.GlobalSep + "result.ma2");
+                                }
+                                else
+                                {
+                                    throw new FileNotFoundException("THE FILE IS NOT SUCCESSFULLY COMPILED.");
+                                }
                             }
                             else Console.WriteLine(result);
                             break;
                     }
-                    
+
                     return Success;
                 }
                 catch (Exception ex)
@@ -308,7 +325,7 @@ namespace MaichartConverter
             /// <summary>
             /// Difficulty
             /// </summary>
-            public string Difficulty { get; set; }
+            public string? Difficulty { get; set; }
             /// <summary>
             /// ID
             /// </summary>
@@ -328,10 +345,8 @@ namespace MaichartConverter
             public CompileMa2()
             {
                 IsCommand("CompileMa2", "Compile assigned Ma2 chart to assigned format");
-                HasLongDescription("This function enables user to compile simai chart specified to the format they want. By default is simai for ma2.");
-                HasRequiredOption("p|path=", "The path to file", path => FileLocation = path);
-                Difficulty = "Default";
-                HasOption("d|difficulty=", "The number representing the difficuty of chart -- 0-5 for Basic to Re:Master", diff => Difficulty = diff);
+                HasLongDescription("This function enables user to compile ma2 chart specified to the format they want. By default is simai for ma2.");
+                HasRequiredOption("p|path=", "REQUIRED: The path to file", path => FileLocation = path);
                 HasOption("f|format=", "The target format - simai or ma2", format => TargetFormat = format);
                 HasOption("o|output=", "Export compiled chart to location specified", dest => Destination = dest);
             }
@@ -352,6 +367,7 @@ namespace MaichartConverter
                     string result = "";
                     switch (TargetFormat)
                     {
+                        case null:
                         case "simai":
                             Simai resultChart = new Simai(candidate);
                             result = resultChart.Compose();
@@ -362,6 +378,14 @@ namespace MaichartConverter
                                     sw.WriteLine(result);
                                 }
                                 sw.Close();
+                                if (File.Exists(Destination + Program.GlobalSep + "maidata.txt"))
+                                {
+                                    Console.WriteLine("Successfully compiled at: " + Destination + Program.GlobalSep + "result.ma2");
+                                }
+                                else
+                                {
+                                    throw new FileNotFoundException("THE FILE IS NOT SUCCESSFULLY COMPILED.");
+                                }
                             }
                             else Console.WriteLine(result);
                             break;
@@ -378,6 +402,14 @@ namespace MaichartConverter
                                     sw.WriteLine(result);
                                 }
                                 sw.Close();
+                                if (File.Exists(Destination + Program.GlobalSep + "result.ma2"))
+                                {
+                                    Console.WriteLine("Successfully compiled at: " + Destination + Program.GlobalSep + "result.ma2");
+                                }
+                                else
+                                {
+                                    throw new FileNotFoundException("THE FILE IS NOT SUCCESSFULLY COMPILED.");
+                                }
                             }
                             else Console.WriteLine(result);
                             break;
@@ -434,12 +466,13 @@ namespace MaichartConverter
             /// </summary>
             public CompileMa2ID()
             {
-                IsCommand("CompileMa2", "Compile assigned Ma2 chart to assigned format");
-                HasLongDescription("This function enables user to compile simai chart specified to the format they want. By default is simai for ma2.");
-                HasRequiredOption("d|difficulty=", "The number representing the difficuty of chart -- 0-5 for Basic to Re:Master", diff => Difficulty = diff);
-                HasRequiredOption("id=", "The id of the ma2", diff => Difficulty = diff);
-                FileLocation = GlobalPaths[0];
-                HasOption("a|a000=", "Folder of A000 to override - end with a path separator", path => FileLocation = path);
+                IsCommand("CompileMa2ID", "Compile assigned Ma2 chart to assigned format");
+                HasLongDescription("This function enables user to compile ma2 chart specified to the format they want. By default is simai for ma2.");
+                HasRequiredOption("d|difficulty=", "REQUIRED: The number representing the difficuty of chart -- 0-4 for Basic to Re:Master", diff => Difficulty = diff);
+                HasRequiredOption("i|id=", "REQUIRED: The id of the ma2", id => ID = id);
+                HasRequiredOption("p|path=", "REQUIRED: Folder of A000 to override - end with a path separator", path => FileLocation = path);
+                //FileLocation = GlobalPaths[0];
+                //HasOption("a|a000=", "Folder of A000 to override - end with a path separator", path => FileLocation = path);
                 HasOption("f|format=", "The target format - simai or ma2", format => TargetFormat = format);
                 HasOption("o|output=", "Export compiled chart to location specified", dest => Destination = dest);
             }
@@ -458,10 +491,11 @@ namespace MaichartConverter
                     Ma2Parser parser = new Ma2Parser();
                     //Chart good = new Ma2(@"/Users/neskol/MaiAnalysis/A000/music/music" + musicID + "/" + musicID + "_0" + difficulty + ".ma2");
                     string tokenLocation = FileLocation ?? throw new FileNotFoundException();
-                    Chart candidate = parser.ChartOfToken(tokenizer.Tokens(tokenLocation+"music"+GlobalSep+"music"+CompensateZero(ID??throw new NullReferenceException("ID shall not be null"))+"_0"+Difficulty+".ma2"));
+                    Chart candidate = parser.ChartOfToken(tokenizer.Tokens(tokenLocation+"music"+GlobalSep+"music"+CompensateZero(ID??throw new NullReferenceException("ID shall not be null"))+GlobalSep+ CompensateZero(ID ?? throw new NullReferenceException("ID shall not be null")) + "_0"+Difficulty+".ma2"));
                     string result = "";
                     switch (TargetFormat)
                     {
+                        case null:
                         case "simai":
                             Simai resultChart = new Simai(candidate);
                             result = resultChart.Compose();
@@ -472,6 +506,14 @@ namespace MaichartConverter
                                     sw.WriteLine(result);
                                 }
                                 sw.Close();
+                                if (File.Exists(Destination + Program.GlobalSep + "maidata.txt"))
+                                {
+                                    Console.WriteLine("Successfully compiled at: " + Destination + Program.GlobalSep + "result.ma2");
+                                }
+                                else
+                                {
+                                    throw new FileNotFoundException("THE FILE IS NOT SUCCESSFULLY COMPILED.");
+                                }
                             }
                             else Console.WriteLine(result);
                             break;
@@ -488,6 +530,14 @@ namespace MaichartConverter
                                     sw.WriteLine(result);
                                 }
                                 sw.Close();
+                                if (File.Exists(Destination + Program.GlobalSep + "result.ma2"))
+                                {
+                                    Console.WriteLine("Successfully compiled at: "+ Destination + Program.GlobalSep + "result.ma2");
+                                }
+                                else
+                                {
+                                    throw new FileNotFoundException("THE FILE IS NOT SUCCESSFULLY COMPILED.");
+                                }
                             }
                             else Console.WriteLine(result);
                             break;
