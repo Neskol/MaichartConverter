@@ -716,7 +716,7 @@ namespace MaichartConverter
                     }
 
                     Dictionary<string, string> bgaMap = new Dictionary<string, string>();
-                    if (exportBGA)
+                    if (exportBGA && bgaLocation != null)
                     {
                         string[] bgaFiles = Directory.GetFiles(bgaLocation, "*.mp4");
                         Array.Sort(bgaFiles);
@@ -728,6 +728,7 @@ namespace MaichartConverter
                             bgaMap.Add("01" + musicID, bgaFile);
                         }
                     }
+                    else throw new NullReferenceException("BGA LOCATION IS NOT SPECIFIED BUT BGA OPTION IS ENABLED");
                     string[] musicFolders = Directory.GetDirectories(musicLocation);
 
                     //Create output directory
@@ -779,7 +780,7 @@ namespace MaichartConverter
 
                             if (exportAudio)
                             {
-                                string originalMusicLocation = audioLocation;
+                                string originalMusicLocation = audioLocation ?? throw new NullReferenceException("AUDIO FOLDER NOT SPECIFIED BUT AUDIO LOCATION IS NULL");
                                 originalMusicLocation += "music00" + shortID + ".mp3";
                                 string newMusicLocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "track.mp3";
                                 if (!File.Exists(newMusicLocation))
@@ -801,7 +802,7 @@ namespace MaichartConverter
 
                             if (exportImage)
                             {
-                                string originalImageLocation = imageLocation;
+                                string originalImageLocation = imageLocation ?? throw new NullReferenceException("IMAGE FOLDER NOT SPECIFIED BUT AUDIO LOCATION IS NULL");
                                 originalImageLocation += "UI_Jacket_00" + shortID + ".png";
                                 string newImageLocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "bg.png";
                                 if (!File.Exists(newImageLocation))

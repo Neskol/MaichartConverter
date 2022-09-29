@@ -196,7 +196,7 @@
                 string timeCandidate = typeCandidate[1].Substring(0, typeCandidate[1].Length - 1);
                 string[] quaverCandidate = timeCandidate.Split(':');
                 int overrideQuaver = Resolution / int.Parse(quaverCandidate[0]);
-                int last = 0;
+                //int last = 0;
                 if (section.Contains("-"))
                 {
 

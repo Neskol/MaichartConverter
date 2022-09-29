@@ -1,4 +1,6 @@
-﻿namespace MaichartConverter
+﻿using System.Reflection.Emit;
+
+namespace MaichartConverter
 {
     /// <summary>
     /// Provide interface for parsers
