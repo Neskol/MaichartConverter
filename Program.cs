@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Xml;
 using ManyConsole;
 using Mono.Options;
+using MaiLib;
 
 namespace MaichartConverter
 {
