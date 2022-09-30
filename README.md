@@ -4,11 +4,11 @@
 > The original supporting classes are now separated from this repo. Please see [MaiLib](https://github.com/Neskol/MaiLib) for more informations.
 
 ### Build
-  ''
+  '''
   git clone
   git submodule update --init --recursive
   dotnet build
-  ''
+  '''
 ### Usage
 > Type 'MaichartConverter help' for manual
 
