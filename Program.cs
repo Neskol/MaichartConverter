@@ -729,7 +729,7 @@ namespace MaichartConverter
                             bgaMap.Add("01" + musicID, bgaFile);
                         }
                     }
-                    else throw new NullReferenceException("BGA LOCATION IS NOT SPECIFIED BUT BGA OPTION IS ENABLED");
+                    else if (exportBGA) throw new NullReferenceException("BGA LOCATION IS NOT SPECIFIED BUT BGA OPTION IS ENABLED");
                     string[] musicFolders = Directory.GetDirectories(musicLocation);
 
                     //Create output directory

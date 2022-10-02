@@ -1,0 +1,24 @@
+{
+  "profiles": {
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    },
+    "NoBGA Run": {
+      "commandName": "Project",
+      "commandLineArgs": "CompileDatabase \r\n-p \"/Users/Neskol/MaiAnalysis/A000/\"\r\n-c \"/Users/Neskol/MaiAnalysis/Image/Texture2D/\"\r\n-m \"/Users/Neskol/MaiAnalysis/Sound/\" \r\n-o \"/Users/Neskol/MaiAnalysis/Output_NoBGA/\" "
+    },
+    "With BGA": {
+      "commandName": "Project",
+      "commandLineArgs": "CompileDatabase \r\n-p \"/Users/Neskol/MaiAnalysis/A000/\"\r\n-c \"/Users/Neskol/MaiAnalysis/Image/Texture2D/\"\r\n-m \"/Users/Neskol/MaiAnalysis/Sound/\"\r\n-v \"/Users/Neskol/MaiAnalysis/DXBGA_HEVC/\" \r\n-o \"/Users/Neskol/MaiAnalysis/Output_HEVC/\" "
+    },
+    "H264": {
+      "commandName": "Project",
+      "commandLineArgs": "CompileDatabase \r\n-p \"/Users/Neskol/MaiAnalysis/A000/\"\r\n-c \"/Users/Neskol/MaiAnalysis/Image/Texture2D/\"\r\n-m \"/Users/Neskol/MaiAnalysis/Sound/\"\r\n-v \"/Users/Neskol/MaiAnalysis/DXBGA_H264/\" \r\n-o \"/Users/Neskol/MaiAnalysis/Output_Android/\" "
+    },
+    "ChartOnly": {
+      "commandName": "Project",
+      "commandLineArgs": "CompileDatabase \r\n-p \"/Users/Neskol/MaiAnalysis/A000/\"\r\n-o \"/Users/Neskol/MaiAnalysis/Output_NoBGA/\" "
+    }
+  }
+}
