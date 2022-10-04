@@ -19,6 +19,10 @@
     "ChartOnly": {
       "commandName": "Project",
       "commandLineArgs": "CompileDatabase \r\n-p \"/Users/Neskol/MaiAnalysis/A000/\"\r\n-o \"/Users/Neskol/MaiAnalysis/Output_NoBGA/\" "
+    },
+    "ChartOnly by Cabinet": {
+      "commandName": "Project",
+      "commandLineArgs": "CompileDatabase \r\n-p \"/Users/Neskol/MaiAnalysis/A000/\"\r\n-g \"2\"\r\n-o \"/Users/Neskol/MaiAnalysis/Output_NoBGA_Cabinet/\" "
     }
   }
 }
