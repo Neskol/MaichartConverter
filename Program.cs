@@ -96,65 +96,6 @@ namespace MaichartConverter
             BPMCollection.AppendChild(root);
             DebugInformationTable.AppendChild(btRoot);
 
-            //string simaiChart = "";
-            //string ma2Chart = "";
-            //string ma2ChartID = "";
-            //string difficulty = "";
-            //string a000Location = "";
-            //string imageLocation = "";
-            //string bgaLocation = "";
-            //string musicLocation = "";
-            //string outputLocation = "";
-            //string categorize_method = "";
-            //bool compileAllChart = false;
-            //bool utageChart = false;
-            //bool exportBGA = false;
-
-            //foreach (string s in args)
-            //{
-            //    Console.WriteLine(s);
-            //}
-
-
-
-            //if (args.Length == 0)
-            //{
-            //   Console.WriteLine("usage: MaichartConverter [-s --simai simai_chart] [-m --ma2 ma2_chart] [-i --id ma2_chart_id]" +
-            //       "[-d --diff difficulty] [-a --all compile_all_chart] [-u --all-utage compile_all_] " +
-            //       "[-s --source override_a000_path] [-p --pic override_pic_path] [-v --video override_video_path] " +
-            //       "[-b --bgm override_bgm_path] [-o --output override_output_pat] [-c --category categorize_method] [-e --export-bga export bga]");
-            //}
-
-            //for (int i = 0; i < args.Count(); i++)
-            //{
-            //    switch (args[i])
-            //    {
-            //        case "-s":
-            //        case "--simai":
-            //            if (i + 1 < args.Length && File.Exists(args[i+1]))
-            //            {
-            //                string path = args[i + 1];
-            //                TestSpecificChart(path);
-            //            }
-            //            break;
-            //        case "-m":
-            //        case "--ma2":
-            //            if (i + 1 < args.Length && File.Exists(args[i + 1]))
-            //            {
-            //                string path = args[i + 1];
-            //                TestSpecificChart(path);
-            //            }
-            //            break;
-            //        case "-i":
-            //        case "--id":
-            //            if (i + 1 < args.Length && File.Exists(args[i + 1]))
-            //            {
-            //                string path = args[i + 1];
-            //                TestSpecificChart(path);
-            //            }
-            //            break;
-            //    }
-
             //TestSpecificChart();
             //TestSpecificChart(@"D:\PandoraCandidate.ma2");
             //TestSpecificChart("000389", "4");
