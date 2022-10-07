@@ -123,11 +123,11 @@ namespace MaichartConverter
         public class CompileSimai:ConsoleCommand
         {
             /// <summary>
-            /// Retrurn when command successfully executed
+            /// Return when command successfully executed
             /// </summary>
             private const int Success = 0;
             /// <summary>
-            /// Retrurn when command failed to execute
+            /// Return when command failed to execute
             /// </summary>
             private const int Failed = 2;
 
@@ -156,7 +156,7 @@ namespace MaichartConverter
                 IsCommand("CompileSimai", "Compile assigned simai chart to assigned format");
                 HasLongDescription("This function enables user to compile simai chart specified to the format they want. By default is ma2 for simai.");
                 HasRequiredOption("p|path=", "The path to file", path => FileLocation = path);             
-                HasOption("d|difficulty=", "The number representing the difficuty of chart -- 1-6 for Easy to Re:Master, 7 for Original/Utage",diff => Difficulty = diff);
+                HasOption("d|difficulty=", "The number representing the difficulty of chart -- 1-6 for Easy to Re:Master, 7 for Original/Utage",diff => Difficulty = diff);
                 HasOption("f|format=", "The target format - simai or ma2", format => TargetFormat = format);
                 HasOption("o|output=","Export compiled chart to location specified", dest => Destination = dest);
             }
@@ -253,11 +253,11 @@ namespace MaichartConverter
         public class CompileMa2 : ConsoleCommand
         {
             /// <summary>
-            /// Retrurn when command successfully executed
+            /// Return when command successfully executed
             /// </summary>
             private const int Success = 0;
             /// <summary>
-            /// Retrurn when command failed to execute
+            /// Return when command failed to execute
             /// </summary>
             private const int Failed = 2;
 
@@ -375,11 +375,11 @@ namespace MaichartConverter
         public class CompileMa2ID : ConsoleCommand
         {
             /// <summary>
-            /// Retrurn when command successfully executed
+            /// Return when command successfully executed
             /// </summary>
             private const int Success = 0;
             /// <summary>
-            /// Retrurn when command failed to execute
+            /// Return when command failed to execute
             /// </summary>
             private const int Failed = 2;
 
@@ -411,7 +411,7 @@ namespace MaichartConverter
             {
                 IsCommand("CompileMa2ID", "Compile assigned Ma2 chart to assigned format");
                 HasLongDescription("This function enables user to compile ma2 chart specified to the format they want. By default is simai for ma2.");
-                HasRequiredOption("d|difficulty=", "REQUIRED: The number representing the difficuty of chart -- 0-4 for Basic to Re:Master", diff => Difficulty = diff);
+                HasRequiredOption("d|difficulty=", "REQUIRED: The number representing the difficulty of chart -- 0-4 for Basic to Re:Master", diff => Difficulty = diff);
                 HasRequiredOption("i|id=", "REQUIRED: The id of the ma2", id => ID = id);
                 HasRequiredOption("p|path=", "REQUIRED: Folder of A000 to override - end with a path separator", path => FileLocation = path);
                 //FileLocation = GlobalPaths[0];
@@ -503,11 +503,11 @@ namespace MaichartConverter
         public class CompileDatabase : ConsoleCommand
         {
             /// <summary>
-            /// Retrurn when command successfully executed
+            /// Return when command successfully executed
             /// </summary>
             private const int Success = 0;
             /// <summary>
-            /// Retrurn when command failed to execute
+            /// Return when command failed to execute
             /// </summary>
             private const int Failed = 2;
 
