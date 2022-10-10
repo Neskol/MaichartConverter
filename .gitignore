@@ -10,6 +10,7 @@
 *.userosscache
 *.sln.docstates
 *.DS_Store
+git rm --cached .DS_Store
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
