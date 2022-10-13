@@ -27,6 +27,14 @@
     "Specific chart": {
       "commandName": "Project",
       "commandLineArgs": "CompileMa2ID\r\n-p \"/Users/Neskol/MaiAnalysis/A000/\"\r\n-i \"11409\"\r\n-d \"3\""
+    },
+    "H264-D": {
+      "commandName": "Project",
+      "commandLineArgs": "CompileDatabase \r\n-p C:\\Users\\Neskol\\MaiAnalysis\\A000\\\r\n-c C:\\Users\\Neskol\\MaiAnalysis\\Image\\Texture2D\\\r\n-m C:\\Users\\Neskol\\MaiAnalysis\\Sound\\\r\n-v D:\\MaiAnalysis\\DXBGA_H264\\ \r\n-o C:\\Users\\Neskol\\MaiAnalysis\\Output_Android\\ "
+    },
+    "Specific chart by path": {
+      "commandName": "Project",
+      "commandLineArgs": "CompileMa2\r\n-p \"/Users/Neskol/MaiAnalysis/A000-Utage/music/music000363/000363_00.ma2\""
     }
   }
 }

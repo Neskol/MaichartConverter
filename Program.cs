@@ -101,11 +101,11 @@ namespace MaichartConverter
             //TestSpecificChart("000389", "4");
             //CompileChartDatabase();
             //CompileAssignedChartDatabase();
-            //CompileUtageChartDatabase();
+            CompileUtageChartDatabase();
             //}
-            //return 0;
-            var commands = GetCommands();
-            return ConsoleCommandDispatcher.DispatchCommand(commands, args, Console.Out);
+            return 0;
+            // var commands = GetCommands();
+            // return ConsoleCommandDispatcher.DispatchCommand(commands, args, Console.Out);
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace MaichartConverter
         /// <summary>
         /// Compile Simai Command
         /// </summary>
-        public class CompileSimai:ConsoleCommand
+        public class CompileSimai : ConsoleCommand
         {
             /// <summary>
             /// Return when command successfully executed
@@ -155,10 +155,10 @@ namespace MaichartConverter
             {
                 IsCommand("CompileSimai", "Compile assigned simai chart to assigned format");
                 HasLongDescription("This function enables user to compile simai chart specified to the format they want. By default is ma2 for simai.");
-                HasRequiredOption("p|path=", "The path to file", path => FileLocation = path);             
-                HasOption("d|difficulty=", "The number representing the difficulty of chart -- 1-6 for Easy to Re:Master, 7 for Original/Utage",diff => Difficulty = diff);
+                HasRequiredOption("p|path=", "The path to file", path => FileLocation = path);
+                HasOption("d|difficulty=", "The number representing the difficulty of chart -- 1-6 for Easy to Re:Master, 7 for Original/Utage", diff => Difficulty = diff);
                 HasOption("f|format=", "The target format - simai or ma2", format => TargetFormat = format);
-                HasOption("o|output=","Export compiled chart to location specified", dest => Destination = dest);
+                HasOption("o|output=", "Export compiled chart to location specified", dest => Destination = dest);
             }
 
             /// <summary>
@@ -434,7 +434,7 @@ namespace MaichartConverter
                     Ma2Parser parser = new Ma2Parser();
                     //Chart good = new Ma2(@"/Users/neskol/MaiAnalysis/A000/music/music" + musicID + "/" + musicID + "_0" + difficulty + ".ma2");
                     string tokenLocation = FileLocation ?? throw new FileNotFoundException();
-                    Chart candidate = parser.ChartOfToken(tokenizer.Tokens(tokenLocation+"music"+GlobalSep+"music"+CompensateZero(ID??throw new NullReferenceException("ID shall not be null"))+GlobalSep+ CompensateZero(ID ?? throw new NullReferenceException("ID shall not be null")) + "_0"+Difficulty+".ma2"));
+                    Chart candidate = parser.ChartOfToken(tokenizer.Tokens(tokenLocation + "music" + GlobalSep + "music" + CompensateZero(ID ?? throw new NullReferenceException("ID shall not be null")) + GlobalSep + CompensateZero(ID ?? throw new NullReferenceException("ID shall not be null")) + "_0" + Difficulty + ".ma2"));
                     string result = "";
                     switch (TargetFormat)
                     {
@@ -475,7 +475,7 @@ namespace MaichartConverter
                                 sw.Close();
                                 if (File.Exists(Destination + Program.GlobalSep + "result.ma2"))
                                 {
-                                    Console.WriteLine("Successfully compiled at: "+ Destination + Program.GlobalSep + "result.ma2");
+                                    Console.WriteLine("Successfully compiled at: " + Destination + Program.GlobalSep + "result.ma2");
                                 }
                                 else
                                 {
@@ -498,7 +498,7 @@ namespace MaichartConverter
         }
 
         /// <summary>
-        /// Compile Ma2 Command
+        /// Compile Ma2 Database
         /// </summary>
         public class CompileDatabase : ConsoleCommand
         {
@@ -539,14 +539,15 @@ namespace MaichartConverter
             /// <summary>
             /// Categorize Index outer shell
             /// </summary>
-            public int? CategorizeIndex 
-            { get 
-                { return categorizeIndex; } 
-                set 
+            public int? CategorizeIndex
+            {
+                get
+                { return categorizeIndex; }
+                set
                 {
-                    if (value!=null) categorizeIndex = (int)value; 
+                    if (value != null) categorizeIndex = (int)value;
                     else categorizeIndex = 0;
-                } 
+                }
             }
             /// <summary>
             /// Destination of output
@@ -577,11 +578,11 @@ namespace MaichartConverter
                 HasRequiredOption("p|path=", "REQUIRED: Folder of A000 to override - end with a path separator", aPath => A000Location = aPath);
                 HasRequiredOption("o|output=", "REQUIRED: Export compiled chart to location specified", dest => Destination = dest);
                 HasOption("m|music=", "Folder of Music files to override - end with a path separator", mPath => BGMLocation = mPath);
-                HasOption("c|cover=", "Folder of Cover Image to override - end with a path separator", iPath => ImageLocation = iPath);                              
+                HasOption("c|cover=", "Folder of Cover Image to override - end with a path separator", iPath => ImageLocation = iPath);
                 //FileLocation = GlobalPaths[0];
                 //HasOption("a|a000=", "Folder of A000 to override - end with a path separator", path => FileLocation = path);
                 HasOption("f|format=", "The target format - simai or ma2", format => TargetFormat = format);
-                HasOption("g|genre=", "The preferred categorizing scheme, includes:\n"+CategorizeMethods, genre => Int32.TryParse(genre,out categorizeIndex));
+                HasOption("g|genre=", "The preferred categorizing scheme, includes:\n" + CategorizeMethods, genre => Int32.TryParse(genre, out categorizeIndex));
                 HasOption("v|video=", "Folder of Video to override - end with a path separator", vPath => VideoLocation = vPath);
             }
 
@@ -721,6 +722,349 @@ namespace MaichartConverter
                             CompiledChart.Add(compiler.GenerateOneLineSummary());
                             Console.WriteLine("Finished compiling maidata " + trackInfo.TrackName + " to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "maidata.txt");
 
+                            if (exportAudio)
+                            {
+                                string originalMusicLocation = audioLocation ?? throw new NullReferenceException("AUDIO FOLDER NOT SPECIFIED BUT AUDIO LOCATION IS NULL");
+                                originalMusicLocation += "music00" + shortID + ".mp3";
+                                string newMusicLocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "track.mp3";
+                                if (!File.Exists(newMusicLocation))
+                                {
+                                    File.Copy(originalMusicLocation, newMusicLocation);
+                                    Console.WriteLine("Exported music to: " + newMusicLocation);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Audio already found in: " + newMusicLocation);
+                                }
+                                //See if image is existing
+                                if (exportAudio && !File.Exists(newMusicLocation))
+                                {
+                                    Console.WriteLine("Audio exists at " + originalMusicLocation + ": " + File.Exists(originalMusicLocation));
+                                    throw new FileNotFoundException("MUSIC NOT FOUND IN:" + newMusicLocation);
+                                }
+                            }
+
+                            if (exportImage)
+                            {
+                                string originalImageLocation = imageLocation ?? throw new NullReferenceException("IMAGE FOLDER NOT SPECIFIED BUT AUDIO LOCATION IS NULL");
+                                originalImageLocation += "UI_Jacket_00" + shortID + ".png";
+                                string newImageLocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "bg.png";
+                                if (!File.Exists(newImageLocation))
+                                {
+                                    File.Copy(originalImageLocation, newImageLocation);
+                                    Console.WriteLine("Image exported to: " + newImageLocation);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Image already found in: " + newImageLocation);
+                                }
+                                //Check if Image exists
+                                if (exportImage && !File.Exists(newImageLocation))
+                                {
+                                    Console.WriteLine("Image exists at " + originalImageLocation + ": " + File.Exists(originalImageLocation));
+                                    throw new FileNotFoundException("IMAGE NOT FOUND IN: " + newImageLocation);
+                                }
+                            }
+                            // Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart);
+
+                            string? originalBGALocation = "";
+                            bool bgaExists = bgaMap.TryGetValue(CompensateZero(trackInfo.TrackID), out originalBGALocation);
+                            if (!bgaExists)
+                            {
+                                if (trackInfo.TrackID.Length == 5)
+                                {
+                                    bgaExists = bgaMap.TryGetValue(trackInfo.TrackID.Substring(1, 4), out originalBGALocation);
+                                }
+                                else if (trackInfo.TrackID.Length == 3)
+                                {
+                                    bgaExists = bgaMap.TryGetValue(CompensateShortZero(trackInfo.TrackID), out originalBGALocation);
+                                }
+                            }
+                            if (exportBGA && !bgaExists)
+                            {
+                                Console.WriteLine("BGA NOT FOUND");
+                                Console.WriteLine(trackInfo.TrackID);
+                                Console.WriteLine(CompensateZero(trackInfo.TrackID));
+                                Console.WriteLine(originalBGALocation);
+                                Console.ReadKey();
+                            }
+                            if (exportBGA)
+                            {
+                                string? newBGALocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "pv.mp4";
+                                if (bgaExists && !File.Exists(newBGALocation))
+                                {
+                                    Console.WriteLine("A BGA file was found in " + originalBGALocation);
+                                    var originalBGALocationCandidate = originalBGALocation ?? throw new NullReferenceException();
+                                    File.Copy(originalBGALocationCandidate, newBGALocation);
+                                    Console.WriteLine("Exported BGA file to: " + newBGALocation);
+                                }
+                                else if (bgaExists && File.Exists(newBGALocation))
+                                {
+                                    Console.WriteLine("BGA already found in " + newBGALocation);
+                                }
+                                //Check if BGA exists
+                                if (exportBGA && bgaExists && !File.Exists(newBGALocation))
+                                {
+                                    Console.WriteLine("BGA exists at " + originalBGALocation + ": " + File.Exists(originalBGALocation));
+                                    throw new FileNotFoundException("BGA NOT FOUND IN: " + newBGALocation);
+                                }
+                            }
+                            NumberTotalTrackCompiled++;
+                            CompiledTracks.Add(int.Parse(trackInfo.TrackID), trackInfo.TrackName);
+                            AppendBPM(trackInfo.TrackID, trackInfo.TrackBPM);
+                            AppendDebugInformation(trackInfo.TrackID, compiler.SymbolicBPMTable(), compiler.SymbolicFirstNote(false));
+                            string[] compiledTrackDetail = { trackInfo.TrackName, trackInfo.TrackGenre, trackInfo.TrackVersion, trackInfo.TrackVersionNumber };
+                            CompiledTrackDetailSet.Add(trackInfo.TrackName + trackInfo.TrackID, compiledTrackDetail);
+                            Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                            Console.WriteLine();
+                        }
+                        else
+                        {
+                            Console.WriteLine("There is no Music.xml in folder " + track);
+                        }
+                    }
+                    Console.WriteLine("Total music compiled: " + NumberTotalTrackCompiled);
+                    int index = 1;
+                    foreach (KeyValuePair<int, string> pair in CompiledTracks)
+                    {
+                        Console.WriteLine("[" + index + "]: " + pair.Key + " " + pair.Value);
+                        index++;
+                    }
+                    Log(outputLocation);
+                    return Success;
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine(ex.Message);
+                    Console.Error.WriteLine(ex.StackTrace);
+                    return Failed;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Compile Ma2 Command
+        /// </summary>
+        public class CompileUtageDatabase : ConsoleCommand
+        {
+            /// <summary>
+            /// Return when command successfully executed
+            /// </summary>
+            private const int Success = 0;
+            /// <summary>
+            /// Return when command failed to execute
+            /// </summary>
+            private const int Failed = 2;
+
+            /// <summary>
+            /// Source file path
+            /// </summary>
+            public string? A000Location { get; set; }
+            /// <summary>
+            /// Image file path
+            /// </summary>
+            public string? ImageLocation { get; set; }
+            /// <summary>
+            /// Music file path
+            /// </summary>
+            public string? BGMLocation { get; set; }
+            /// <summary>
+            /// Video file path
+            /// </summary>
+            public string? VideoLocation { get; set; }
+            /// <summary>
+            /// Difficulty
+            /// </summary>
+            public string? Difficulty { get; set; }
+
+            /// <summary>
+            /// Categorize Index
+            /// </summary>
+            private int categorizeIndex = 0;
+            /// <summary>
+            /// Categorize Index outer shell
+            /// </summary>
+            public int? CategorizeIndex
+            {
+                get
+                { return categorizeIndex; }
+                set
+                {
+                    if (value != null) categorizeIndex = (int)value;
+                    else categorizeIndex = 0;
+                }
+            }
+            /// <summary>
+            /// Destination of output
+            /// </summary>
+            public string? Destination { get; set; }
+            /// <summary>
+            /// Target Format of the file
+            /// </summary>
+            public string? TargetFormat { get; set; }
+
+            /// <summary>
+            /// Stores categorize method for easier access
+            /// </summary>
+            public string CategorizeMethods { get; set; }
+
+            /// <summary>
+            /// Construct Command
+            /// </summary>
+            public CompileUtageDatabase()
+            {
+                CategorizeMethods = "";
+                for (int i = 0; i < TrackCategorizeMethodSet.Length; i++)
+                {
+                    CategorizeMethods += "[" + i + "] " + TrackCategorizeMethodSet[i] + "\n";
+                }
+                IsCommand("CompileDatabase", "Compile whole ma2 database to format assigned");
+                HasLongDescription("This function enables user to compile whole database to the format they want. By default is simai for ma2.");
+                HasRequiredOption("p|path=", "REQUIRED: Folder of A000 to override - end with a path separator", aPath => A000Location = aPath);
+                HasRequiredOption("o|output=", "REQUIRED: Export compiled chart to location specified", dest => Destination = dest);
+                HasOption("m|music=", "Folder of Music files to override - end with a path separator", mPath => BGMLocation = mPath);
+                HasOption("c|cover=", "Folder of Cover Image to override - end with a path separator", iPath => ImageLocation = iPath);
+                //FileLocation = GlobalPaths[0];
+                //HasOption("a|a000=", "Folder of A000 to override - end with a path separator", path => FileLocation = path);
+                HasOption("f|format=", "The target format - simai or ma2", format => TargetFormat = format);
+                HasOption("g|genre=", "The preferred categorizing scheme, includes:\n" + CategorizeMethods, genre => Int32.TryParse(genre, out categorizeIndex));
+                HasOption("v|video=", "Folder of Video to override - end with a path separator", vPath => VideoLocation = vPath);
+            }
+
+            /// <summary>
+            /// Execute the command
+            /// </summary>
+            /// <param name="remainingArguments">Rest of the arguments</param>
+            /// <returns>Code of execution indicates if the commands is successfully executed</returns>
+            /// <exception cref="FileNotFoundException">Raised when the file is not found</exception>
+            public override int Run(string[] remainingArguments)
+            {
+                try
+                {
+                    string sep = Program.GlobalSep;
+                    bool exportBGA = true;
+                    bool exportImage = true;
+                    bool exportAudio = true;
+                    string a000Location = A000Location ?? throw new FileNotFoundException("A000 location was not specified");
+                    if (a000Location == null || a000Location.Equals(""))
+                    {
+                        a000Location = GlobalPaths[0];
+                    }
+
+                    string musicLocation = a000Location + @"music" + sep;
+                    string? audioLocation = BGMLocation;
+                    if (BGMLocation == null)
+                    {
+                        exportAudio = false;
+                    }
+                    else
+                    {
+                        audioLocation = GlobalPaths[1];
+                    }
+
+                    string? imageLocation = ImageLocation;
+                    if (ImageLocation == null)
+                    {
+                        exportImage = false;
+                    }
+                    else
+                    {
+                        imageLocation = GlobalPaths[2];
+                    }
+
+                    string? bgaLocation = VideoLocation;
+                    if (VideoLocation == null)
+                    {
+                        exportBGA = false;
+                    }
+                    else
+                    {
+                        bgaLocation = GlobalPaths[3];
+                    }
+
+                    string outputLocation = Destination ?? throw new NullReferenceException("Destination not specified");
+                    if (outputLocation.Equals(""))
+                    {
+                        outputLocation = GlobalPaths[4];
+                    }
+
+                    try
+                    {
+                        if (0 <= categorizeIndex && categorizeIndex < TrackCategorizeMethodSet.Length)
+                        {
+                            GlobalTrackCategorizeMethod = TrackCategorizeMethodSet[categorizeIndex];
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message + " The program will use Genre as default method. Press any key to continue.");
+                        GlobalTrackCategorizeMethod = TrackCategorizeMethodSet[0];
+                        categorizeIndex = 0;
+                        Console.ReadKey();
+                    }
+
+                    Dictionary<string, string> bgaMap = new Dictionary<string, string>();
+                    if (exportBGA && bgaLocation != null)
+                    {
+                        string[] bgaFiles = Directory.GetFiles(bgaLocation, "*.mp4");
+                        Array.Sort(bgaFiles);
+
+                        foreach (string bgaFile in bgaFiles)
+                        {
+                            string musicID = bgaFile.Substring(bgaLocation.Length).Substring(0, 6).Substring(2, 4);
+                            bgaMap.Add(CompensateZero(musicID), bgaFile);
+                            bgaMap.Add("01" + musicID, bgaFile);
+                        }
+                    }
+                    else if (exportBGA) throw new NullReferenceException("BGA LOCATION IS NOT SPECIFIED BUT BGA OPTION IS ENABLED");
+                    string[] musicFolders = Directory.GetDirectories(musicLocation);
+
+                    //Create output directory
+                    DirectoryInfo output = new DirectoryInfo(outputLocation);
+
+                    NumberTotalTrackCompiled = 0;
+                    CompiledTracks = new Dictionary<int, string>();
+                    //Iterate music folders
+                    foreach (string track in musicFolders)
+                    {
+                        if (File.Exists(track + sep + "Music.xml"))
+                        {
+                            TrackInformation trackInfo = new XmlInformation(track + sep + "");
+                            Console.WriteLine("There is Music.xml in " + track);
+                            string shortID = CompensateZero(trackInfo.TrackID).Substring(2);
+                            Console.WriteLine("Name: " + trackInfo.TrackName);
+                            Console.WriteLine("ID:" + trackInfo.TrackID);
+                            Console.WriteLine("Genre: " + trackInfo.TrackGenre);
+                            string[] categorizeScheme = { trackInfo.TrackGenre, trackInfo.TrackSymbolicLevel, trackInfo.TrackVersion, trackInfo.TrackComposer, trackInfo.TrackBPM, trackInfo.StandardDeluxePrefix, "" };
+                            string defaultCategorizedPath = outputLocation + categorizeScheme[categorizeIndex];
+
+                            //Cross out if not creating update packs
+                            // defaultCategorizedPath += sep + categorizeScheme[0];
+
+                            //Deal with special characters in path
+                            string trackNameSubstitute = trackInfo.TrackSortName.Replace("" + sep + "", "of");
+                            trackNameSubstitute = trackInfo.TrackSortName.Replace("/", "of");
+                            trackNameSubstitute = trackInfo.TrackID + "_" + trackNameSubstitute;
+                            if (!Directory.Exists(defaultCategorizedPath))
+                            {
+                                Directory.CreateDirectory(defaultCategorizedPath);
+                                Console.WriteLine("Created folder: " + defaultCategorizedPath);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Already exist folder: " + defaultCategorizedPath);
+                            }
+                            if (!Directory.Exists(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix))
+                            {
+                                Directory.CreateDirectory(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                                Console.WriteLine("Created song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Already exist song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                            }
+                            SimaiCompiler compiler = new SimaiCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + "_Utage", true);
+                            Console.WriteLine("Finished compiling maidata " + trackInfo.TrackName + " to: " + defaultCategorizedPath + sep + trackNameSubstitute + "_Utage" + sep + "maidata.txt");
                             if (exportAudio)
                             {
                                 string originalMusicLocation = audioLocation ?? throw new NullReferenceException("AUDIO FOLDER NOT SPECIFIED BUT AUDIO LOCATION IS NULL");
@@ -1128,7 +1472,7 @@ namespace MaichartConverter
                     NumberTotalTrackCompiled++;
                     CompiledTracks.Add(int.Parse(trackInfo.TrackID), trackInfo.TrackName);
                     AppendBPM(trackInfo.TrackID, trackInfo.TrackBPM);
-                    AppendDebugInformation(trackInfo.TrackID, compiler.SymbolicBPMTable(),compiler.SymbolicFirstNote(false));
+                    AppendDebugInformation(trackInfo.TrackID, compiler.SymbolicBPMTable(), compiler.SymbolicFirstNote(false));
                     string[] compiledTrackDetail = { trackInfo.TrackName, trackInfo.TrackGenre, trackInfo.TrackVersion, trackInfo.TrackVersionNumber };
                     CompiledTrackDetailSet.Add(trackInfo.TrackName + trackInfo.TrackID, compiledTrackDetail);
                     Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
@@ -1528,7 +1872,7 @@ namespace MaichartConverter
             //File.Copy(oldName, newName);
 
             NumberTotalTrackCompiled = 0;
-            CompiledTracks = new Dictionary<int,string>();
+            CompiledTracks = new Dictionary<int, string>();
             //Iterate music folders
             foreach (string track in musicFolders)
             {
@@ -1659,7 +2003,7 @@ namespace MaichartConverter
                         }
                     }
                     NumberTotalTrackCompiled++;
-                    CompiledTracks.Add(int.Parse(trackInfo.TrackID),trackInfo.TrackName + trackInfo.TrackID);
+                    CompiledTracks.Add(int.Parse(trackInfo.TrackID), trackInfo.TrackName + trackInfo.TrackID);
                     string[] compiledTrackDetail = { trackInfo.TrackName, trackInfo.TrackGenre, trackInfo.TrackVersion, trackInfo.TrackVersionNumber };
                     CompiledTrackDetailSet.Add(trackInfo.TrackName + trackInfo.TrackID, compiledTrackDetail);
                     Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
@@ -1672,9 +2016,9 @@ namespace MaichartConverter
             }
             Console.WriteLine("Total music compiled: " + NumberTotalTrackCompiled);
             int index = 1;
-            foreach (KeyValuePair<int,string> pair in CompiledTracks)
+            foreach (KeyValuePair<int, string> pair in CompiledTracks)
             {
-                Console.WriteLine("[" + index + "]: " + pair.Key+", "+pair.Value);
+                Console.WriteLine("[" + index + "]: " + pair.Key + ", " + pair.Value);
                 index++;
             }
             Log(outputLocation);
@@ -1738,7 +2082,7 @@ namespace MaichartConverter
             result += (@"  \____|__  (____  /__|\___  >___|  (____  /__|   |__|   \______  /\____/|___|  /\_/  \___  >__|   |__|  \___  >__|   " + "\n");
             result += (@"          \/     \/        \/     \/     \/                     \/            \/          \/                 \/       " + "\n");
             result += "a GUtils component for rhythm games\n";
-            result += "Rev "+ Assembly.GetExecutingAssembly().GetName().Version + " by Neskol\n";
+            result += "Rev " + Assembly.GetExecutingAssembly().GetName().Version + " by Neskol\n";
             result += "Check https://github.com/Neskol/MaichartConverter for updates and instructions\n";
             return result;
         }
@@ -1801,7 +2145,7 @@ namespace MaichartConverter
         /// <param name = "idValue">ID of the chart</param>
         /// <param name="bpmTable">BPMTable</param>
         /// <param name="firstNoteValue">First note of the Master Chart</param>
-        public static void AppendDebugInformation(string idValue, BPMChanges bpmTable,Note firstNoteValue)
+        public static void AppendDebugInformation(string idValue, BPMChanges bpmTable, Note firstNoteValue)
         {
             XmlElement node = DebugInformationTable.CreateElement("Node");
             XmlElement id = DebugInformationTable.CreateElement("ID");
