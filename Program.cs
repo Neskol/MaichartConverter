@@ -101,11 +101,11 @@ namespace MaichartConverter
             //TestSpecificChart("000389", "4");
             //CompileChartDatabase();
             //CompileAssignedChartDatabase();
-            CompileUtageChartDatabase();
+            // CompileUtageChartDatabase();
             //}
-            return 0;
-            // var commands = GetCommands();
-            // return ConsoleCommandDispatcher.DispatchCommand(commands, args, Console.Out);
+            // return 0;
+            var commands = GetCommands();
+            return ConsoleCommandDispatcher.DispatchCommand(commands, args, Console.Out);
         }
 
         /// <summary>
@@ -918,7 +918,7 @@ namespace MaichartConverter
                 {
                     CategorizeMethods += "[" + i + "] " + TrackCategorizeMethodSet[i] + "\n";
                 }
-                IsCommand("CompileDatabase", "Compile whole ma2 database to format assigned");
+                IsCommand("CompileUtageDatabase", "Compile whole utage database to format assigned");
                 HasLongDescription("This function enables user to compile whole database to the format they want. By default is simai for ma2.");
                 HasRequiredOption("p|path=", "REQUIRED: Folder of A000 to override - end with a path separator", aPath => A000Location = aPath);
                 HasRequiredOption("o|output=", "REQUIRED: Export compiled chart to location specified", dest => Destination = dest);
@@ -957,7 +957,7 @@ namespace MaichartConverter
                     {
                         exportAudio = false;
                     }
-                    else
+                    else if (BGMLocation.Equals(""))
                     {
                         audioLocation = GlobalPaths[1];
                     }
@@ -967,7 +967,7 @@ namespace MaichartConverter
                     {
                         exportImage = false;
                     }
-                    else
+                    else if (ImageLocation.Equals(""))
                     {
                         imageLocation = GlobalPaths[2];
                     }
@@ -977,7 +977,7 @@ namespace MaichartConverter
                     {
                         exportBGA = false;
                     }
-                    else
+                    else if (VideoLocation.Equals(""))
                     {
                         bgaLocation = GlobalPaths[3];
                     }
@@ -1054,14 +1054,14 @@ namespace MaichartConverter
                             {
                                 Console.WriteLine("Already exist folder: " + defaultCategorizedPath);
                             }
-                            if (!Directory.Exists(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix))
+                            if (!Directory.Exists(defaultCategorizedPath + sep + trackNameSubstitute + "_Utage"))
                             {
-                                Directory.CreateDirectory(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
-                                Console.WriteLine("Created song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                                Directory.CreateDirectory(defaultCategorizedPath + sep + trackNameSubstitute + "_Utage");
+                                Console.WriteLine("Created song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + "_Utage");
                             }
                             else
                             {
-                                Console.WriteLine("Already exist song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                                Console.WriteLine("Already exist song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + "_Utage");
                             }
                             SimaiCompiler compiler = new SimaiCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + "_Utage", true);
                             Console.WriteLine("Finished compiling maidata " + trackInfo.TrackName + " to: " + defaultCategorizedPath + sep + trackNameSubstitute + "_Utage" + sep + "maidata.txt");
@@ -1069,7 +1069,7 @@ namespace MaichartConverter
                             {
                                 string originalMusicLocation = audioLocation ?? throw new NullReferenceException("AUDIO FOLDER NOT SPECIFIED BUT AUDIO LOCATION IS NULL");
                                 originalMusicLocation += "music00" + shortID + ".mp3";
-                                string newMusicLocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "track.mp3";
+                                string newMusicLocation = defaultCategorizedPath + sep + trackNameSubstitute + "_Utage" + sep + "track.mp3";
                                 if (!File.Exists(newMusicLocation))
                                 {
                                     File.Copy(originalMusicLocation, newMusicLocation);
@@ -1091,7 +1091,7 @@ namespace MaichartConverter
                             {
                                 string originalImageLocation = imageLocation ?? throw new NullReferenceException("IMAGE FOLDER NOT SPECIFIED BUT AUDIO LOCATION IS NULL");
                                 originalImageLocation += "UI_Jacket_00" + shortID + ".png";
-                                string newImageLocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "bg.png";
+                                string newImageLocation = defaultCategorizedPath + sep + trackNameSubstitute + "_Utage" + sep + "bg.png";
                                 if (!File.Exists(newImageLocation))
                                 {
                                     File.Copy(originalImageLocation, newImageLocation);
@@ -1133,7 +1133,7 @@ namespace MaichartConverter
                             }
                             if (exportBGA)
                             {
-                                string? newBGALocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "pv.mp4";
+                                string? newBGALocation = defaultCategorizedPath + sep + trackNameSubstitute + "_Utage" + sep + "pv.mp4";
                                 if (bgaExists && !File.Exists(newBGALocation))
                                 {
                                     Console.WriteLine("A BGA file was found in " + originalBGALocation);
@@ -1155,10 +1155,10 @@ namespace MaichartConverter
                             NumberTotalTrackCompiled++;
                             CompiledTracks.Add(int.Parse(trackInfo.TrackID), trackInfo.TrackName);
                             AppendBPM(trackInfo.TrackID, trackInfo.TrackBPM);
-                            AppendDebugInformation(trackInfo.TrackID, compiler.SymbolicBPMTable(), compiler.SymbolicFirstNote(false));
+                            // AppendDebugInformation(trackInfo.TrackID, compiler.SymbolicBPMTable(), compiler.SymbolicFirstNote(false));
                             string[] compiledTrackDetail = { trackInfo.TrackName, trackInfo.TrackGenre, trackInfo.TrackVersion, trackInfo.TrackVersionNumber };
                             CompiledTrackDetailSet.Add(trackInfo.TrackName + trackInfo.TrackID, compiledTrackDetail);
-                            Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                            Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + "_Utage");
                             Console.WriteLine();
                         }
                         else
