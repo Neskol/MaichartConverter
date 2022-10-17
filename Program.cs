@@ -5,6 +5,7 @@ using System.Xml;
 using ManyConsole;
 using Mono.Options;
 using MaiLib;
+using System.Reflection.Metadata;
 
 namespace MaichartConverter
 {
@@ -63,6 +64,8 @@ namespace MaichartConverter
         public static int NumberTotalTrackCompiled;
         public static Dictionary<int, string> CompiledTracks = new();
         public static List<string> CompiledChart = new();
+
+        public static List<string> ErrorMessage = new();
         public static Dictionary<string, string[]> CompiledTrackDetailSet = new Dictionary<string, string[]>();
 
         public static XmlDocument BPMCollection = new XmlDocument();
@@ -1174,7 +1177,7 @@ namespace MaichartConverter
 
                             if (exportImage)
                             {
-                                string originalImageLocation = imageLocation ?? throw new NullReferenceException("IMAGE FOLDER NOT SPECIFIED BUT AUDIO LOCATION IS NULL");
+                                string originalImageLocation = imageLocation ?? throw new NullReferenceException("IMAGE SPECIFIED BUT IMAGE LOCATION IS NULL");
                                 originalImageLocation += "UI_Jacket_00" + shortID + ".png";
                                 string newImageLocation = defaultCategorizedPath + sep + trackNameSubstitute + "_Utage" + sep + "bg.png";
                                 if (!File.Exists(newImageLocation))
@@ -1189,8 +1192,7 @@ namespace MaichartConverter
                                 //Check if Image exists
                                 if (exportImage && !File.Exists(newImageLocation))
                                 {
-                                    Console.WriteLine("Image exists at " + originalImageLocation + ": " + File.Exists(originalImageLocation));
-                                    throw new FileNotFoundException("IMAGE NOT FOUND IN: " + newImageLocation);
+                                    ErrorMessage.Add("Image exists at " + originalImageLocation + ": " + File.Exists(originalImageLocation) + "BUT NOT FOUND AT "+ newImageLocation);
                                 }
                             }
                             // Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart);
@@ -1214,7 +1216,7 @@ namespace MaichartConverter
                                 Console.WriteLine(trackInfo.TrackID);
                                 Console.WriteLine(CompensateZero(trackInfo.TrackID));
                                 Console.WriteLine(originalBGALocation);
-                                Console.ReadKey();
+                                ErrorMessage.Add(trackInfo.TrackID + "BGA Not Found in "+originalBGALocation);
                             }
                             if (exportBGA)
                             {
@@ -1222,7 +1224,7 @@ namespace MaichartConverter
                                 if (bgaExists && !File.Exists(newBGALocation))
                                 {
                                     Console.WriteLine("A BGA file was found in " + originalBGALocation);
-                                    var originalBGALocationCandidate = originalBGALocation ?? throw new NullReferenceException();
+                                    var originalBGALocationCandidate = originalBGALocation ?? throw new NullReferenceException("EXPORT AUDIO BUT AUDIO NOT FOUND");
                                     File.Copy(originalBGALocationCandidate, newBGALocation);
                                     Console.WriteLine("Exported BGA file to: " + newBGALocation);
                                 }
@@ -1233,8 +1235,7 @@ namespace MaichartConverter
                                 //Check if BGA exists
                                 if (exportBGA && bgaExists && !File.Exists(newBGALocation))
                                 {
-                                    Console.WriteLine("BGA exists at " + originalBGALocation + ": " + File.Exists(originalBGALocation));
-                                    throw new FileNotFoundException("BGA NOT FOUND IN: " + newBGALocation);
+                                    ErrorMessage.Add("BGA exists at " + originalBGALocation + ": " + File.Exists(originalBGALocation) + " BUT BGA NOT FOUND IN: " + newBGALocation);
                                 }
                             }
                             NumberTotalTrackCompiled++;
@@ -2200,6 +2201,15 @@ namespace MaichartConverter
             {
                 sw.WriteLine("[" + index + "]\t" + title);
                 index++;
+            }
+            sw.WriteLine();
+            if (ErrorMessage.Count()>0)
+            {
+                sw.WriteLine("Warnings:");
+                foreach (string error in ErrorMessage)
+                {
+                    sw.WriteLine(error);
+                }
             }
             sw.Close();
             BPMCollection.Save(outputLocation + "bpm.xml");
