@@ -147,6 +147,16 @@ namespace MaichartConverter
             /// Target Format of the file
             /// </summary>
             public string? TargetFormat { get; set; }
+            /// <summary>
+            /// Rotation option for charts
+            /// </summary>
+            /// <value>Clockwise90/180, Counterclockwise90/180, UpsideDown, LeftToRight</value>
+            public string? Rotate { get; set; }
+            /// <summary>
+            /// OverallTick Shift for the chart: if the shift tick exceeds the 0 Bar 0 Tick, any note before 0 bar 0 tick will be discarded.
+            /// </summary>
+            /// <value>Tick, 384 tick = 1 bar</value>
+            public int? ShiftTick { get; set; }
 
             /// <summary>
             /// Construct Command
@@ -158,6 +168,8 @@ namespace MaichartConverter
                 HasRequiredOption("p|path=", "The path to file", path => FileLocation = path);
                 HasOption("d|difficulty=", "The number representing the difficulty of chart -- 1-6 for Easy to Re:Master, 7 for Original/Utage", diff => Difficulty = diff);
                 HasOption("f|format=", "The target format - simai or ma2", format => TargetFormat = format);
+                HasOption("r|rotate=", "Rotating method to rotate a chart: Clockwise90/180, Counterclockwise90/180, UpsideDown, LeftToRight", rotate => Rotate = rotate);
+                HasOption("s|shift=", "Overall shift to the chart in unit of tick", tick => ShiftTick = int.Parse(tick));
                 HasOption("o|output=", "Export compiled chart to location specified", dest => Destination = dest);
             }
 
@@ -184,6 +196,14 @@ namespace MaichartConverter
                         tokensCandidates = tokenizer.ChartCandidates.Values.First();
                     }
                     Chart candidate = parser.ChartOfToken(tokensCandidates);
+                    if (Rotate != null)
+                    {
+                        candidate.RotateNotes(Rotate);
+                    }
+                    if (ShiftTick != null && ShiftTick != 0)
+                    {
+                        candidate.ShiftByOffset((int)ShiftTick);
+                    }
                     SimaiCompiler compiler = new SimaiCompiler();
                     string result = "";
                     switch (TargetFormat)
@@ -210,6 +230,7 @@ namespace MaichartConverter
                             else Console.WriteLine(result);
                             break;
                         case null:
+                        case "":
                         case "ma2":
                             if (result.Equals(""))
                             {
@@ -281,6 +302,16 @@ namespace MaichartConverter
             /// Target Format of the file
             /// </summary>
             public string? TargetFormat { get; set; }
+            /// <summary>
+            /// Rotation option for charts
+            /// </summary>
+            /// <value>Clockwise90/180, Counterclockwise90/180, UpsideDown, LeftToRight</value>
+            public string? Rotate { get; set; }
+            /// <summary>
+            /// OverallTick Shift for the chart: if the shift tick exceeds the 0 Bar 0 Tick, any note before 0 bar 0 tick will be discarded.
+            /// </summary>
+            /// <value>Tick, 384 tick = 1 bar</value>
+            public int? ShiftTick { get; set; }
 
             /// <summary>
             /// Construct Command
@@ -291,6 +322,8 @@ namespace MaichartConverter
                 HasLongDescription("This function enables user to compile ma2 chart specified to the format they want. By default is simai for ma2.");
                 HasRequiredOption("p|path=", "REQUIRED: The path to file", path => FileLocation = path);
                 HasOption("f|format=", "The target format - simai or ma2", format => TargetFormat = format);
+                HasOption("r|rotate=", "Rotating method to rotate a chart: Clockwise90/180, Counterclockwise90/180, UpsideDown, LeftToRight", rotate => Rotate = rotate);
+                HasOption("s|shift=", "Overall shift to the chart in unit of tick", tick => ShiftTick = int.Parse(tick));
                 HasOption("o|output=", "Export compiled chart to location specified", dest => Destination = dest);
             }
 
@@ -307,6 +340,14 @@ namespace MaichartConverter
                     Ma2Tokenizer tokenizer = new Ma2Tokenizer();
                     Ma2Parser parser = new Ma2Parser();
                     Chart candidate = parser.ChartOfToken(tokenizer.Tokens(FileLocation ?? throw new FileNotFoundException()));
+                    if (Rotate != null)
+                    {
+                        candidate.RotateNotes(Rotate);
+                    }
+                    if (ShiftTick != null && ShiftTick != 0)
+                    {
+                        candidate.ShiftByOffset((int)ShiftTick);
+                    }
                     string result = "";
                     switch (TargetFormat)
                     {
@@ -403,6 +444,16 @@ namespace MaichartConverter
             /// Target Format of the file
             /// </summary>
             public string? TargetFormat { get; set; }
+            /// <summary>
+            /// Rotation option for charts
+            /// </summary>
+            /// <value>Clockwise90/180, Counterclockwise90/180, UpsideDown, LeftToRight</value>
+            public string? Rotate { get; set; }
+            /// <summary>
+            /// OverallTick Shift for the chart: if the shift tick exceeds the 0 Bar 0 Tick, any note before 0 bar 0 tick will be discarded.
+            /// </summary>
+            /// <value>Tick, 384 tick = 1 bar</value>
+            public int? ShiftTick { get; set; }
 
             /// <summary>
             /// Construct Command
@@ -417,6 +468,8 @@ namespace MaichartConverter
                 //FileLocation = GlobalPaths[0];
                 //HasOption("a|a000=", "Folder of A000 to override - end with a path separator", path => FileLocation = path);
                 HasOption("f|format=", "The target format - simai or ma2", format => TargetFormat = format);
+                HasOption("r|rotate=", "Rotating method to rotate a chart: Clockwise90/180, Counterclockwise90/180, UpsideDown, LeftToRight", rotate => Rotate = rotate);
+                HasOption("s|shift=", "Overall shift to the chart in unit of tick", tick => ShiftTick = int.Parse(tick));
                 HasOption("o|output=", "Export compiled chart to location specified", dest => Destination = dest);
             }
 
@@ -435,6 +488,14 @@ namespace MaichartConverter
                     //Chart good = new Ma2(@"/Users/neskol/MaiAnalysis/A000/music/music" + musicID + "/" + musicID + "_0" + difficulty + ".ma2");
                     string tokenLocation = FileLocation ?? throw new FileNotFoundException();
                     Chart candidate = parser.ChartOfToken(tokenizer.Tokens(tokenLocation + "music" + GlobalSep + "music" + CompensateZero(ID ?? throw new NullReferenceException("ID shall not be null")) + GlobalSep + CompensateZero(ID ?? throw new NullReferenceException("ID shall not be null")) + "_0" + Difficulty + ".ma2"));
+                    if (Rotate != null)
+                    {
+                        candidate.RotateNotes(Rotate);
+                    }
+                    if (ShiftTick != null && ShiftTick != 0)
+                    {
+                        candidate.ShiftByOffset((int)ShiftTick);
+                    }
                     string result = "";
                     switch (TargetFormat)
                     {
@@ -562,6 +623,16 @@ namespace MaichartConverter
             /// Stores categorize method for easier access
             /// </summary>
             public string CategorizeMethods { get; set; }
+            /// <summary>
+            /// Rotation option for charts
+            /// </summary>
+            /// <value>Clockwise90/180, Counterclockwise90/180, UpsideDown, LeftToRight</value>
+            public string? Rotate { get; set; }
+            /// <summary>
+            /// OverallTick Shift for the chart: if the shift tick exceeds the 0 Bar 0 Tick, any note before 0 bar 0 tick will be discarded.
+            /// </summary>
+            /// <value>Tick, 384 tick = 1 bar</value>
+            public int? ShiftTick { get; set; }
 
             /// <summary>
             /// Construct Command
@@ -583,6 +654,8 @@ namespace MaichartConverter
                 //HasOption("a|a000=", "Folder of A000 to override - end with a path separator", path => FileLocation = path);
                 HasOption("f|format=", "The target format - simai or ma2", format => TargetFormat = format);
                 HasOption("g|genre=", "The preferred categorizing scheme, includes:\n" + CategorizeMethods, genre => Int32.TryParse(genre, out categorizeIndex));
+                HasOption("r|rotate=", "Rotating method to rotate a chart: Clockwise90/180, Counterclockwise90/180, UpsideDown, LeftToRight", rotate => Rotate = rotate);
+                HasOption("s|shift=", "Overall shift to the chart in unit of tick", tick => ShiftTick = int.Parse(tick));
                 HasOption("v|video=", "Folder of Video to override - end with a path separator", vPath => VideoLocation = vPath);
             }
 
@@ -907,6 +980,16 @@ namespace MaichartConverter
             /// Stores categorize method for easier access
             /// </summary>
             public string CategorizeMethods { get; set; }
+            /// <summary>
+            /// Rotation option for charts
+            /// </summary>
+            /// <value>Clockwise90/180, Counterclockwise90/180, UpsideDown, LeftToRight</value>
+            public string? Rotate { get; set; }
+            /// <summary>
+            /// OverallTick Shift for the chart: if the shift tick exceeds the 0 Bar 0 Tick, any note before 0 bar 0 tick will be discarded.
+            /// </summary>
+            /// <value>Tick, 384 tick = 1 bar</value>
+            public int? ShiftTick { get; set; }
 
             /// <summary>
             /// Construct Command
@@ -928,6 +1011,8 @@ namespace MaichartConverter
                 //HasOption("a|a000=", "Folder of A000 to override - end with a path separator", path => FileLocation = path);
                 HasOption("f|format=", "The target format - simai or ma2", format => TargetFormat = format);
                 HasOption("g|genre=", "The preferred categorizing scheme, includes:\n" + CategorizeMethods, genre => Int32.TryParse(genre, out categorizeIndex));
+                HasOption("r|rotate=", "Rotating method to rotate a chart: Clockwise90/180, Counterclockwise90/180, UpsideDown, LeftToRight", rotate => Rotate = rotate);
+                HasOption("s|shift=", "Overall shift to the chart in unit of tick", tick => ShiftTick = int.Parse(tick));
                 HasOption("v|video=", "Folder of Video to override - end with a path separator", vPath => VideoLocation = vPath);
             }
 
