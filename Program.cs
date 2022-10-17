@@ -1180,7 +1180,7 @@ namespace MaichartConverter
                                 string originalImageLocation = imageLocation ?? throw new NullReferenceException("IMAGE SPECIFIED BUT IMAGE LOCATION IS NULL");
                                 originalImageLocation += "UI_Jacket_00" + shortID + ".png";
                                 string newImageLocation = defaultCategorizedPath + sep + trackNameSubstitute + "_Utage" + sep + "bg.png";
-                                if (!File.Exists(newImageLocation))
+                                if (!File.Exists(newImageLocation)&&File.Exists(originalImageLocation))
                                 {
                                     File.Copy(originalImageLocation, newImageLocation);
                                     Console.WriteLine("Image exported to: " + newImageLocation);
