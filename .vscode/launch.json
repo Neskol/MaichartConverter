@@ -123,7 +123,7 @@
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/bin/Debug/net6.0/MaichartConverter.dll",
-            "args": "CompileUtageDatabase -p \"/Users/Neskol/MaiAnalysis/A000-Utage/\" -g \"6\" -c \"/Users/Neskol/MaiAnalysis/Image/Texture2D/\" -v \"/Users/Neskol/MaiAnalysis/FinaleBGA_HEVC/\" -m \"/Users/Neskol/MaiAnalysis/Sound-Finale-MP3/\" -o \"/Users/Neskol/MaiAnalysis/Output_Utage/\"",
+            "args": "CompileUtageDatabase -p \"/Users/Neskol/MaiAnalysis/A000-Utage/\" -g \"6\" -c \"/Users/Neskol/MaiAnalysis/Image/Texture2D/\" -v \"/Users/Neskol/MaiAnalysis/FinaleBGA_HEVC/\" -m \"/Users/Neskol/MaiAnalysis/Sound-Finale-MP3/\" -o \"/Users/Neskol/MaiAnalysis/Output_Utage_HEVC/\"",
             "cwd": "${workspaceFolder}",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "integratedTerminal",
