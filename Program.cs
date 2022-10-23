@@ -891,6 +891,7 @@ namespace MaichartConverter
                             AppendDebugInformation(trackInfo.TrackID, compiler.SymbolicBPMTable(), compiler.SymbolicFirstNote(false));
                             string[] compiledTrackDetail = { trackInfo.TrackName, trackInfo.TrackGenre, trackInfo.TrackVersion, trackInfo.TrackVersionNumber };
                             CompiledTrackDetailSet.Add(trackInfo.TrackName + trackInfo.TrackID, compiledTrackDetail);
+                            CompiledChart.Add(trackInfo.TrackName + compiler.GenerateOneLineSummary());
                             Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
                             Console.WriteLine();
                         }
@@ -1244,6 +1245,7 @@ namespace MaichartConverter
                             // AppendDebugInformation(trackInfo.TrackID, compiler.SymbolicBPMTable(), compiler.SymbolicFirstNote(false));
                             string[] compiledTrackDetail = { trackInfo.TrackName, trackInfo.TrackGenre, trackInfo.TrackVersion, trackInfo.TrackVersionNumber };
                             CompiledTrackDetailSet.Add(trackInfo.TrackName + trackInfo.TrackID, compiledTrackDetail);
+                            CompiledChart.Add(trackInfo.TrackID + trackInfo.TrackName + compiler.GenerateOneLineSummary());
                             Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + "_Utage");
                             Console.WriteLine();
                         }
