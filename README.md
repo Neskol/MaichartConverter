@@ -1,7 +1,7 @@
 # MaichartConverter
 
 ## A simple program provide functionality of converting maimai chart between Simai and Ma2.
-> The original supporting classes are now separated from this repo. Please see [MaiLib](https://github.com/Neskol/MaiLib) for more informations.
+> The original supporting classes are now separated from this repo. Please see [MaiLib](https://github.com/Neskol/MaiLib) for more information.
 
 ### Build
     git clone
@@ -22,4 +22,4 @@
 
 ### Disclamer
 - Copyrights of the works belong to each individual right holders. This tool is purely used as non-commercial and study purpose. You should find your way for any resource might be used and properly use at your own risk.
-- If you would like to use the parser in your project, please refer [MaiLib](https://github.com/Neskol/MaiLib) and hopely that helps!
+- If you would like to use the parser in your project, please refer [MaiLib](https://github.com/Neskol/MaiLib) and hopefully that helps!
