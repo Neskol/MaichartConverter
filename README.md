@@ -20,6 +20,6 @@
 - If you have difficulty using the commands, please refer VSCode launch.json where I included several examples
 - The whole program was planned to convert from ma2 to simai initially and all other features were developed after that, so there is a HUGE amount of compromises in code design which made it hard to read (but works so far). It would be most kind of you if you would like to help me fixing that
 
-### Disclamer
+### Disclaimer
 - Copyrights of the works belong to each individual right holders. This tool is purely used as non-commercial and study purpose. You should find your way for any resource might be used and properly use at your own risk.
 - If you would like to use the parser in your project, please refer [MaiLib](https://github.com/Neskol/MaiLib) and hopefully that helps!
