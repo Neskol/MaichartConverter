@@ -37,6 +37,22 @@
             // Use IntelliSense to find out which attributes exist for C# debugging
             // Use hover for the description of the existing attributes
             // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+            "name": ".NET Core Launch (ChartAndBGMOnly)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/bin/Debug/net6.0/MaichartConverter.dll",
+            "args": "CompileDatabase -p \"/Users/Neskol/MaiAnalysis/A000/\" -m \"/Users/Neskol/MaiAnalysis/Sound/\" -o \"/Users/Neskol/MaiAnalysis/Output_ChartAndBGMOnly/\"",
+            "cwd": "${workspaceFolder}",
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "integratedTerminal",
+            "stopAtEntry": false
+        },
+        {
+            // Use IntelliSense to find out which attributes exist for C# debugging
+            // Use hover for the description of the existing attributes
+            // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
             "name": ".NET Core Launch (NoBGA)",
             "type": "coreclr",
             "request": "launch",
@@ -108,6 +124,22 @@
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/bin/Debug/net6.0/MaichartConverter.dll",
             "args": "CompileUtageDatabase -p \"/Users/Neskol/MaiAnalysis/A000-Utage/\" -g \"6\" -o \"/Users/Neskol/MaiAnalysis/Output_Utage_ChartOnly/\"",
+            "cwd": "${workspaceFolder}",
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "integratedTerminal",
+            "stopAtEntry": false
+        },
+        {
+            // Use IntelliSense to find out which attributes exist for C# debugging
+            // Use hover for the description of the existing attributes
+            // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+            "name": ".NET Core Launch (Utage_ChartAndBGMOnly)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/bin/Debug/net6.0/MaichartConverter.dll",
+            "args": "CompileUtageDatabase -p \"/Users/Neskol/MaiAnalysis/A000-Utage/\" -g \"6\" -m \"/Users/Neskol/MaiAnalysis/Sound-Finale-MP3/\" -o \"/Users/Neskol/MaiAnalysis/Output_Utage_ChartAndBGMOnly/\"",
             "cwd": "${workspaceFolder}",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "integratedTerminal",
