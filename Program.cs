@@ -688,7 +688,7 @@ namespace MaichartConverter
                     {
                         exportAudio = false;
                     }
-                    else
+                    else if (BGMLocation.Equals(""))
                     {
                         audioLocation = GlobalPaths[1];
                     }
@@ -698,7 +698,7 @@ namespace MaichartConverter
                     {
                         exportImage = false;
                     }
-                    else
+                    else if (ImageLocation.Equals(""))
                     {
                         imageLocation = GlobalPaths[2];
                     }
@@ -708,7 +708,7 @@ namespace MaichartConverter
                     {
                         exportBGA = false;
                     }
-                    else
+                    else if (VideoLocation.Equals(""))
                     {
                         bgaLocation = GlobalPaths[3];
                     }
