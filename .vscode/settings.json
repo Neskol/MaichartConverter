@@ -8,5 +8,6 @@
         "Maichart",
         "pqszw",
         "smsg"
-    ]
+    ],
+    "dotnet.defaultSolution": "MaichartConverter.sln"
 }

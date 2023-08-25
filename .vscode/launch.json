@@ -37,6 +37,22 @@
         // Use IntelliSense to find out which attributes exist for C# debugging
         // Use hover for the description of the existing attributes
         // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+        "name": ".NET Core Launch (For Convert Source)",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        // If you have changed target frameworks, make sure to update the program path.
+        "program": "${workspaceFolder}/bin/Debug/net6.0/MaichartConverter.dll",
+        "args": "CompileDatabase -p \"/Users/Neskol/MaiAnalysis/A000/\" -o \"/Users/Neskol/source/repo/Neskol/Maichart-Converts/\"",
+        "cwd": "${workspaceFolder}",
+        // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+        "console": "integratedTerminal",
+        "stopAtEntry": false
+      },
+      {
+        // Use IntelliSense to find out which attributes exist for C# debugging
+        // Use hover for the description of the existing attributes
+        // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
         "name": ".NET Core Launch (ChartAndBGMOnly)",
         "type": "coreclr",
         "request": "launch",
@@ -124,6 +140,22 @@
         // If you have changed target frameworks, make sure to update the program path.
         "program": "${workspaceFolder}/bin/Debug/net6.0/MaichartConverter.dll",
         "args": "CompileDatabase -p \"/Users/Neskol/MaiAnalysis/A000-1.30Update/\" -c \"/Users/Neskol/MaiAnalysis/Image/Texture2D/\" -m \"/Users/Neskol/MaiAnalysis/Sound/\" -o \"/Users/Neskol/MaiAnalysis/Output_NoBGA_Festival/\"",
+        "cwd": "${workspaceFolder}",
+        // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+        "console": "integratedTerminal",
+        "stopAtEntry": false
+      },
+      {
+        // Use IntelliSense to find out which attributes exist for C# debugging
+        // Use hover for the description of the existing attributes
+        // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+        "name": ".NET Core Launch For UpdateTest (NoBGA)",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        // If you have changed target frameworks, make sure to update the program path.
+        "program": "${workspaceFolder}/bin/Debug/net6.0/MaichartConverter.dll",
+        "args": "CompileDatabase -p \"/Users/Neskol/MaiAnalysis/A000/\" -c \"/Users/Neskol/MaiAnalysis/Image/Texture2D/\" -m \"/Users/Neskol/MaiAnalysis/Sound/\" -g \"2\" -o \"/Users/Neskol/MaiAnalysis/Output_NoBGA_FestivalPlusTest/\"",
         "cwd": "${workspaceFolder}",
         // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
         "console": "integratedTerminal",
