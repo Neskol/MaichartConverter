@@ -74,7 +74,7 @@ namespace MaichartConverter
         /// <summary>
         /// Main method to process charts
         /// </summary>
-        /// <param name="args">Parameters to take in</param>     
+        /// <param name="args">Parameters to take in</param>
         public static int Main(string[] args)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -758,6 +758,7 @@ namespace MaichartConverter
                     //Iterate music folders
                     foreach (string track in musicFolders)
                     {
+                        Console.WriteLine("Iterating on folder {0}",track);
                         if (File.Exists(track + sep + "Music.xml"))
                         {
                             TrackInformation trackInfo = new XmlInformation(track + sep + "");
