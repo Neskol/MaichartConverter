@@ -17,6 +17,8 @@ namespace MaichartConverter
         /// </summary>
         private const int Failed = 2;
 
+        public bool StrictDecimal { get; set; }
+
         /// <summary>
         /// Source file path
         /// </summary>
@@ -97,11 +99,12 @@ namespace MaichartConverter
             HasOption("c|cover=", "Folder of Cover Image to override - end with a path separator", iPath => ImageLocation = iPath);
             //FileLocation = GlobalPaths[0];
             //HasOption("a|a000=", "Folder of A000 to override - end with a path separator", path => FileLocation = path);
-            HasOption("f|format=", "The target format - simai or ma2", format => TargetFormat = format);
+            HasOption("f|format=", "The target format - Simai, SimaiFes, Ma2_103, Ma2_104", format => TargetFormat = format);
             HasOption("g|genre=", "The preferred categorizing scheme, includes:\n" + CategorizeMethods, genre => Int32.TryParse(genre, out categorizeIndex));
             HasOption("r|rotate=", "Rotating method to rotate a chart: Clockwise90/180, Counterclockwise90/180, UpsideDown, LeftToRight", rotate => Rotate = rotate);
             HasOption("s|shift=", "Overall shift to the chart in unit of tick", tick => ShiftTick = int.Parse(tick));
             HasOption("v|video=", "Folder of Video to override - end with a path separator", vPath => VideoLocation = vPath);
+            HasOption("d|decimal=","Force output chart to have levels rated by decimal", dec => StrictDecimal = true);
         }
 
         /// <summary>
@@ -114,6 +117,7 @@ namespace MaichartConverter
         {
             try
             {
+                // Console.ReadKey();
                 string sep = Program.GlobalSep;
                 bool exportBGA = true;
                 bool exportImage = true;
@@ -237,7 +241,8 @@ namespace MaichartConverter
                         {
                             Console.WriteLine("Already exist song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
                         }
-                        SimaiCompiler compiler = new SimaiCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                        SimaiCompiler compiler = new SimaiCompiler(StrictDecimal, track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                        compiler.WriteOut(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix, false);
                         Program.CompiledChart.Add(compiler.GenerateOneLineSummary());
                         Console.WriteLine("Finished compiling maidata " + trackInfo.TrackName + " to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "maidata.txt");
 
