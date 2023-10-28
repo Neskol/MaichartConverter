@@ -56,7 +56,7 @@ namespace MaichartConverter
             IsCommand("CompileMa2", "Compile assigned Ma2 chart to assigned format");
             HasLongDescription("This function enables user to compile ma2 chart specified to the format they want. By default is simai for ma2.");
             HasRequiredOption("p|path=", "REQUIRED: The path to file", path => FileLocation = path);
-            HasOption("f|format=", "The target format - simai or ma2", format => TargetFormat = format);
+            HasOption("f|format=", "The target format - Ma2 (Ma2_103) or Ma2_104", format => TargetFormat = format);
             HasOption("r|rotate=", "Rotating method to rotate a chart: Clockwise90/180, Counterclockwise90/180, UpsideDown, LeftToRight", rotate => Rotate = rotate);
             HasOption("s|shift=", "Overall shift to the chart in unit of tick", tick => ShiftTick = int.Parse(tick));
             HasOption("o|output=", "Export compiled chart to location specified", dest => Destination = dest);
@@ -111,9 +111,39 @@ namespace MaichartConverter
                         else Console.WriteLine(result);
                         break;
                     case "ma2":
+                    case "MA2":
+                    case "Ma2":
+                    case "Ma2_103":
                         if (result.Equals(""))
                         {
                             Ma2 defaultChart = new Ma2(candidate);
+                            result = defaultChart.Compose();
+                        }
+                        if (Destination != null && !Destination.Equals(""))
+                        {
+                            StreamWriter sw = new StreamWriter(Destination + Program.GlobalSep + "result.ma2", false);
+                            {
+                                sw.WriteLine(result);
+                            }
+                            sw.Close();
+                            if (File.Exists(Destination + Program.GlobalSep + "result.ma2"))
+                            {
+                                Console.WriteLine("Successfully compiled at: " + Destination + Program.GlobalSep + "result.ma2");
+                            }
+                            else
+                            {
+                                throw new FileNotFoundException("THE FILE IS NOT SUCCESSFULLY COMPILED.");
+                            }
+                        }
+                        else Console.WriteLine(result);
+                        break;
+                    case "Ma2_104":
+                        if (result.Equals(""))
+                        {
+                            Ma2 defaultChart = new Ma2(candidate)
+                            {
+                                ChartVersion = ChartEnum.ChartVersion.Ma2_104
+                            };
                             result = defaultChart.Compose();
                         }
                         if (Destination != null && !Destination.Equals(""))
