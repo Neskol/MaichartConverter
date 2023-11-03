@@ -165,6 +165,22 @@
         // Use IntelliSense to find out which attributes exist for C# debugging
         // Use hover for the description of the existing attributes
         // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+        "name": ".NET Core Launch (H264_BGA By Cab)",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        // If you have changed target frameworks, make sure to update the program path.
+        "program": "${workspaceFolder}/bin/Debug/net6.0/MaichartConverter.dll",
+        "args": "CompileDatabase -g \"2\" -p \"/Users/Neskol/MaiAnalysis/A000/\" -c \"/Users/Neskol/MaiAnalysis/Image/Texture2D/\" -v \"/Users/Neskol/MaiAnalysis/DXBGA_H264/\" -m \"/Users/Neskol/MaiAnalysis/Sound/\" -o \"/Users/Neskol/MaiAnalysis/Output_H264/\"",
+        "cwd": "${workspaceFolder}",
+        // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+        "console": "integratedTerminal",
+        "stopAtEntry": false
+      },
+      {
+        // Use IntelliSense to find out which attributes exist for C# debugging
+        // Use hover for the description of the existing attributes
+        // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
         "name": ".NET Core Launch For Update (Chart Only)",
         "type": "coreclr",
         "request": "launch",
