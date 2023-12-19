@@ -241,9 +241,18 @@ namespace MaichartConverter
                         {
                             Console.WriteLine("Already exist song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
                         }
-                        SimaiCompiler compiler = new SimaiCompiler(StrictDecimal, track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
-                        compiler.WriteOut(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix, false);
-                        Program.CompiledChart.Add(compiler.GenerateOneLineSummary());
+                        SimaiCompiler compiler;
+                        if (trackInfo.Information["Utage"] != "")
+                        {
+                            compiler = new SimaiCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + "_Utage", true);
+                            compiler.WriteOut(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix, false);
+                        }
+                        else
+                        {
+                            compiler = new SimaiCompiler(StrictDecimal, track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                            compiler.WriteOut(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix, false);
+                            Program.CompiledChart.Add(compiler.GenerateOneLineSummary());
+                        }
                         Console.WriteLine("Finished compiling maidata " + trackInfo.TrackName + " to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "maidata.txt");
 
                         if (exportAudio)
