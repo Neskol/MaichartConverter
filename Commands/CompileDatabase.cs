@@ -348,7 +348,7 @@ namespace MaichartConverter
                         // Program.AppendDebugInformation(trackInfo.TrackID, compiler.SymbolicBPMTable(), compiler.SymbolicFirstNote(false));
                         string[] compiledTrackDetail = { trackInfo.TrackName, trackInfo.TrackGenre, trackInfo.TrackVersion, trackInfo.TrackVersionNumber };
                         Program.CompiledTrackDetailSet.Add(trackInfo.TrackName + trackInfo.TrackID, compiledTrackDetail);
-                        Program.CompiledChart.Add(trackInfo.TrackName + compiler.GenerateOneLineSummary());
+                        // Program.CompiledChart.Add(trackInfo.TrackName + compiler.GenerateOneLineSummary());
                         Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
                         Console.WriteLine();
                     }

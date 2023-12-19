@@ -201,7 +201,6 @@ namespace MaichartConverter
             //     sw.WriteLine("[" + index + "]\t" + compiledDetailArray[0] + "\t" + compiledDetailArray[1] + "\t" + compiledDetailArray[2] + "\t" + compiledDetailArray[3] ?? throw new NullReferenceException());
             //     index++;
             // }
-            index = 1;
 
             sw.WriteLine("Total chart compiled: " + CompiledChart.Count);
             foreach (string title in CompiledChart)
