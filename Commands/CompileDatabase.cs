@@ -246,6 +246,7 @@ namespace MaichartConverter
                         {
                             compiler = new SimaiCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + "_Utage", true);
                             compiler.WriteOut(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix, false);
+                            Program.CompiledChart.Add(compiler.GenerateOneLineSummary());
                         }
                         else
                         {
