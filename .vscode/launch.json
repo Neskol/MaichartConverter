@@ -411,7 +411,7 @@
         "preLaunchTask": "build",
         // If you have changed target frameworks, make sure to update the program path.
         "program": "${workspaceFolder}/bin/Debug/net8.0/MaichartConverter.dll",
-        "args": "ReverseMa2FromSimaiDatabase -p \"/Users/Neskol/MaiAnalysis/Output_HEVC_By_Cab_Decimal",
+        "args": "ReverseMa2FromSimaiDatabase -p \"/Users/Neskol/MaiAnalysis/Output_NoBGA_By_Cab",
         "cwd": "${workspaceFolder}",
         // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
         "console": "integratedTerminal",

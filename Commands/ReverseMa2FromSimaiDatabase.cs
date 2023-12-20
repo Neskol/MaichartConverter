@@ -69,12 +69,46 @@ public class ReverseMa2FromSimaiDatabase : ConsoleCommand
                 // Console.WriteLine(path);
                 Console.WriteLine(Path.GetFileName(path));
                 string idCandidate = Path.GetFileName(path).Split('_')[0];
-                // int id = int.Parse(idCandidate);
-                Console.WriteLine("ID of path: {0}", idCandidate);
-                if (File.Exists($"{path}/bg.png")) Console.WriteLine("BG exists under {0}", path);
-                if (File.Exists($"{path}/pv.mp4")) Console.WriteLine("PV exists under {0}", path);
-                if (File.Exists($"{path}/mv.mp4")) Console.WriteLine("MV exists under {0}", path);
-                if (File.Exists($"{path}/track.mp3")) Console.WriteLine("TRACK exists under {0}", path);
+                bool isChartFolder = int.TryParse(idCandidate, out int id);
+                // Console.WriteLine("ID of path: {0}", idCandidate);
+                if (isChartFolder)
+                {
+                    if (File.Exists($"{path}/bg.png"))
+                    {
+                        string oldPath = $"{path}/bg.png";
+                        string newPath = $"{imageLocation}/UI_Jacket_{Program.CompensateZero(id.ToString())}.png";
+                        Console.WriteLine("Located image at: {0}", oldPath);
+                        if (File.Exists(newPath) && !OverwriteDestination) Console.WriteLine("File already located at {0} and skipped because not overwriting", newPath);
+                        else File.Copy(oldPath, newPath, OverwriteDestination);
+                        Console.WriteLine("Copied image to: {0}", newPath);
+                    }
+                    if (File.Exists($"{path}/pv.mp4"))
+                    {
+                        string oldPath = $"{path}/pv.mp4";
+                        string newPath = $"{bgaLocation}/{Program.CompensateZero(id.ToString())}.mp4";
+                        Console.WriteLine("Located PV at: {0}", oldPath);
+                        if (File.Exists(newPath) && !OverwriteDestination) Console.WriteLine("File already located at {0} and skipped because not overwriting", newPath);
+                        else File.Copy(oldPath, newPath, OverwriteDestination);
+                        Console.WriteLine("Copied PV to: {0}", newPath);
+                    }
+                    if (File.Exists($"{path}/mv.mp4")) {
+                        string oldPath = $"{path}/mv.mp4";
+                        string newPath = $"{bgaLocation}/{Program.CompensateZero(id.ToString())}.mp4";
+                        Console.WriteLine("Located MV at: {0}", oldPath);
+                        if (File.Exists(newPath) && !OverwriteDestination) Console.WriteLine("File already located at {0} and skipped because not overwriting", newPath);
+                        else File.Copy(oldPath, newPath, OverwriteDestination);
+                        Console.WriteLine("Copied MV to: {0}", newPath);
+                    }
+                    if (File.Exists($"{path}/track.mp3")) {
+                        string oldPath = $"{path}/track.mp3";
+                        string newPath = $"{soundLocation}/music{Program.CompensateZero(id.ToString())}.mp3";
+                        Console.WriteLine("Located track at: {0}", oldPath);
+                        if (File.Exists(newPath) && !OverwriteDestination) Console.WriteLine("File already located at {0} and skipped because not overwriting", newPath);
+                        else File.Copy(oldPath, newPath, OverwriteDestination);
+                        Console.WriteLine("Copied track to: {0}", newPath);
+                    }
+                }
+                else Console.WriteLine("{0} is not a chart folder",path);
                 Console.WriteLine();
             }
             return Success;
