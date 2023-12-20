@@ -91,6 +91,8 @@ namespace MaichartConverter
             {
                 CategorizeMethods += "[" + i + "] " + Program.TrackCategorizeMethodSet[i] + "\n";
             }
+
+            StrictDecimal = false;
             IsCommand("CompileDatabase", "Compile whole ma2 database to format assigned");
             HasLongDescription("This function enables user to compile whole database to the format they want. By default is simai for ma2.");
             HasRequiredOption("p|path=", "REQUIRED: Folder of A000 to override - end with a path separator", aPath => A000Location = aPath);
@@ -104,7 +106,7 @@ namespace MaichartConverter
             HasOption("r|rotate=", "Rotating method to rotate a chart: Clockwise90/180, Counterclockwise90/180, UpsideDown, LeftToRight", rotate => Rotate = rotate);
             HasOption("s|shift=", "Overall shift to the chart in unit of tick", tick => ShiftTick = int.Parse(tick));
             HasOption("v|video=", "Folder of Video to override - end with a path separator", vPath => VideoLocation = vPath);
-            HasOption("d|decimal=","Force output chart to have levels rated by decimal", dec => StrictDecimal = true);
+            HasOption("d|decimal:", "Force output chart to have levels rated by decimal", _ => StrictDecimal = _ is null ? false : true);
         }
 
         /// <summary>
@@ -189,8 +191,11 @@ namespace MaichartConverter
                     foreach (string bgaFile in bgaFiles)
                     {
                         string musicID = bgaFile.Substring(bgaLocation.Length).Substring(0, 6).Substring(2, 4);
-                        bgaMap.Add(Program.CompensateZero(musicID), bgaFile);
+                        if (!bgaMap.Keys.Contains(Program.CompensateZero(musicID))) bgaMap.Add(Program.CompensateZero(musicID), bgaFile);
                         bgaMap.Add("01" + musicID, bgaFile);
+                        bgaMap.Add("10" + musicID, bgaFile);
+                        bgaMap.Add("11" + musicID, bgaFile);
+                        bgaMap.Add("12" + musicID, bgaFile);
                     }
                 }
                 else if (exportBGA) throw new NullReferenceException("BGA LOCATION IS NOT SPECIFIED BUT BGA OPTION IS ENABLED");
@@ -305,7 +310,11 @@ namespace MaichartConverter
                         bool bgaExists = bgaMap.TryGetValue(Program.CompensateZero(trackInfo.TrackID), out originalBGALocation);
                         if (!bgaExists)
                         {
-                            if (trackInfo.TrackID.Length == 5)
+                            if (trackInfo.TrackID.Length == 6)
+                            {
+                                bgaExists = bgaMap.TryGetValue(trackInfo.TrackID.Substring(2, 4), out originalBGALocation);
+                            }
+                            else if (trackInfo.TrackID.Length == 5)
                             {
                                 bgaExists = bgaMap.TryGetValue(trackInfo.TrackID.Substring(1, 4), out originalBGALocation);
                             }
