@@ -106,7 +106,7 @@ namespace MaichartConverter
             HasOption("r|rotate=", "Rotating method to rotate a chart: Clockwise90/180, Counterclockwise90/180, UpsideDown, LeftToRight", rotate => Rotate = rotate);
             HasOption("s|shift=", "Overall shift to the chart in unit of tick", tick => ShiftTick = int.Parse(tick));
             HasOption("v|video=", "Folder of Video to override - end with a path separator", vPath => VideoLocation = vPath);
-            HasOption("d|decimal:", "Force output chart to have levels rated by decimal", _ => StrictDecimal = _ is null ? false : true);
+            HasOption("d|decimal:", "Force output chart to have levels rated by decimal", _ => StrictDecimal = true);
         }
 
         /// <summary>
@@ -249,19 +249,13 @@ namespace MaichartConverter
                         SimaiCompiler compiler;
                         if (trackInfo.Information["Utage"] != "")
                         {
-                            compiler = new SimaiCompiler(track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + "_Utage", true)
-                            {
-                                StrictDecimalLevel = StrictDecimal
-                            };
+                            compiler = new SimaiCompiler(StrictDecimal, track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + "_Utage", true);
                             compiler.WriteOut(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix, true);
                             Program.CompiledChart.Add(compiler.GenerateOneLineSummary());
                         }
                         else
                         {
-                            compiler = new SimaiCompiler(StrictDecimal, track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix)
-                            {
-                                StrictDecimalLevel = StrictDecimal
-                            };
+                            compiler = new SimaiCompiler(StrictDecimal, track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
                             compiler.WriteOut(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix, true);
                             Program.CompiledChart.Add(compiler.GenerateOneLineSummary());
                         }
