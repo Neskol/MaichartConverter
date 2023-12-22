@@ -87,14 +87,14 @@ namespace MaichartConverter
 
             Console.WriteLine(ComposeHeader());
 
-            XmlDeclaration xmlDecl = BPMCollection.CreateXmlDeclaration("1.0", "UTF-8", null);
-            XmlDeclaration xmlDeclBPM = DebugInformationTable.CreateXmlDeclaration("1.0", "UTF-8", null);
-            BPMCollection.AppendChild(xmlDecl);
-            DebugInformationTable.AppendChild(xmlDeclBPM);
-            XmlElement root = BPMCollection.CreateElement("BPM");
-            XmlElement btRoot = DebugInformationTable.CreateElement("BPM-Table");
-            BPMCollection.AppendChild(root);
-            DebugInformationTable.AppendChild(btRoot);
+            // XmlDeclaration xmlDecl = BPMCollection.CreateXmlDeclaration("1.0", "UTF-8", null);
+            // XmlDeclaration xmlDeclBPM = DebugInformationTable.CreateXmlDeclaration("1.0", "UTF-8", null);
+            // BPMCollection.AppendChild(xmlDecl);
+            // DebugInformationTable.AppendChild(xmlDeclBPM);
+            // XmlElement root = BPMCollection.CreateElement("BPM");
+            // XmlElement btRoot = DebugInformationTable.CreateElement("BPM-Table");
+            // BPMCollection.AppendChild(root);
+            // DebugInformationTable.AppendChild(btRoot);
 
             //TestSpecificChart();
             //TestSpecificChart(@"D:\PandoraCandidate.ma2");
@@ -105,7 +105,17 @@ namespace MaichartConverter
             //}
             // return 0;
             var commands = GetCommands();
+            // foreach (ConsoleCommand x in commands)
+            // {
+            //     Console.WriteLine(x.Command.ToString());
+            // }
+            // Console.WriteLine(string.Join(' ',args));
             return ConsoleCommandDispatcher.DispatchCommand(commands, args, Console.Out);
+            // else
+            // {
+            //     ConsoleCommand reverseDatabase = new ReverseMa2FromSimaiDatabase();
+            //     return reverseDatabase.Run(args);
+            // }
         }
 
         /// <summary>
@@ -187,20 +197,7 @@ namespace MaichartConverter
         public static void Log(string outputLocation)
         {
             StreamWriter sw = new StreamWriter(outputLocation + "log.txt", false);
-            // sw.WriteLine("Total music compiled: " + NumberTotalTrackCompiled);
             int index = 1;
-            // sw.WriteLine("Index\tTitle\tGenre\tVersion\tPatch Number");
-            // foreach (KeyValuePair<int,string> pair in CompiledTracks)
-            // {
-            //     string[]? compiledDetailArray = new string[0];
-            //     CompiledTrackDetailSet.TryGetValue(pair.Key.ToString(), out compiledDetailArray);
-            //     if (compiledDetailArray == null)
-            //     {
-            //         compiledDetailArray = new string[0];
-            //     }
-            //     sw.WriteLine("[" + index + "]\t" + compiledDetailArray[0] + "\t" + compiledDetailArray[1] + "\t" + compiledDetailArray[2] + "\t" + compiledDetailArray[3] ?? throw new NullReferenceException());
-            //     index++;
-            // }
 
             sw.WriteLine("Total chart compiled: " + CompiledChart.Count);
             foreach (string title in CompiledChart)
@@ -218,8 +215,8 @@ namespace MaichartConverter
                 }
             }
             sw.Close();
-            BPMCollection.Save(outputLocation + "bpm.xml");
-            DebugInformationTable.Save(outputLocation + "debug.xml");
+            // BPMCollection.Save(outputLocation + "bpm.xml");
+            // DebugInformationTable.Save(outputLocation + "debug.xml");
         }
 
         /// <summary>

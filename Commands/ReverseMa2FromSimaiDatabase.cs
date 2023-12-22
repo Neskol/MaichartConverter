@@ -20,11 +20,11 @@ public class ReverseMa2FromSimaiDatabase : ConsoleCommand
 
     public ReverseMa2FromSimaiDatabase()
     {
-        SourceLocation = "";
+        SourceLocation = ".";
         OverwriteDestination = false;
         IsCommand("ReverseMa2FromSimaiDatabase",
             "Reverse Simai Database from given folder to MaiAnalysis folder for compilation");
-        HasOption("p|path=", "Load Simai files from this location", path => SourceLocation = path);
+        HasOption("p|path=", "Load Simai files from this location", path => SourceLocation = path ?? "");
         HasOption("o|output=", "Write extracted files into this directory. New folder will be created if not provided",
             output => Destination = output);
         HasOption("r|replace:", "Replace files at destination if already exist. By default is false.",

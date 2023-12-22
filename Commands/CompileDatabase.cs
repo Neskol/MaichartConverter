@@ -1,5 +1,6 @@
 using ManyConsole;
 using MaiLib;
+using System.Configuration.Assemblies;
 
 namespace MaichartConverter
 {
@@ -8,15 +9,8 @@ namespace MaichartConverter
     /// </summary>
     public class CompileDatabase : ConsoleCommand
     {
-        /// <summary>
-        /// Return when command successfully executed
-        /// </summary>
-        private const int Success = 0;
-        /// <summary>
-        /// Return when command failed to execute
-        /// </summary>
-        private const int Failed = 2;
-
+        public const int Success = 0;
+        public const int Failed = 0;
         public bool StrictDecimal { get; set; }
 
         /// <summary>
@@ -125,6 +119,11 @@ namespace MaichartConverter
                 bool exportImage = true;
                 bool exportAudio = true;
                 string a000Location = A000Location ?? throw new FileNotFoundException("A000 location was not specified");
+                // if (remainingArguments.Length == 0)
+                // {
+                //     Console.WriteLine("Step 1: Provide A000 Location");
+                //     a000Location = Console.ReadLine() ?? "";
+                // }
                 if (a000Location == null || a000Location.Equals(""))
                 {
                     a000Location = Program.GlobalPaths[0];
@@ -132,6 +131,11 @@ namespace MaichartConverter
 
                 string musicLocation = a000Location + @"music" + sep;
                 string? audioLocation = BGMLocation;
+                // if (remainingArguments.Length == 0)
+                // {
+                //     Console.WriteLine("Step 2: Provide BGM Location");
+                //     audioLocation = Console.ReadLine() ?? "";
+                // }
                 if (BGMLocation == null)
                 {
                     exportAudio = false;
