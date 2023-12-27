@@ -115,7 +115,10 @@ public class ReverseMa2FromSimaiDatabase : ConsoleCommand
         }
         catch(Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            Console.WriteLine("Program cannot proceed becasue of following error returned: \n{0}", ex.GetType());
+            Console.Error.WriteLine(ex.Message);
+            Console.Error.WriteLine(ex.StackTrace);
+            Console.ReadKey();
             return Failed;
         }
     }
