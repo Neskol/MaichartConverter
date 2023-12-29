@@ -96,10 +96,10 @@ namespace MaichartConverter
                 string result = "";
                 switch (TargetFormat)
                 {
-                    case "simai":
+                    case "Simai":
                         Simai resultChart = new Simai(candidate);
                         result = resultChart.Compose();
-                        if (Destination != null && !Destination.Equals(""))
+                        if (Destination is not null && !Destination.Equals(""))
                         {
                             StreamWriter sw = new StreamWriter(Destination + Program.GlobalSep + "maidata.txt", false);
                             {
@@ -108,7 +108,7 @@ namespace MaichartConverter
                             sw.Close();
                             if (File.Exists(Destination + Program.GlobalSep + "maidata.txt"))
                             {
-                                Console.WriteLine("Successfully compiled at: " + Destination + Program.GlobalSep + "result.ma2");
+                                Console.WriteLine("Successfully compiled at: " + Destination + Program.GlobalSep + "maidata.txt");
                             }
                             else
                             {
@@ -119,7 +119,7 @@ namespace MaichartConverter
                         break;
                     case null:
                     case "":
-                    case "ma2":
+                    case "Ma2":
                         if (result.Equals(""))
                         {
                             Ma2 defaultChart = new Ma2(candidate);
