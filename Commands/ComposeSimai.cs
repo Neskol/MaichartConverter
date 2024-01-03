@@ -143,6 +143,35 @@ namespace MaichartConverter
                         }
                         else Console.WriteLine(result);
                         break;
+                    case "Ma2_104":
+                        if (result.Equals(""))
+                        {
+                            Ma2 defaultChart = new Ma2(candidate)
+                            {
+                                ChartVersion = ChartEnum.ChartVersion.Ma2_104
+                            };
+                            result = defaultChart.Compose();
+                        }
+                        if (Destination != null && !Destination.Equals(""))
+                        {
+                            StreamWriter sw = new StreamWriter(Destination + Program.GlobalSep + "result.ma2", false);
+                            {
+                                sw.WriteLine(result);
+                            }
+                            sw.Close();
+                            if (File.Exists(Destination + Program.GlobalSep + "result.ma2"))
+                            {
+                                Console.WriteLine("Successfully compiled at: " + Destination + Program.GlobalSep + "result.ma2");
+                            }
+                            else
+                            {
+                                throw new FileNotFoundException("THE FILE IS NOT SUCCESSFULLY COMPILED.");
+                            }
+                        }
+                        else Console.WriteLine(result);
+                        break;
+                    default:
+                        throw new InvalidOperationException($"UNSUPPORTED FORMAT: Expected Simai, Ma2, Ma2_104 or null. Actual: {TargetFormat}");
                 }
 
                 return Success;
