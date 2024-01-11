@@ -43,7 +43,7 @@
         "preLaunchTask": "build",
         // If you have changed target frameworks, make sure to update the program path.
         "program": "${workspaceFolder}/bin/Debug/net8.0/MaichartConverter.dll",
-        "args": "CompileDatabase -p \"/Users/Neskol/MaiAnalysis/A000/\" -o \"/Users/Neskol/source/repos/Neskol/Maichart-Converts/\"",
+        "args": "CompileDatabase -p \"/Users/Neskol/MaiAnalysis/A000/\" -o \"/Users/Neskol/MaiAnalysis/Maichart-Converts/\"",
         "cwd": "${workspaceFolder}",
         // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
         "console": "integratedTerminal",
