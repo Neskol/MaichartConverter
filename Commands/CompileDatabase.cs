@@ -83,7 +83,7 @@ namespace MaichartConverter
             CategorizeMethods = "";
             for (int i = 0; i < Program.TrackCategorizeMethodSet.Length; i++)
             {
-                CategorizeMethods += "[" + i + "] " + Program.TrackCategorizeMethodSet[i] + "\n";
+                CategorizeMethods += $"[{i}]{Program.TrackCategorizeMethodSet[i]}\n";
             }
 
             StrictDecimal = false;
