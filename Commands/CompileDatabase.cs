@@ -35,22 +35,10 @@ namespace MaichartConverter
         public string? Difficulty { get; set; }
 
         /// <summary>
-        /// Categorize Index
-        /// </summary>
-        private int categorizeIndex = 0;
-        /// <summary>
         /// Categorize Index outer shell
         /// </summary>
-        public int? CategorizeIndex
-        {
-            get
-            { return categorizeIndex; }
-            set
-            {
-                if (value != null) categorizeIndex = (int)value;
-                else categorizeIndex = 0;
-            }
-        }
+        public int CategorizeIndex { get; set; }
+
         /// <summary>
         /// Destination of output
         /// </summary>
@@ -96,7 +84,7 @@ namespace MaichartConverter
             //FileLocation = GlobalPaths[0];
             //HasOption("a|a000=", "Folder of A000 to override - end with a path separator", path => FileLocation = path);
             HasOption("f|format=", "The target format - Simai, SimaiFes, Ma2_103, Ma2_104", format => TargetFormat = format);
-            HasOption("g|genre=", "The preferred categorizing scheme, includes:\n" + CategorizeMethods, genre => Int32.TryParse(genre, out categorizeIndex));
+            HasOption("g|genre=", "The preferred categorizing scheme, includes:\n" + CategorizeMethods, genre => CategorizeIndex = Int32.Parse(genre));
             HasOption("r|rotate=", "Rotating method to rotate a chart: Clockwise90/180, Counterclockwise90/180, UpsideDown, LeftToRight", rotate => Rotate = rotate);
             HasOption("s|shift=", "Overall shift to the chart in unit of tick", tick => ShiftTick = int.Parse(tick));
             HasOption("v|video=", "Folder of Video to override - end with a path separator", vPath => VideoLocation = vPath);
@@ -114,7 +102,6 @@ namespace MaichartConverter
             try
             {
                 // Console.ReadKey();
-                string sep = Program.GlobalSep;
                 bool exportBGA = true;
                 bool exportImage = true;
                 bool exportAudio = true;
@@ -129,7 +116,7 @@ namespace MaichartConverter
                     a000Location = Program.GlobalPaths[0];
                 }
 
-                string musicLocation = a000Location + @"music" + sep;
+                string musicLocation = $"{a000Location}/music/";
                 string? audioLocation = BGMLocation;
                 // if (remainingArguments.Length == 0)
                 // {
@@ -173,16 +160,16 @@ namespace MaichartConverter
 
                 try
                 {
-                    if (0 <= categorizeIndex && categorizeIndex < Program.TrackCategorizeMethodSet.Length)
+                    if (0 <= CategorizeIndex && CategorizeIndex < Program.TrackCategorizeMethodSet.Length)
                     {
-                        Program.GlobalTrackCategorizeMethod = Program.TrackCategorizeMethodSet[categorizeIndex];
+                        Program.GlobalTrackCategorizeMethod = Program.TrackCategorizeMethodSet[(int)CategorizeIndex];
                     }
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message + " The program will use Genre as default method. Press any key to continue.");
                     Program.GlobalTrackCategorizeMethod = Program.TrackCategorizeMethodSet[0];
-                    categorizeIndex = 0;
+                    CategorizeIndex = 0;
                     Console.ReadKey();
                 }
 
@@ -214,70 +201,71 @@ namespace MaichartConverter
                 foreach (string track in musicFolders)
                 {
                     Console.WriteLine("Iterating on folder {0}", track);
-                    if (File.Exists(track + sep + "Music.xml"))
+                    if (File.Exists($"{track}/Music.xml"))
                     {
-                        TrackInformation trackInfo = new XmlInformation(track + sep + "");
-                        Console.WriteLine("There is Music.xml in " + track);
+                        TrackInformation trackInfo = new XmlInformation($"{track}/");
+                        Console.WriteLine("There is Music.xml in {0}",track);
                         string shortID = Program.CompensateZero(trackInfo.TrackID).Substring(2);
-                        Console.WriteLine("Name: " + trackInfo.TrackName);
-                        Console.WriteLine("ID:" + trackInfo.TrackID);
-                        Console.WriteLine("Genre: " + trackInfo.TrackGenre);
-                        string[] categorizeScheme = { trackInfo.TrackGenre, trackInfo.TrackSymbolicLevel, trackInfo.TrackVersion, trackInfo.TrackComposer, trackInfo.TrackBPM, trackInfo.StandardDeluxePrefix, "" };
-                        string defaultCategorizedPath = outputLocation + categorizeScheme[categorizeIndex];
+                        Console.WriteLine($"Name: {trackInfo.TrackName}");
+                        Console.WriteLine($"ID: {trackInfo.TrackID}");
+                        Console.WriteLine($"Genre: {trackInfo.TrackGenre}");
+                        string[] categorizeScheme = [trackInfo.TrackGenre, trackInfo.TrackSymbolicLevel, trackInfo.TrackVersion, trackInfo.TrackComposer, trackInfo.TrackBPM, trackInfo.StandardDeluxePrefix, ""
+                        ];
+                        string defaultCategorizedPath = $"{outputLocation}/{categorizeScheme[CategorizeIndex]}";
 
                         //Cross out if not creating update packs
                         // defaultCategorizedPath += sep + categorizeScheme[0];
 
                         //Deal with special characters in path
-                        string trackNameSubstitute = trackInfo.TrackSortName.Replace("" + sep + "", "of");
-                        trackNameSubstitute = trackInfo.TrackSortName.Replace("/", "of");
-                        trackNameSubstitute = trackInfo.TrackID + "_" + trackNameSubstitute;
+                        string trackNameSubstitute = $"{trackInfo.TrackID}_{trackInfo.TrackSortName}";
                         if (!Directory.Exists(defaultCategorizedPath))
                         {
                             Directory.CreateDirectory(defaultCategorizedPath);
-                            Console.WriteLine("Created folder: " + defaultCategorizedPath);
+                            Console.WriteLine("Created folder: {0}", defaultCategorizedPath);
                         }
                         else
                         {
-                            Console.WriteLine("Already exist folder: " + defaultCategorizedPath);
+                            Console.WriteLine("Already exist folder: {0}", defaultCategorizedPath);
                         }
-                        if (!Directory.Exists(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix))
+
+                        string trackPath =
+                            $"{defaultCategorizedPath}/{trackNameSubstitute}{trackInfo.DXChartTrackPathSuffix}";
+                        if (!Directory.Exists(trackPath))
                         {
-                            Directory.CreateDirectory(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
-                            Console.WriteLine("Created song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                            Directory.CreateDirectory(trackPath);
+                            Console.WriteLine("Created song folder: {0}",trackPath);
                         }
                         else
                         {
-                            Console.WriteLine("Already exist song folder: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                            Console.WriteLine("Already exist song folder: {0}", trackPath);
                         }
                         SimaiCompiler compiler;
                         if (trackInfo.Information["Utage"] != "")
                         {
-                            compiler = new SimaiCompiler(StrictDecimal, track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + "_Utage", true);
-                            compiler.WriteOut(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix, true);
+                            compiler = new SimaiCompiler(StrictDecimal, $"{track}/", $"{defaultCategorizedPath}/{trackNameSubstitute}_Utage", true);
+                            compiler.WriteOut(trackPath, true);
                             Program.CompiledChart.Add(compiler.GenerateOneLineSummary());
                         }
                         else
                         {
-                            compiler = new SimaiCompiler(StrictDecimal, track + sep + "", defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
-                            compiler.WriteOut(defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix, true);
+                            compiler = new SimaiCompiler(StrictDecimal, $"{track}/", trackPath);
+                            compiler.WriteOut(trackPath, true);
                             Program.CompiledChart.Add(compiler.GenerateOneLineSummary());
                         }
-                        Console.WriteLine("Finished compiling maidata " + trackInfo.TrackName + " to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "maidata.txt");
+                        Console.WriteLine("Finished compiling maidata {0} to: {1}", trackInfo.TrackName, $"{trackPath}/maidata.txt");
 
                         if (exportAudio)
                         {
-                            string originalMusicLocation = audioLocation ?? throw new NullReferenceException("AUDIO FOLDER NOT SPECIFIED BUT AUDIO LOCATION IS NULL");
-                            originalMusicLocation += "music00" + shortID + ".mp3";
-                            string newMusicLocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "track.mp3";
+                            string originalMusicLocation = $"{audioLocation}/music00{shortID}.mp3" ?? throw new NullReferenceException("AUDIO FOLDER NOT SPECIFIED BUT AUDIO LOCATION IS NULL");
+                            string newMusicLocation = $"{trackPath}/track.mp3";
                             if (!File.Exists(newMusicLocation))
                             {
                                 File.Copy(originalMusicLocation, newMusicLocation);
-                                Console.WriteLine("Exported music to: " + newMusicLocation);
+                                Console.WriteLine("Exported music to: {0}", newMusicLocation);
                             }
                             else
                             {
-                                Console.WriteLine("Audio already found in: " + newMusicLocation);
+                                Console.WriteLine("Audio already found in: {0}", newMusicLocation);
                             }
                             //See if image is existing
                             if (exportAudio && !File.Exists(newMusicLocation))
@@ -289,39 +277,40 @@ namespace MaichartConverter
 
                         if (exportImage)
                         {
-                            string originalImageLocation = imageLocation ?? throw new NullReferenceException("IMAGE FOLDER NOT SPECIFIED BUT AUDIO LOCATION IS NULL");
-                            originalImageLocation += "UI_Jacket_00" + shortID + ".png";
-                            string newImageLocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "bg.png";
+                            string originalImageLocation = $"{imageLocation}/UI_Jacket_00{shortID}.png" ?? throw new NullReferenceException("IMAGE FOLDER NOT SPECIFIED BUT AUDIO LOCATION IS NULL");
+                            string newImageLocation = $"{trackPath}/bg.png";
                             if (!File.Exists(newImageLocation))
                             {
                                 File.Copy(originalImageLocation, newImageLocation);
-                                Console.WriteLine("Image exported to: " + newImageLocation);
+                                Console.WriteLine("Image exported to: {0}", newImageLocation);
                             }
                             else
                             {
-                                Console.WriteLine("Image already found in: " + newImageLocation);
+                                Console.WriteLine("Image already found in: {0}", newImageLocation);
                             }
                             //Check if Image exists
                             if (exportImage && !File.Exists(newImageLocation))
                             {
-                                Console.WriteLine("Image exists at " + originalImageLocation + ": " + File.Exists(originalImageLocation));
+                                Console.WriteLine("Image exists at {0}: {1}", originalImageLocation, File.Exists(originalImageLocation));
                                 throw new FileNotFoundException("IMAGE NOT FOUND IN: " + newImageLocation);
                             }
                         }
                         // Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart);
 
-                        string? originalBGALocation = "";
-                        bool bgaExists = bgaMap.TryGetValue(Program.CompensateZero(trackInfo.TrackID), out originalBGALocation);
+                        bool bgaExists = bgaMap.TryGetValue(Program.CompensateZero(trackInfo.TrackID), out var originalBGALocation);
                         if (!bgaExists)
                         {
+                            // Compensate on DX Utage
                             if (trackInfo.TrackID.Length == 6)
                             {
                                 bgaExists = bgaMap.TryGetValue(trackInfo.TrackID.Substring(2, 4), out originalBGALocation);
                             }
+                            // Compensate on DX Standard
                             else if (trackInfo.TrackID.Length == 5)
                             {
                                 bgaExists = bgaMap.TryGetValue(trackInfo.TrackID.Substring(1, 4), out originalBGALocation);
                             }
+                            // Compensate on Standard
                             else if (trackInfo.TrackID.Length == 3)
                             {
                                 bgaExists = bgaMap.TryGetValue(Program.CompensateShortZero(trackInfo.TrackID), out originalBGALocation);
@@ -337,22 +326,22 @@ namespace MaichartConverter
                         }
                         if (exportBGA)
                         {
-                            string? newBGALocation = defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix + sep + "pv.mp4";
+                            string? newBGALocation = $"{trackPath}/pv.mp4";
                             if (bgaExists && !File.Exists(newBGALocation))
                             {
-                                Console.WriteLine("A BGA file was found in " + originalBGALocation);
-                                var originalBGALocationCandidate = originalBGALocation ?? throw new NullReferenceException();
+                                Console.WriteLine("A BGA file was found in {0}", originalBGALocation);
+                                string originalBGALocationCandidate = originalBGALocation ?? throw new NullReferenceException();
                                 File.Copy(originalBGALocationCandidate, newBGALocation);
-                                Console.WriteLine("Exported BGA file to: " + newBGALocation);
+                                Console.WriteLine("Exported BGA file to: {0}", newBGALocation);
                             }
                             else if (bgaExists && File.Exists(newBGALocation))
                             {
-                                Console.WriteLine("BGA already found in " + newBGALocation);
+                                Console.WriteLine("BGA already found in {0}", newBGALocation);
                             }
                             //Check if BGA exists
                             if (exportBGA && bgaExists && !File.Exists(newBGALocation))
                             {
-                                Console.WriteLine("BGA exists at " + originalBGALocation + ": " + File.Exists(originalBGALocation));
+                                Console.WriteLine("BGA exists at {0}: {1}", originalBGALocation, File.Exists(originalBGALocation));
                                 throw new FileNotFoundException("BGA NOT FOUND IN: " + newBGALocation);
                             }
                         }
@@ -363,19 +352,19 @@ namespace MaichartConverter
                         string[] compiledTrackDetail = { trackInfo.TrackName, trackInfo.TrackGenre, trackInfo.TrackVersion, trackInfo.TrackVersionNumber };
                         Program.CompiledTrackDetailSet.Add(trackInfo.TrackName + trackInfo.TrackID, compiledTrackDetail);
                         // Program.CompiledChart.Add(trackInfo.TrackName + compiler.GenerateOneLineSummary());
-                        Console.WriteLine("Exported to: " + defaultCategorizedPath + sep + trackNameSubstitute + trackInfo.DXChartTrackPathSuffix);
+                        Console.WriteLine("Exported to: {0}", trackPath);
                         Console.WriteLine();
                     }
                     else
                     {
-                        Console.WriteLine("There is no Music.xml in folder " + track);
+                        Console.WriteLine("There is no Music.xml in folder {0}", track);
                     }
                 }
-                Console.WriteLine("Total music compiled: " + Program.NumberTotalTrackCompiled);
+                Console.WriteLine("Total music compiled: {0}", Program.NumberTotalTrackCompiled);
                 int index = 1;
                 foreach (KeyValuePair<int, string> pair in Program.CompiledTracks)
                 {
-                    Console.WriteLine("[" + index + "]: " + pair.Key + " " + pair.Value);
+                    Console.WriteLine($"[{index}]: {pair.Key} {pair.Value}");
                     index++;
                 }
                 Program.Log(outputLocation);
@@ -383,7 +372,7 @@ namespace MaichartConverter
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Program cannot proceed becasue of following error returned: \n{0}", ex.GetType());
+                Console.WriteLine("Program cannot proceed because of following error returned: \n{0}", ex.GetType());
                 Console.Error.WriteLine(ex.Message);
                 Console.Error.WriteLine(ex.StackTrace);
                 Console.ReadKey();
