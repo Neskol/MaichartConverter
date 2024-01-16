@@ -8,7 +8,8 @@
     git submodule update --init --recursive
     dotnet build
 ### Usage
-> Type 'MaichartConverter help' for manual
+> Type 'MaichartConverter help' for detailed manual for each command.
+- [`CompileDatabase`](./Commands/Manuals/CompileDatabase.md): Compose whole ma2 database to simai
 
 ### Parameters notice
 - music files should be named musicxxxxxx.mp3 which xxxxxx matches the music id specified in music.xml in each a000 folder, and compensate 0s at the front to 6 digits
