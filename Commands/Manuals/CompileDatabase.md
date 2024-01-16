@@ -20,6 +20,6 @@
 
 ### Depreciated/Under development params:
 > These parameters are not tested. Feel free to test and report issues!
-- `-f | --format <string>`: Forces program to complie carts in given format (within composed `maidata`.txt). Available format: `Simai, SimaiFes, Ma2, Ma2_104`.
+- `-f | --format <string>`: Forces program to compile carts in given format (within composed `maidata`.txt). Available format: `Simai, SimaiFes, Ma2, Ma2_104`.
 - `-r | --rotate <string>`: Forces program to rotate all charts in given method. Available rotations: `Clockwise90, Clockwise180, CounterClockwise90, CounterClockwise180, UpsideDown, LeftToRight`.
 - `-s | --shift <int>`: Shifts notes in all charts front or back by given ticks.

@@ -10,6 +10,7 @@
 ### Usage
 > Type 'MaichartConverter help' for detailed manual for each command.
 - [`CompileDatabase`](./Commands/Manuals/CompileDatabase.md): Compose whole ma2 database to simai
+- [`ReverseMa2FromSimaiDatabase`](./Commands/Manuals/ReverseMa2FromSimaiDatabase.md): Reverse Simai Database from given folder to MaiAnalysis folder for compilation
 
 ### Parameters notice
 - music files should be named musicxxxxxx.mp3 which xxxxxx matches the music id specified in music.xml in each a000 folder, and compensate 0s at the front to 6 digits
