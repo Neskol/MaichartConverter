@@ -48,7 +48,7 @@ namespace MaichartConverter
         /// Defines possible sorting scheme
         /// </summary>
         /// <value>Sorting scheme</value>
-        public static readonly string[] TrackCategorizeMethodSet = { "Genre", "Level", "Cabinet", "Composer", "BPM", "SD//DX Chart", "No Separate Folder" };
+        public static readonly string[] TrackCategorizeMethodSet = { "Genre", "Level", "Cabinet", "Composer", "BPM", "SD/DX Chart", "No Separate Folder" };
 
         /// <summary>
         /// Program will sort output according to this
