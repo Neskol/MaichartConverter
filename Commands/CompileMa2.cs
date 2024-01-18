@@ -90,18 +90,23 @@ namespace MaichartConverter
                 {
                     case null:
                     case "simai":
+                    case "Simai":
+                    case "SimaiFes":
                         Simai resultChart = new Simai(candidate);
+                        resultChart.Update();
                         result = resultChart.Compose();
                         if (Destination != null && !Destination.Equals(""))
                         {
-                            StreamWriter sw = new StreamWriter(Destination + Program.GlobalSep + "maidata.txt", false);
+                            string targetMaidataLocation = $"{Destination}/maidata.txt";
+                            if (!Directory.Exists(Destination)) Directory.CreateDirectory(Destination);
+                            StreamWriter sw = new StreamWriter(targetMaidataLocation, false);
                             {
                                 sw.WriteLine(result);
                             }
                             sw.Close();
-                            if (File.Exists(Destination + Program.GlobalSep + "maidata.txt"))
+                            if (File.Exists(targetMaidataLocation))
                             {
-                                Console.WriteLine("Successfully compiled at: " + Destination + Program.GlobalSep + "result.ma2");
+                                Console.WriteLine("Successfully compiled at: {0}", targetMaidataLocation);
                             }
                             else
                             {
@@ -111,51 +116,27 @@ namespace MaichartConverter
                         else Console.WriteLine(result);
                         break;
                     case "ma2":
-                    case "MA2":
                     case "Ma2":
+                    case "MA2":
                     case "Ma2_103":
-                        if (result.Equals(""))
-                        {
-                            Ma2 defaultChart = new Ma2(candidate);
-                            result = defaultChart.Compose();
-                        }
-                        if (Destination != null && !Destination.Equals(""))
-                        {
-                            StreamWriter sw = new StreamWriter(Destination + Program.GlobalSep + "result.ma2", false);
-                            {
-                                sw.WriteLine(result);
-                            }
-                            sw.Close();
-                            if (File.Exists(Destination + Program.GlobalSep + "result.ma2"))
-                            {
-                                Console.WriteLine("Successfully compiled at: " + Destination + Program.GlobalSep + "result.ma2");
-                            }
-                            else
-                            {
-                                throw new FileNotFoundException("THE FILE IS NOT SUCCESSFULLY COMPILED.");
-                            }
-                        }
-                        else Console.WriteLine(result);
-                        break;
                     case "Ma2_104":
                         if (result.Equals(""))
                         {
-                            Ma2 defaultChart = new Ma2(candidate)
-                            {
-                                ChartVersion = ChartEnum.ChartVersion.Ma2_104
-                            };
+                            Ma2 defaultChart = TargetFormat.Equals("Ma2_104")? new Ma2(candidate){ChartVersion = ChartEnum.ChartVersion.Ma2_104} : new Ma2(candidate);
                             result = defaultChart.Compose();
                         }
                         if (Destination != null && !Destination.Equals(""))
                         {
-                            StreamWriter sw = new StreamWriter(Destination + Program.GlobalSep + "result.ma2", false);
+                            string targetMaidataLocation = $"{Destination}/result.ma2";
+                            if (!Directory.Exists(Destination)) Directory.CreateDirectory(Destination);
+                            StreamWriter sw = new StreamWriter(targetMaidataLocation, false);
                             {
                                 sw.WriteLine(result);
                             }
                             sw.Close();
-                            if (File.Exists(Destination + Program.GlobalSep + "result.ma2"))
+                            if (File.Exists(targetMaidataLocation))
                             {
-                                Console.WriteLine("Successfully compiled at: " + Destination + Program.GlobalSep + "result.ma2");
+                                Console.WriteLine("Successfully compiled at: {0}", targetMaidataLocation);
                             }
                             else
                             {

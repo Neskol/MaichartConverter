@@ -11,33 +11,23 @@ namespace MaichartConverter
     /// </summary>
     class Program
     {
-        /// <summary>
-        /// Defines Windows path separator
-        /// </summary>
-        public static string WindowsPathSep = "\\";
-
-        /// <summary>
-        /// Defines MacOS path separator
-        /// </summary>
-        public static string MacPathSep = "/";
-
-
-        public static string[] WinPaths = { @"C:\Users\Neskol\MaiAnalysis\A000\",
+        public static string[] WinPaths =
+        [
+            @"C:\Users\Neskol\MaiAnalysis\A000\",
         @"C:\Users\Neskol\MaiAnalysis\Sound\",
         @"C:\Users\Neskol\MaiAnalysis\Image\Texture2D\",
         @"C:\Users\Neskol\MaiAnalysis\DXBGA_HEVC\",
-        @"C:\Users\Neskol\MaiAnalysis\Output\"};
+        @"C:\Users\Neskol\MaiAnalysis\Output\"
+        ];
 
-        public static string[] MacPaths = { @"/Users/neskol/MaiAnalysis/A000/",
+        public static string[] MacPaths =
+        [
+            @"/Users/neskol/MaiAnalysis/A000/",
         @"/Users/neskol/MaiAnalysis/Sound/",
         @"/Users/neskol/MaiAnalysis/Image/Texture2D/",
         @"/Users/neskol/MaiAnalysis/DXBGA_HEVC/",
-        @"/Users/neskol/MaiAnalysis/Output/"};
-
-        /// <summary>
-        /// Defines which separator is using in programs
-        /// </summary>
-        public static string GlobalSep = MacPathSep;
+        @"/Users/neskol/MaiAnalysis/Output/"
+        ];
 
         /// <summary>
         /// Defines which path is using in programs
@@ -48,7 +38,7 @@ namespace MaichartConverter
         /// Defines possible sorting scheme
         /// </summary>
         /// <value>Sorting scheme</value>
-        public static readonly string[] TrackCategorizeMethodSet = { "Genre", "Level", "Cabinet", "Composer", "BPM", "SD//DX Chart", "No Separate Folder" };
+        public static readonly string[] TrackCategorizeMethodSet = ["Genre", "Level", "Cabinet", "Composer", "BPM", "SD/DX Chart", "No Separate Folder"];
 
         /// <summary>
         /// Program will sort output according to this
@@ -60,9 +50,9 @@ namespace MaichartConverter
         /// </summary>
         public static int NumberTotalTrackCompiled;
         public static Dictionary<int, string> CompiledTracks = new();
-        public static List<string> CompiledChart = new();
+        public static List<string> CompiledChart = [];
 
-        public static List<string> ErrorMessage = new();
+        public static List<string> ErrorMessage = [];
         public static Dictionary<string, string[]> CompiledTrackDetailSet = new Dictionary<string, string[]>();
 
         public static XmlDocument BPMCollection = new XmlDocument();
@@ -74,16 +64,16 @@ namespace MaichartConverter
         /// <param name="args">Parameters to take in</param>
         public static int Main(string[] args)
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                GlobalPaths = WinPaths;
-                GlobalSep = WindowsPathSep;
-            }
-            else
-            {
-                GlobalPaths = MacPaths;
-                GlobalSep = MacPathSep;
-            }
+            // if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            // {
+            //     GlobalPaths = WinPaths;
+            //     GlobalSep = WindowsPathSep;
+            // }
+            // else
+            // {
+            //     GlobalPaths = MacPaths;
+            //     GlobalSep = MacPathSep;
+            // }
 
             Console.WriteLine(ComposeHeader());
 
@@ -206,7 +196,7 @@ namespace MaichartConverter
                 index++;
             }
             sw.WriteLine();
-            if (ErrorMessage.Count()>0)
+            if (ErrorMessage.Count>0)
             {
                 sw.WriteLine("Warnings:");
                 foreach (string error in ErrorMessage)

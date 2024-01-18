@@ -7,8 +7,13 @@
     git clone
     git submodule update --init --recursive
     dotnet build
-### Usage
-> Type 'MaichartConverter help' for manual
+### Usage & Available Commands
+> Type 'MaichartConverter help' for detailed manual for each command.
+- [`CompileDatabase`](./Commands/Manuals/CompileDatabase.md): Compose whole ma2 database to simai
+- [`CompileMa2`](./Commands/Manuals/CompileMa2.md): Compile assigned Ma2 chart to assigned format
+- [`CompileMa2ID`](./Commands/Manuals/CompileMa2ID.md): Compile assigned Ma2 chart indexed by ID to assigned format
+- [`CompileSimai`](./Commands/Manuals/CompileSimai.md): Compile assigned simai chart to assigned format
+- [`ReverseMa2FromSimaiDatabase`](./Commands/Manuals/ReverseMa2FromSimaiDatabase.md): Reverse Simai Database from given folder to MaiAnalysis folder for compilation
 
 ### Parameters notice
 - music files should be named musicxxxxxx.mp3 which xxxxxx matches the music id specified in music.xml in each a000 folder, and compensate 0s at the front to 6 digits
