@@ -115,40 +115,13 @@ namespace MaichartConverter
                         else Console.WriteLine(result);
                         break;
                     case "ma2":
-                    case "MA2":
                     case "Ma2":
+                    case "MA2":
                     case "Ma2_103":
-                        if (result.Equals(""))
-                        {
-                            Ma2 defaultChart = new Ma2(candidate);
-                            result = defaultChart.Compose();
-                        }
-                        if (Destination != null && !Destination.Equals(""))
-                        {
-                            string targetMaidataLocation = $"{Destination}/result.ma2";
-                            StreamWriter sw = new StreamWriter(targetMaidataLocation, false);
-                            {
-                                sw.WriteLine(result);
-                            }
-                            sw.Close();
-                            if (File.Exists(targetMaidataLocation))
-                            {
-                                Console.WriteLine("Successfully compiled at: {0}", targetMaidataLocation);
-                            }
-                            else
-                            {
-                                throw new FileNotFoundException("THE FILE IS NOT SUCCESSFULLY COMPILED.");
-                            }
-                        }
-                        else Console.WriteLine(result);
-                        break;
                     case "Ma2_104":
                         if (result.Equals(""))
                         {
-                            Ma2 defaultChart = new Ma2(candidate)
-                            {
-                                ChartVersion = ChartEnum.ChartVersion.Ma2_104
-                            };
+                            Ma2 defaultChart = TargetFormat.Equals("Ma2_104")? new Ma2(candidate){ChartVersion = ChartEnum.ChartVersion.Ma2_104} : new Ma2(candidate);
                             result = defaultChart.Compose();
                         }
                         if (Destination != null && !Destination.Equals(""))
