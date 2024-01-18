@@ -93,6 +93,7 @@ namespace MaichartConverter
                     case "Simai":
                     case "SimaiFes":
                         Simai resultChart = new Simai(candidate);
+                        resultChart.Update();
                         result = resultChart.Compose();
                         if (Destination != null && !Destination.Equals(""))
                         {
