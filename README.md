@@ -7,9 +7,12 @@
     git clone
     git submodule update --init --recursive
     dotnet build
-### Usage
+### Usage & Available Commands
 > Type 'MaichartConverter help' for detailed manual for each command.
 - [`CompileDatabase`](./Commands/Manuals/CompileDatabase.md): Compose whole ma2 database to simai
+- [`ComposeMa2`](./Commands/Manuals/ComposeMa2.md): Compile assigned Ma2 chart to assigned format
+- [`ComposeMa2ID`](./Commands/Manuals/ComposeMa2ID.md): Compile assigned Ma2 chart indexed by ID to assigned format
+- [`ComposeSimai`](./Commands/Manuals/ComposeSimai.md): Compile assigned simai chart to assigned format
 - [`ReverseMa2FromSimaiDatabase`](./Commands/Manuals/ReverseMa2FromSimaiDatabase.md): Reverse Simai Database from given folder to MaiAnalysis folder for compilation
 
 ### Parameters notice
