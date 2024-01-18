@@ -10,9 +10,9 @@
 ### Usage & Available Commands
 > Type 'MaichartConverter help' for detailed manual for each command.
 - [`CompileDatabase`](./Commands/Manuals/CompileDatabase.md): Compose whole ma2 database to simai
-- [`ComposeMa2`](./Commands/Manuals/ComposeMa2.md): Compile assigned Ma2 chart to assigned format
-- [`ComposeMa2ID`](./Commands/Manuals/ComposeMa2ID.md): Compile assigned Ma2 chart indexed by ID to assigned format
-- [`ComposeSimai`](./Commands/Manuals/ComposeSimai.md): Compile assigned simai chart to assigned format
+- [`CompileMa2`](./Commands/Manuals/CompileMa2.md): Compile assigned Ma2 chart to assigned format
+- [`CompileMa2ID`](./Commands/Manuals/CompileMa2ID.md): Compile assigned Ma2 chart indexed by ID to assigned format
+- [`CompileSimai`](./Commands/Manuals/CompileSimai.md): Compile assigned simai chart to assigned format
 - [`ReverseMa2FromSimaiDatabase`](./Commands/Manuals/ReverseMa2FromSimaiDatabase.md): Reverse Simai Database from given folder to MaiAnalysis folder for compilation
 
 ### Parameters notice

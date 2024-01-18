@@ -102,6 +102,7 @@ namespace MaichartConverter
                         if (Destination is not null && !Destination.Equals(""))
                         {
                             string targetMaidataLocation = $"{Destination}/maidata.txt";
+                            if (!Directory.Exists(Destination)) Directory.CreateDirectory(Destination);
                             StreamWriter sw = new StreamWriter(targetMaidataLocation, false);
                             {
                                 sw.WriteLine(result);
@@ -133,6 +134,7 @@ namespace MaichartConverter
                         if (Destination != null && !Destination.Equals(""))
                         {
                             string targetMaidataLocation = $"{Destination}/result.ma2";
+                            if (!Directory.Exists(Destination)) Directory.CreateDirectory(Destination);
                             StreamWriter sw = new StreamWriter(targetMaidataLocation, false);
                             {
                                 sw.WriteLine(result);

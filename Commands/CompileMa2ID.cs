@@ -96,7 +96,7 @@ namespace MaichartConverter
                 string compensatedId =
                     Program.CompensateZero(ID ?? throw new NullReferenceException("ID shall not be null"));
                 Chart candidate = parser.ChartOfToken(tokenizer.Tokens(
-                    $"{tokenLocation}music/music{compensatedId}/{compensatedId}_0{Difficulty}.ma2"));
+                    $"{tokenLocation}/music/music{compensatedId}/{compensatedId}_0{Difficulty}.ma2"));
                 if (Rotate != null)
                 {
                     bool rotationIsValid = Enum.TryParse(Rotate, out NoteEnum.FlipMethod rotateMethod);
@@ -123,6 +123,7 @@ namespace MaichartConverter
                         if (Destination != null && !Destination.Equals(""))
                         {
                             string targetMaidataLocation = $"{Destination}/maidata.txt";
+                            if (!Directory.Exists(Destination)) Directory.CreateDirectory(Destination);
                             StreamWriter sw = new StreamWriter(targetMaidataLocation, false);
                             {
                                 sw.WriteLine(result);
@@ -156,6 +157,7 @@ namespace MaichartConverter
                         if (Destination != null && !Destination.Equals(""))
                         {
                             string targetMaidataLocation = $"{Destination}/result.ma2";
+                            if (!Directory.Exists(Destination)) Directory.CreateDirectory(Destination);
                             StreamWriter sw = new StreamWriter(targetMaidataLocation, false);
                             {
                                 sw.WriteLine(result);
@@ -171,7 +173,6 @@ namespace MaichartConverter
                             }
                         }
                         else Console.WriteLine(result);
-
                         break;
                 }
 
