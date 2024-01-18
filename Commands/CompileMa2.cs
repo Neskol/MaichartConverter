@@ -96,14 +96,15 @@ namespace MaichartConverter
                         result = resultChart.Compose();
                         if (Destination != null && !Destination.Equals(""))
                         {
-                            StreamWriter sw = new StreamWriter(Destination + Program.GlobalSep + "maidata.txt", false);
+                            string targetMaidataLocation = $"{Destination}/maidata.txt";
+                            StreamWriter sw = new StreamWriter(targetMaidataLocation, false);
                             {
                                 sw.WriteLine(result);
                             }
                             sw.Close();
-                            if (File.Exists(Destination + Program.GlobalSep + "maidata.txt"))
+                            if (File.Exists(targetMaidataLocation))
                             {
-                                Console.WriteLine("Successfully compiled at: " + Destination + Program.GlobalSep + "result.ma2");
+                                Console.WriteLine("Successfully compiled at: {0}", targetMaidataLocation);
                             }
                             else
                             {
@@ -123,14 +124,15 @@ namespace MaichartConverter
                         }
                         if (Destination != null && !Destination.Equals(""))
                         {
-                            StreamWriter sw = new StreamWriter(Destination + Program.GlobalSep + "result.ma2", false);
+                            string targetMaidataLocation = $"{Destination}/result.ma2";
+                            StreamWriter sw = new StreamWriter(targetMaidataLocation, false);
                             {
                                 sw.WriteLine(result);
                             }
                             sw.Close();
-                            if (File.Exists(Destination + Program.GlobalSep + "result.ma2"))
+                            if (File.Exists(targetMaidataLocation))
                             {
-                                Console.WriteLine("Successfully compiled at: " + Destination + Program.GlobalSep + "result.ma2");
+                                Console.WriteLine("Successfully compiled at: {0}", targetMaidataLocation);
                             }
                             else
                             {
@@ -150,14 +152,15 @@ namespace MaichartConverter
                         }
                         if (Destination != null && !Destination.Equals(""))
                         {
-                            StreamWriter sw = new StreamWriter(Destination + Program.GlobalSep + "result.ma2", false);
+                            string targetMaidataLocation = $"{Destination}/result.ma2";
+                            StreamWriter sw = new StreamWriter(targetMaidataLocation, false);
                             {
                                 sw.WriteLine(result);
                             }
                             sw.Close();
-                            if (File.Exists(Destination + Program.GlobalSep + "result.ma2"))
+                            if (File.Exists(targetMaidataLocation))
                             {
-                                Console.WriteLine("Successfully compiled at: " + Destination + Program.GlobalSep + "result.ma2");
+                                Console.WriteLine("Successfully compiled at: {0}", targetMaidataLocation);
                             }
                             else
                             {
