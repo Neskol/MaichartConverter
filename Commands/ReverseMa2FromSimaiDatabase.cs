@@ -6,11 +6,12 @@ namespace MaichartConverter;
 public class ReverseMa2FromSimaiDatabase : ConsoleCommand
 {
     /// <summary>
-    /// Return when command successfully executed
+    ///     Return when command successfully executed
     /// </summary>
     private const int Success = 0;
+
     /// <summary>
-    /// Return when command failed to execute
+    ///     Return when command failed to execute
     /// </summary>
     private const int Failed = 2;
 
@@ -42,9 +43,10 @@ public class ReverseMa2FromSimaiDatabase : ConsoleCommand
             if (!Directory.Exists(Destination))
             {
                 // Console.WriteLine("Source folder: {0}",SourceLocation);
-                Console.WriteLine("Destination folder is not found, creating one at: {0}",Destination);
+                Console.WriteLine("Destination folder is not found, creating one at: {0}", Destination);
                 Directory.CreateDirectory(Destination);
             }
+
             // Check sub directories of destination
             string soundLocation = $"{Destination}/Sound";
             string imageLocation = $"{Destination}/Image/Texture2D";
@@ -54,16 +56,19 @@ public class ReverseMa2FromSimaiDatabase : ConsoleCommand
                 Console.WriteLine("Sound folder is not found, creating one at: {0}", soundLocation);
                 Directory.CreateDirectory(soundLocation);
             }
+
             if (!Directory.Exists(imageLocation))
             {
                 Console.WriteLine("Image folder is not found, creating one at: {0}", imageLocation);
                 Directory.CreateDirectory(imageLocation);
             }
+
             if (!Directory.Exists(bgaLocation))
             {
                 Console.WriteLine("BGA folder is not found, creating one at: {0}", bgaLocation);
                 Directory.CreateDirectory(bgaLocation);
             }
+
             foreach (string path in mainFolderInfo)
             {
                 // Console.WriteLine(path);
@@ -78,42 +83,57 @@ public class ReverseMa2FromSimaiDatabase : ConsoleCommand
                         string oldPath = $"{path}/bg.png";
                         string newPath = $"{imageLocation}/UI_Jacket_{Program.CompensateZero(id.ToString())}.png";
                         Console.WriteLine("Located image at: {0}", oldPath);
-                        if (File.Exists(newPath) && !OverwriteDestination) Console.WriteLine("File already located at {0} and skipped because not overwriting", newPath);
+                        if (File.Exists(newPath) && !OverwriteDestination)
+                            Console.WriteLine("File already located at {0} and skipped because not overwriting",
+                                newPath);
                         else File.Copy(oldPath, newPath, OverwriteDestination);
                         Console.WriteLine("Copied image to: {0}", newPath);
                     }
+
                     if (File.Exists($"{path}/pv.mp4"))
                     {
                         string oldPath = $"{path}/pv.mp4";
                         string newPath = $"{bgaLocation}/{Program.CompensateZero(id.ToString())}.mp4";
                         Console.WriteLine("Located PV at: {0}", oldPath);
-                        if (File.Exists(newPath) && !OverwriteDestination) Console.WriteLine("File already located at {0} and skipped because not overwriting", newPath);
+                        if (File.Exists(newPath) && !OverwriteDestination)
+                            Console.WriteLine("File already located at {0} and skipped because not overwriting",
+                                newPath);
                         else File.Copy(oldPath, newPath, OverwriteDestination);
                         Console.WriteLine("Copied PV to: {0}", newPath);
                     }
-                    if (File.Exists($"{path}/mv.mp4")) {
+
+                    if (File.Exists($"{path}/mv.mp4"))
+                    {
                         string oldPath = $"{path}/mv.mp4";
                         string newPath = $"{bgaLocation}/{Program.CompensateZero(id.ToString())}.mp4";
                         Console.WriteLine("Located MV at: {0}", oldPath);
-                        if (File.Exists(newPath) && !OverwriteDestination) Console.WriteLine("File already located at {0} and skipped because not overwriting", newPath);
+                        if (File.Exists(newPath) && !OverwriteDestination)
+                            Console.WriteLine("File already located at {0} and skipped because not overwriting",
+                                newPath);
                         else File.Copy(oldPath, newPath, OverwriteDestination);
                         Console.WriteLine("Copied MV to: {0}", newPath);
                     }
-                    if (File.Exists($"{path}/track.mp3")) {
+
+                    if (File.Exists($"{path}/track.mp3"))
+                    {
                         string oldPath = $"{path}/track.mp3";
                         string newPath = $"{soundLocation}/music{Program.CompensateZero(id.ToString())}.mp3";
                         Console.WriteLine("Located track at: {0}", oldPath);
-                        if (File.Exists(newPath) && !OverwriteDestination) Console.WriteLine("File already located at {0} and skipped because not overwriting", newPath);
+                        if (File.Exists(newPath) && !OverwriteDestination)
+                            Console.WriteLine("File already located at {0} and skipped because not overwriting",
+                                newPath);
                         else File.Copy(oldPath, newPath, OverwriteDestination);
                         Console.WriteLine("Copied track to: {0}", newPath);
                     }
                 }
-                else Console.WriteLine("{0} is not a chart folder",path);
+                else Console.WriteLine("{0} is not a chart folder", path);
+
                 Console.WriteLine();
             }
+
             return Success;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Console.WriteLine("Program cannot proceed becasue of following error returned: \n{0}", ex.GetType());
             Console.Error.WriteLine(ex.Message);

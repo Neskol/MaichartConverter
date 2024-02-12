@@ -4,59 +4,60 @@ using MaiLib;
 namespace MaichartConverter
 {
     /// <summary>
-    /// Compile Ma2 Command
+    ///     Compile Ma2 Command
     /// </summary>
     public class CompileMa2ID : ConsoleCommand
     {
         /// <summary>
-        /// Return when command successfully executed
+        ///     Return when command successfully executed
         /// </summary>
         private const int Success = 0;
 
         /// <summary>
-        /// Return when command failed to execute
+        ///     Return when command failed to execute
         /// </summary>
         private const int Failed = 2;
 
         /// <summary>
-        /// Source file path
+        ///     Source file path
         /// </summary>
         public string? FileLocation { get; set; }
 
         /// <summary>
-        /// Difficulty
+        ///     Difficulty
         /// </summary>
         public string? Difficulty { get; set; }
 
         /// <summary>
-        /// ID
+        ///     ID
         /// </summary>
         public string? ID { get; set; }
 
         /// <summary>
-        /// Destination of output
+        ///     Destination of output
         /// </summary>
         public string? Destination { get; set; }
 
         /// <summary>
-        /// Target Format of the file
+        ///     Target Format of the file
         /// </summary>
         public string? TargetFormat { get; set; }
 
         /// <summary>
-        /// Rotation option for charts
+        ///     Rotation option for charts
         /// </summary>
         /// <value>Clockwise90/180, Counterclockwise90/180, UpsideDown, LeftToRight</value>
         public string? Rotate { get; set; }
 
         /// <summary>
-        /// OverallTick Shift for the chart: if the shift tick exceeds the 0 Bar 0 Tick, any note before 0 bar 0 tick will be discarded.
+        ///     OverallTick Shift for the chart: if the shift tick exceeds the 0 Bar 0 Tick, any note before 0 bar 0 tick will be
+        ///     discarded.
         /// </summary>
         /// <value>Tick, 384 tick = 1 bar</value>
         public int? ShiftTick { get; set; }
 
         /// <summary>
-        /// Construct Command
+        ///     Construct Command
         /// </summary>
         public CompileMa2ID()
         {
@@ -80,7 +81,7 @@ namespace MaichartConverter
         }
 
         /// <summary>
-        /// Execute the command
+        ///     Execute the command
         /// </summary>
         /// <param name="remainingArguments">Rest of the arguments</param>
         /// <returns>Code of execution indicates if the commands is successfully executed</returns>
@@ -173,6 +174,7 @@ namespace MaichartConverter
                             }
                         }
                         else Console.WriteLine(result);
+
                         break;
                 }
 

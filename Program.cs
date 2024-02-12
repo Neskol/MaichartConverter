@@ -7,48 +7,50 @@ using MaiLib;
 namespace MaichartConverter
 {
     /// <summary>
-    /// Main program of converter
+    ///     Main program of converter
     /// </summary>
     class Program
     {
         public static string[] WinPaths =
         [
             @"C:\Users\Neskol\MaiAnalysis\A000\",
-        @"C:\Users\Neskol\MaiAnalysis\Sound\",
-        @"C:\Users\Neskol\MaiAnalysis\Image\Texture2D\",
-        @"C:\Users\Neskol\MaiAnalysis\DXBGA_HEVC\",
-        @"C:\Users\Neskol\MaiAnalysis\Output\"
+            @"C:\Users\Neskol\MaiAnalysis\Sound\",
+            @"C:\Users\Neskol\MaiAnalysis\Image\Texture2D\",
+            @"C:\Users\Neskol\MaiAnalysis\DXBGA_HEVC\",
+            @"C:\Users\Neskol\MaiAnalysis\Output\"
         ];
 
         public static string[] MacPaths =
         [
             @"/Users/neskol/MaiAnalysis/A000/",
-        @"/Users/neskol/MaiAnalysis/Sound/",
-        @"/Users/neskol/MaiAnalysis/Image/Texture2D/",
-        @"/Users/neskol/MaiAnalysis/DXBGA_HEVC/",
-        @"/Users/neskol/MaiAnalysis/Output/"
+            @"/Users/neskol/MaiAnalysis/Sound/",
+            @"/Users/neskol/MaiAnalysis/Image/Texture2D/",
+            @"/Users/neskol/MaiAnalysis/DXBGA_HEVC/",
+            @"/Users/neskol/MaiAnalysis/Output/"
         ];
 
         /// <summary>
-        /// Defines which path is using in programs
+        ///     Defines which path is using in programs
         /// </summary>
         public static string[] GlobalPaths = MacPaths;
 
         /// <summary>
-        /// Defines possible sorting scheme
+        ///     Defines possible sorting scheme
         /// </summary>
         /// <value>Sorting scheme</value>
-        public static readonly string[] TrackCategorizeMethodSet = ["Genre", "Level", "Cabinet", "Composer", "BPM", "SD/DX Chart", "No Separate Folder"];
+        public static readonly string[] TrackCategorizeMethodSet =
+            ["Genre", "Level", "Cabinet", "Composer", "BPM", "SD/DX Chart", "No Separate Folder"];
 
         /// <summary>
-        /// Program will sort output according to this
+        ///     Program will sort output according to this
         /// </summary>
         public static string GlobalTrackCategorizeMethod = TrackCategorizeMethodSet[0];
 
         /// <summary>
-        /// Records total track number compiled by program
+        ///     Records total track number compiled by program
         /// </summary>
         public static int NumberTotalTrackCompiled;
+
         public static Dictionary<int, string> CompiledTracks = new();
         public static List<string> CompiledChart = [];
 
@@ -59,7 +61,7 @@ namespace MaichartConverter
         public static XmlDocument DebugInformationTable = new XmlDocument();
 
         /// <summary>
-        /// Main method to process charts
+        ///     Main method to process charts
         /// </summary>
         /// <param name="args">Parameters to take in</param>
         public static int Main(string[] args)
@@ -94,7 +96,7 @@ namespace MaichartConverter
             // CompileUtageChartDatabase();
             //}
             // return 0;
-            var commands = GetCommands();
+            IEnumerable<ConsoleCommand>? commands = GetCommands();
             // foreach (ConsoleCommand x in commands)
             // {
             //     Console.WriteLine(x.Command.ToString());
@@ -109,7 +111,7 @@ namespace MaichartConverter
         }
 
         /// <summary>
-        /// Get commands
+        ///     Get commands
         /// </summary>
         /// <returns>ProperCommands</returns>
         public static IEnumerable<ConsoleCommand> GetCommands()
@@ -118,7 +120,7 @@ namespace MaichartConverter
         }
 
         /// <summary>
-        /// Compensate 0 for music IDs
+        ///     Compensate 0 for music IDs
         /// </summary>
         /// <param name="intake">Music ID</param>
         /// <returns>0..+#Music ID and |Music ID|==6</returns>
@@ -131,6 +133,7 @@ namespace MaichartConverter
                 {
                     result = "0" + result;
                 }
+
                 return result;
             }
             catch (NullReferenceException ex)
@@ -140,7 +143,7 @@ namespace MaichartConverter
         }
 
         /// <summary>
-        /// Compensate 0 for short music IDs
+        ///     Compensate 0 for short music IDs
         /// </summary>
         /// <param name="intake">Music ID</param>
         /// <returns>0..+#Music ID and |Music ID|==4</returns>
@@ -153,6 +156,7 @@ namespace MaichartConverter
                 {
                     result = "0" + result;
                 }
+
                 return result;
             }
             catch (NullReferenceException ex)
@@ -162,18 +166,30 @@ namespace MaichartConverter
         }
 
         /// <summary>
-        /// Compose fancy header
+        ///     Compose fancy header
         /// </summary>
         /// <returns>MaichartConverter.fancy</returns>
         public static string ComposeHeader()
         {
             string result = "";
-            result += (@"     _____         .__       .__                   __   _________                                   __                " + "\n");
-            result += (@"    /     \ _____  |__| ____ |  |__ _____ ________/  |_ \_   ___ \  ____   _______  __ ____________/  |_  ___________ " + "\n");
-            result += (@"   /  \ /  \\__  \ |  |/ ___\|  |  \\__  \\_  __ \   __\/    \  \/ /  _ \ /    \  \/ // __ \_  __ \   __\/ __ \_  __ \" + "\n");
-            result += (@"  /    Y    \/ __ \|  \  \___|   Y  \/ __ \|  | \/|  |  \     \___(  <_> )   |  \   /\  ___/|  | \/|  | \  ___/|  | \/" + "\n");
-            result += (@"  \____|__  (____  /__|\___  >___|  (____  /__|   |__|   \______  /\____/|___|  /\_/  \___  >__|   |__|  \___  >__|   " + "\n");
-            result += (@"          \/     \/        \/     \/     \/                     \/            \/          \/                 \/       " + "\n");
+            result +=
+                (@"     _____         .__       .__                   __   _________                                   __                " +
+                 "\n");
+            result +=
+                (@"    /     \ _____  |__| ____ |  |__ _____ ________/  |_ \_   ___ \  ____   _______  __ ____________/  |_  ___________ " +
+                 "\n");
+            result +=
+                (@"   /  \ /  \\__  \ |  |/ ___\|  |  \\__  \\_  __ \   __\/    \  \/ /  _ \ /    \  \/ // __ \_  __ \   __\/ __ \_  __ \" +
+                 "\n");
+            result +=
+                (@"  /    Y    \/ __ \|  \  \___|   Y  \/ __ \|  | \/|  |  \     \___(  <_> )   |  \   /\  ___/|  | \/|  | \  ___/|  | \/" +
+                 "\n");
+            result +=
+                (@"  \____|__  (____  /__|\___  >___|  (____  /__|   |__|   \______  /\____/|___|  /\_/  \___  >__|   |__|  \___  >__|   " +
+                 "\n");
+            result +=
+                (@"          \/     \/        \/     \/     \/                     \/            \/          \/                 \/       " +
+                 "\n");
             result += "a GUtils component for rhythm games\n";
             result += "Rev " + Assembly.GetExecutingAssembly().GetName().Version + " by Neskol\n";
             result += "Check https://github.com/Neskol/MaichartConverter for updates and instructions\n";
@@ -181,7 +197,7 @@ namespace MaichartConverter
         }
 
         /// <summary>
-        /// Log to given position.
+        ///     Log to given position.
         /// </summary>
         /// <param name="outputLocation">Place to log</param>
         public static void Log(string outputLocation)
@@ -195,8 +211,9 @@ namespace MaichartConverter
                 sw.WriteLine("[" + index + "]\t" + title);
                 index++;
             }
+
             sw.WriteLine();
-            if (ErrorMessage.Count>0)
+            if (ErrorMessage.Count > 0)
             {
                 sw.WriteLine("Warnings:");
                 foreach (string error in ErrorMessage)
@@ -204,13 +221,14 @@ namespace MaichartConverter
                     sw.WriteLine(error);
                 }
             }
+
             sw.Close();
             // BPMCollection.Save(outputLocation + "bpm.xml");
             // DebugInformationTable.Save(outputLocation + "debug.xml");
         }
 
         /// <summary>
-        /// Append Nodes to BPMCollection
+        ///     Append Nodes to BPMCollection
         /// </summary>
         /// <param name="idValue">ID</param>
         /// <param name="bpmValue">BPM</param>
@@ -228,9 +246,9 @@ namespace MaichartConverter
         }
 
         /// <summary>
-        /// Append debug information to save
+        ///     Append debug information to save
         /// </summary>
-        /// <param name = "idValue">ID of the chart</param>
+        /// <param name="idValue">ID of the chart</param>
         /// <param name="bpmTable">BPMTable</param>
         /// <param name="firstNoteValue">First note of the Master Chart</param>
         public static void AppendDebugInformation(string idValue, BPMChanges bpmTable, Note firstNoteValue)
@@ -260,10 +278,9 @@ namespace MaichartConverter
                 changeNote.AppendChild(noteBPM);
                 bpm.AppendChild(changeNote);
             }
+
             XmlNode root = DebugInformationTable.ChildNodes[1] ?? throw new NullReferenceException();
             root.AppendChild(node);
         }
     }
-
-
 }
