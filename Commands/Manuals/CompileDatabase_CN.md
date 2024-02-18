@@ -16,25 +16,22 @@
 
 > 除非另有所指，`XXXXXX`在此指代谱面ID
 
-- `-p | --path <path>`: Path to `A000` Folder. Expects file structure of `A000/music/musicXXXXXX/Music.xml`
-- `-o | --output <path>`: Path to output folder. Program will try to write to this path and create new folder when
-  necessary so make sure you have write permission of the given folder.
+- `-p | --path <目录>`: `A000`目录的路径。需要该文件夹有如下结构：`A000/music/musicXXXXXX/Music.xml`
+- `-o | --output <目录>`: 输出文件夹路径。如果该路径不存在，程序会尝试在该位置创建新文件夹。请确保该路径可写。
 
-### Optional Params:
+### 可选参数
 
-- `-m | --music <path>`: Path to MP3 files. Expected naming scheme is `musicXXXXXX.mp3`.
-- `-c | --cover <path>`: Path to track pictures. Expected naming scheme is `UI_Jacket_XXXXXX.png`.
-- `-v | --video <path>`: Path to background videos. Expected naming scheme is `musicXXXXXX.mp4`
-- `-g | --genre <number 0-6> `: Preferred categorizing scheme.
-  `0 = Genre, 1 = Level, 2 = Cabinet, 3 = Composer, 4 = BPM, 5 - SD/DX Chart, 6 = No subfolders`
-- `-d | --decimal`: Option to force levels to be displayed in decimals (e.g. `14+ => 14.7`).
+- `-m | --music <目录>`: MP3文件夹的路径。需要该文件夹下文件的命名方式为： `musicXXXXXX.mp3`.
+- `-c | --cover <目录>`: 曲目插图文件夹的路径。需要该文件夹下文件的命名方式为： `UI_Jacket_XXXXXX.png`.
+- `-v | --video <目录>`: 背景视频文件夹的路径。需要该文件夹下文件的命名方式为： `musicXXXXXX.mp4`
+- `-g | --genre <数字 0-6> `: 输出文件夹分类方式。
+  `0 = 曲目类别, 1 = 曲目难度, 2 = 初出版本, 3 = 曲目作者, 4 = BPM, 5 - SD/DX谱面, 6 = 不创建子文件夹`
+- `-d | --decimal`: 使程序使用定数作为显示的难度 (例如： `14+ => 14.7`).
 
-### Depreciated/Under development params:
+### 弃用/开发中参数:
 
-> These parameters are not tested. Feel free to test and report issues!
+> 以下参数没有完成开发，有条件的话还请实验/测试一下
 
-- `-f | --format <string>`: Forces program to compile carts in given format (within composed `maidata`.txt). Available
-  format: `Simai, SimaiFes, Ma2, Ma2_104`.
-- `-r | --rotate <string>`: Forces program to rotate all charts in given method. Available
-  rotations: `Clockwise90, Clockwise180, CounterClockwise90, CounterClockwise180, UpsideDown, LeftToRight`.
-- `-s | --shift <int>`: Shifts notes in all charts front or back by given ticks.
+- `-f | --format <选项>`: 强制将谱面编写为该格式。 (仅限 `maidata.txt`内). 可用格式: `Simai, SimaiFes, Ma2, Ma2_104`.
+- `-r | --rotate <选项>`: 强制按要求旋转谱面。可用选项： `Clockwise90, Clockwise180, CounterClockwise90, CounterClockwise180, UpsideDown, LeftToRight`.
+- `-s | --shift <整数>`: 将所有谱面按指定间隔向前/向后平移。

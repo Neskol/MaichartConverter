@@ -10,6 +10,8 @@
 
     MaichartConverter ComposeMa2 -p "/Users/Neskol/MaiAnalysis/A000/music/music000363/000363_03.ma2" -f Ma2_104
 
+## Available Parameters
+
 ### Required Params:
 
 > Unless otherwise specified, `XXXXXX` here stands for musicID.
@@ -20,7 +22,7 @@
 
 > Program will print result in the terminal if `-o | --output` parameter is not provided.
 
-- `-f | --format <string>`: Forces program to compile carts in given format (within composed `maidata`.txt). Available
+- `-f | --format <string>`: Forces program to compile carts in given format. Available
   format: `Simai, SimaiFes, Ma2, Ma2_104`. Note: Festival features requires `SimaiFes` or `Ma2_104` parameter.
 - `-r | --rotate <string>`: Forces program to rotate all charts in given method. Available
   rotations: `Clockwise90, Clockwise180, CounterClockwise90, CounterClockwise180, UpsideDown, LeftToRight`.
