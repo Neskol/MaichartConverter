@@ -33,5 +33,6 @@
 > 以下参数没有完成开发，有条件的话还请实验/测试一下
 
 - `-f | --format <选项>`: 强制将谱面编写为该格式。 (仅限 `maidata.txt`内). 可用格式: `Simai, SimaiFes, Ma2, Ma2_104`.
-- `-r | --rotate <选项>`: 强制按要求旋转谱面。可用选项： `Clockwise90, Clockwise180, CounterClockwise90, CounterClockwise180, UpsideDown, LeftToRight`.
+- `-r | --rotate <选项>`:
+  强制按要求旋转谱面。可用选项： `Clockwise90, Clockwise180, CounterClockwise90, CounterClockwise180, UpsideDown, LeftToRight`.
 - `-s | --shift <整数>`: 将所有谱面按指定间隔向前/向后平移。

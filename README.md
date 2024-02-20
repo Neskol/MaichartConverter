@@ -15,11 +15,16 @@
 
 > Type 'MaichartConverter help' for detailed manual for each command.
 
-- [`CompileDatabase`](./Commands/Manuals/CompileDatabase.md): Compose whole ma2 database to simai
-- [`CompileMa2`](./Commands/Manuals/CompileMa2.md): Compile assigned Ma2 chart to assigned format
-- [`CompileMa2ID`](./Commands/Manuals/CompileMa2ID.md): Compile assigned Ma2 chart indexed by ID to assigned format
-- [`CompileSimai`](./Commands/Manuals/CompileSimai.md): Compile assigned simai chart to assigned format
-- [`ReverseMa2FromSimaiDatabase`](./Commands/Manuals/ReverseMa2FromSimaiDatabase.md): Reverse Simai Database from given
+- `CompileDatabase`([English](./Manuals/ENG/CompileDatabase.md)/[中文](./Manuals/CHN/CompileDatabase_CN.md)): Compose
+  whole ma2 database to simai
+- `CompileMa2`([English](./Manuals/ENG/CompileMa2.md)/[中文](./Manuals/CHN/CompileMa2_CN.md)): Compile assigned Ma2
+  chart to assigned format
+- `CompileMa2ID`([English](./Manuals/ENG/CompileMa2ID.md)/[中文](./Manuals/CHN/CompileMa2ID_CN.md)): Compile assigned
+  Ma2 chart indexed by ID to assigned format
+- `CompileSimai`([English](./Manuals/ENG/CompileSimai.md)/[中文](./Manuals/CHN/CompileSimai_CN.md)): Compile assigned
+  simai chart to assigned format
+- `ReverseMa2FromSimaiDatabase`([English](./Manuals/ENG/ReverseMa2FromSimaiDatabase.md)/[中文](./Manuals/CHN/ReverseMa2FromSimaiDatabase_CN.md)):
+  Reverse Simai Database from given
   folder to MaiAnalysis folder for compilation
 
 ### Parameters notice

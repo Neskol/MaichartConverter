@@ -24,8 +24,10 @@
 
 > 如果`-o | --output`参数没有提供，程序将会在终端输出结果
 
-- `-d | --difficulty <数字 1-7>`: 指定的难度。 1-6 指代 `Easy` 到 `Re:Master`。 如果没有指定难度，程序将会转译第一个谱面。 7指代`Original`。
+- `-d | --difficulty <数字 1-7>`: 指定的难度。 1-6 指代 `Easy` 到 `Re:Master`。 如果没有指定难度，程序将会转译第一个谱面。
+  7指代`Original`。
 - `-f | --format <选项>`: 强制将谱面编写为该格式。可用格式: `Simai, SimaiFes, Ma2, Ma2_104`.
-- `-r | --rotate <选项>`: 强制按要求旋转谱面。可用选项： `Clockwise90, Clockwise180, CounterClockwise90, CounterClockwise180, UpsideDown, LeftToRight`.
+- `-r | --rotate <选项>`:
+  强制按要求旋转谱面。可用选项： `Clockwise90, Clockwise180, CounterClockwise90, CounterClockwise180, UpsideDown, LeftToRight`.
 - `-s | --shift <整数>`: 将所有谱面按指定间隔向前/向后平移。
 - `-o | --output <目录>`: 输出文件夹路径。如果该路径不存在，程序会尝试在该位置创建新文件夹。请确保该路径可写。

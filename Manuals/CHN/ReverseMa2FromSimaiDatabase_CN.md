@@ -3,6 +3,7 @@
 ### 将给定Simai谱面文件夹中的各项数据复制到MaiAnalysis文件夹方便本程序处理
 
 ## 基本语法
+
 > 仅支持使用本程序生成的Simai谱面文件夹 或遵循本程序命名方式的文件夹
 
     MaichartConverter ReverseMa2FromSimaiDatabase --参数
