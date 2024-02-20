@@ -1,6 +1,6 @@
 # `ComposeMa2ID`命令指南
 
-### 转译musicID的Ma2谱面
+### 转译由musicID指定的Ma2谱面
 
 ## 基本语法
 
