@@ -193,7 +193,7 @@ namespace MaichartConverter
                     Console.ReadKey();
                 }
 
-                Dictionary<string, string> bgaMap = new Dictionary<string, string>();
+                Dictionary<string, string> bgaMap = [];
                 if (exportBGA && bgaLocation != null)
                 {
                     string[] bgaFiles = Directory.GetFiles(bgaLocation, "*.mp4");
@@ -219,7 +219,7 @@ namespace MaichartConverter
                 DirectoryInfo output = new DirectoryInfo(outputLocation);
 
                 Program.NumberTotalTrackCompiled = 0;
-                Program.CompiledTracks = new Dictionary<int, string>();
+                Program.CompiledTracks = [];
                 //Iterate music folders
                 foreach (string track in musicFolders)
                 {
@@ -398,10 +398,10 @@ namespace MaichartConverter
                         // Program.AppendBPM(trackInfo.TrackID, trackInfo.TrackBPM);
                         // Program.AppendDebugInformation(trackInfo.TrackID, compiler.SymbolicBPMTable(), compiler.SymbolicFirstNote(false));
                         string[] compiledTrackDetail =
-                        {
+                        [
                             trackInfo.TrackName, trackInfo.TrackGenre, trackInfo.TrackVersion,
                             trackInfo.TrackVersionNumber
-                        };
+                        ];
                         Program.CompiledTrackDetailSet.Add(trackInfo.TrackName + trackInfo.TrackID,
                             compiledTrackDetail);
                         // Program.CompiledChart.Add(trackInfo.TrackName + compiler.GenerateOneLineSummary());

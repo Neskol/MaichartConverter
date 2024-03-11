@@ -51,11 +51,11 @@ namespace MaichartConverter
         /// </summary>
         public static int NumberTotalTrackCompiled;
 
-        public static Dictionary<int, string> CompiledTracks = new();
+        public static Dictionary<int, string> CompiledTracks = [];
         public static List<string> CompiledChart = [];
 
         public static List<string> ErrorMessage = [];
-        public static Dictionary<string, string[]> CompiledTrackDetailSet = new Dictionary<string, string[]>();
+        public static Dictionary<string, string[]> CompiledTrackDetailSet = [];
 
         public static XmlDocument BPMCollection = new XmlDocument();
         public static XmlDocument DebugInformationTable = new XmlDocument();
