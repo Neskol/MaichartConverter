@@ -5,7 +5,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>1.0.7.1</Version>
+        <Version>1.0.8.0</Version>
         <Platforms>AnyCPU;ARM64</Platforms>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <PackageReadmeFile>README.md</PackageReadmeFile>
