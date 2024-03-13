@@ -267,7 +267,7 @@ namespace MaichartConverter
                         }
 
                         SimaiCompiler compiler;
-                        if (trackInfo.Information["Utage"] != "")
+                        if (trackInfo.InformationDict["Utage"] != "")
                         {
                             compiler = new SimaiCompiler(StrictDecimal, $"{track}/",
                                 $"{defaultCategorizedPath}/{trackNameSubstitute}_Utage", true);
