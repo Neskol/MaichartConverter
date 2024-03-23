@@ -30,8 +30,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ManyConsole" Version="2.0.1"/>
-        <PackageReference Include="ManyConsole.Standard" Version="2.0.0"/>
+        <PackageReference Include="CSCore" Version="1.2.1.2" />
+        <PackageReference Include="CSCore.Ffmpeg" Version="1.2.0-beta1" />
+        <PackageReference Include="ManyConsole" Version="2.0.1" />
+        <PackageReference Include="ManyConsole.Standard" Version="2.0.0" />
     </ItemGroup>
 
     <ItemGroup>

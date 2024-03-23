@@ -10,7 +10,7 @@ namespace MaichartConverter
     public class CompileDatabase : ConsoleCommand
     {
         public const int Success = 0;
-        public const int Failed = 0;
+        public const int Failed = 2;
         public bool StrictDecimal { get; set; }
 
         /// <summary>
