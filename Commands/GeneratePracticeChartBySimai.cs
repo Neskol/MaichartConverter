@@ -91,6 +91,12 @@ public class GeneratePracticeChartBySimai : ConsoleCommand
 
     public override int Run(string[] remainingArguments)
     {
+        SimaiTokenizer tokenizer = new SimaiTokenizer();
+        SimaiParser parser = new SimaiParser();
+
+        if (File.Exists($"{SourceLocation}/maidata.txt")) tokenizer.UpdateFromPath($"{SourceLocation}/maidata.txt");
+        else throw new FileNotFoundException($"There is no maidata existing in the folder specified: {SourceLocation}");
+
         throw new NotImplementedException();
     }
 }
