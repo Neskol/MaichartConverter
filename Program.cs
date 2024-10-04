@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Xml;
 using ManyConsole;
 using MaiLib;
@@ -11,28 +10,17 @@ namespace MaichartConverter
     /// </summary>
     class Program
     {
-        public static string[] WinPaths =
-        [
-            @"C:\Users\Neskol\MaiAnalysis\A000\",
-            @"C:\Users\Neskol\MaiAnalysis\Sound\",
-            @"C:\Users\Neskol\MaiAnalysis\Image\Texture2D\",
-            @"C:\Users\Neskol\MaiAnalysis\DXBGA_HEVC\",
-            @"C:\Users\Neskol\MaiAnalysis\Output\"
-        ];
-
-        public static string[] MacPaths =
-        [
-            @"/Users/neskol/MaiAnalysis/A000/",
-            @"/Users/neskol/MaiAnalysis/Sound/",
-            @"/Users/neskol/MaiAnalysis/Image/Texture2D/",
-            @"/Users/neskol/MaiAnalysis/DXBGA_HEVC/",
-            @"/Users/neskol/MaiAnalysis/Output/"
-        ];
-
+        protected static string home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         /// <summary>
         ///     Defines which path is using in programs
         /// </summary>
-        public static string[] GlobalPaths = MacPaths;
+        public static string[] DefaultPaths = [
+            $"{home}/MaiAnalysis/A000/",
+            $"{home}/MaiAnalysis/Sound/",
+            $"{home}/MaiAnalysis/Image/Texture2D/",
+            $"{home}/MaiAnalysis/DXBGA_HEVC/",
+            $"{home}/MaiAnalysis/Output/"
+        ];
 
         /// <summary>
         ///     Defines possible sorting scheme
@@ -66,17 +54,6 @@ namespace MaichartConverter
         /// <param name="args">Parameters to take in</param>
         public static int Main(string[] args)
         {
-            // if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            // {
-            //     GlobalPaths = WinPaths;
-            //     GlobalSep = WindowsPathSep;
-            // }
-            // else
-            // {
-            //     GlobalPaths = MacPaths;
-            //     GlobalSep = MacPathSep;
-            // }
-
             Console.WriteLine(ComposeHeader());
 
             // XmlDeclaration xmlDecl = BPMCollection.CreateXmlDeclaration("1.0", "UTF-8", null);
@@ -191,7 +168,7 @@ namespace MaichartConverter
                 (@"          \/     \/        \/     \/     \/                     \/            \/          \/                 \/       " +
                  "\n");
             result += "a GUtils component for rhythm games\n";
-            result += "Rev " + Assembly.GetExecutingAssembly().GetName().Version + " by Neskol\n";
+            result += "Rev. " + Assembly.GetExecutingAssembly().GetName().Version + " by Neskol\n";
             result += "Check https://github.com/Neskol/MaichartConverter for updates and instructions\n";
             return result;
         }
@@ -205,10 +182,10 @@ namespace MaichartConverter
             StreamWriter sw = new StreamWriter(outputLocation + "log.txt", false);
             int index = 1;
 
-            sw.WriteLine("Total chart compiled: " + CompiledChart.Count);
-            foreach (string title in CompiledChart)
+            Console.WriteLine("Total music compiled: {0}", NumberTotalTrackCompiled);
+            foreach (KeyValuePair<int, string> pair in CompiledTracks)
             {
-                sw.WriteLine("[" + index + "]\t" + title);
+                sw.WriteLine($"[{index}]: {pair.Key} {pair.Value}");
                 index++;
             }
 
