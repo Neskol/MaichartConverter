@@ -23,9 +23,10 @@
   Ma2 chart indexed by ID to assigned format
 - `CompileSimai`([English](./Manuals/ENG/CompileSimai.md)/[中文](./Manuals/CHN/CompileSimai_CN.md)): Compile assigned
   simai chart to assigned format
-- `ReverseMa2FromSimaiDatabase`([English](./Manuals/ENG/ReverseMa2FromSimaiDatabase.md)/[中文](./Manuals/CHN/ReverseMa2FromSimaiDatabase_CN.md)):
-  Reverse Simai Database from given
-  folder to MaiAnalysis folder for compilation
+-
+`ReverseMa2FromSimaiDatabase`([English](./Manuals/ENG/ReverseMa2FromSimaiDatabase.md)/[中文](./Manuals/CHN/ReverseMa2FromSimaiDatabase_CN.md)):
+Reverse Simai Database from given
+folder to MaiAnalysis folder for compilation
 
 ### Parameters notice
 

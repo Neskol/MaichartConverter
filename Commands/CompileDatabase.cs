@@ -12,6 +12,8 @@ namespace MaichartConverter
         public const int Failed = 2;
         public bool StrictDecimal { get; set; }
         public bool IgnoreIncompleteAssets { get; set; }
+        public bool MusicIDFolderName { get; set; }
+        public bool LogTracksInJson { get; set; }
 
         /// <summary>
         ///     Source file path
@@ -99,7 +101,7 @@ namespace MaichartConverter
             HasOption("f|format=", "The target format - Simai, SimaiFes, Ma2_103, Ma2_104",
                 format => TargetFormat = format);
             HasOption("g|genre=", "The preferred categorizing scheme, includes:\n" + CategorizeMethods,
-                genre => CategorizeIndex = Int32.Parse(genre));
+                genre => CategorizeIndex = int.Parse(genre));
             HasOption("r|rotate=",
                 "Rotating method to rotate a chart: Clockwise90/180, Counterclockwise90/180, UpsideDown, LeftToRight",
                 rotate => Rotate = rotate);
@@ -107,7 +109,10 @@ namespace MaichartConverter
             HasOption("v|video=", "Folder of Video to override - end with a path separator",
                 vPath => VideoLocation = vPath);
             HasOption("d|decimal:", "Force output chart to have levels rated by decimal", _ => StrictDecimal = true);
-            HasOption("i|ignore:", "Ignore incomplete assests and proceed converting", _ => IgnoreIncompleteAssets = true);
+            HasOption("i|ignore:", "Ignore incomplete assests and proceed converting",
+                _ => IgnoreIncompleteAssets = true);
+            HasOption("n|number:", "Use musicID as folder name instead of sort name", _ => MusicIDFolderName = true);
+            HasOption("j|json:", "Create a log file of compiled tracks in JSON", _ => LogTracksInJson = true);
         }
 
         /// <summary>
@@ -182,7 +187,7 @@ namespace MaichartConverter
                 {
                     if (0 <= CategorizeIndex && CategorizeIndex < Program.TrackCategorizeMethodSet.Length)
                     {
-                        Program.GlobalTrackCategorizeMethod = Program.TrackCategorizeMethodSet[(int)CategorizeIndex];
+                        Program.GlobalTrackCategorizeMethod = Program.TrackCategorizeMethodSet[CategorizeIndex];
                     }
                 }
                 catch (Exception e)
@@ -244,7 +249,9 @@ namespace MaichartConverter
                         // defaultCategorizedPath += sep + categorizeScheme[0];
 
                         //Deal with special characters in path
-                        string trackNameSubstitute = $"{trackInfo.TrackID}_{trackInfo.TrackSortName}";
+                        string trackNameSubstitute = MusicIDFolderName
+                            ? trackInfo.TrackID
+                            : $"{trackInfo.TrackID}_{trackInfo.TrackSortName}";
                         if (!Directory.Exists(defaultCategorizedPath))
                         {
                             Directory.CreateDirectory(defaultCategorizedPath);
@@ -256,8 +263,9 @@ namespace MaichartConverter
                         }
 
                         // Check if assets are complete
-                        string trackPath =
-                            $"{defaultCategorizedPath}/{trackNameSubstitute}{trackInfo.DXChartTrackPathSuffix}";
+                        string trackPath = MusicIDFolderName
+                            ? $"{defaultCategorizedPath}/{trackNameSubstitute}"
+                            : $"{defaultCategorizedPath}/{trackNameSubstitute}{trackInfo.DXChartTrackPathSuffix}";
                         string originalMusicLocation = $"{audioLocation}/music00{shortID}.mp3";
                         string originalImageLocation = $"{imageLocation}/UI_Jacket_00{shortID}.png";
                         bool trackAssetIncomplete = false;
@@ -295,7 +303,8 @@ namespace MaichartConverter
                             if (!File.Exists(originalMusicLocation))
                             {
                                 Console.WriteLine("MUSIC FILE NOT FOUND AT: {0}", originalMusicLocation);
-                                Program.ErrorMessage.Add($"Music not fould: {trackInfo.TrackName} at {originalMusicLocation}");
+                                Program.ErrorMessage.Add(
+                                    $"Music not fould: {trackInfo.TrackName} at {originalMusicLocation}");
                                 trackAssetIncomplete = true;
                                 if (!IgnoreIncompleteAssets) Console.ReadLine();
                             }
@@ -324,7 +333,8 @@ namespace MaichartConverter
                             if (!File.Exists(originalImageLocation))
                             {
                                 Console.WriteLine("IMAGE FILE NOT FOUND AT: {0}", originalImageLocation);
-                                Program.ErrorMessage.Add($"Image not fould: {trackInfo.TrackName} at {originalImageLocation}");
+                                Program.ErrorMessage.Add(
+                                    $"Image not fould: {trackInfo.TrackName} at {originalImageLocation}");
                                 trackAssetIncomplete = true;
                                 if (!IgnoreIncompleteAssets) Console.ReadLine();
                             }
@@ -427,13 +437,14 @@ namespace MaichartConverter
                             string[] compiledTrackDetail =
                             [
                                 trackInfo.TrackName, trackInfo.TrackGenre, trackInfo.TrackVersion,
-                            trackInfo.TrackVersionNumber
+                                trackInfo.TrackVersionNumber
                             ];
                             Program.CompiledTrackDetailSet.Add(trackInfo.TrackName + trackInfo.TrackID,
                                 compiledTrackDetail);
                             // Program.CompiledChart.Add(trackInfo.TrackName + compiler.GenerateOneLineSummary());
                             Console.WriteLine("Exported to: {0}", trackPath);
                         }
+
                         Console.WriteLine();
                     }
                     else
@@ -451,6 +462,7 @@ namespace MaichartConverter
                 }
 
                 Program.Log(outputLocation);
+                if (LogTracksInJson) Program.LogTracksInJson(outputLocation);
                 return Success;
             }
             catch (Exception ex)

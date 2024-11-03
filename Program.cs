@@ -2,6 +2,9 @@
 using System.Xml;
 using ManyConsole;
 using MaiLib;
+using System.Text.Json;
+using System.Text.Unicode;
+using System.Text.Encodings.Web;
 
 namespace MaichartConverter
 {
@@ -11,10 +14,12 @@ namespace MaichartConverter
     class Program
     {
         protected static string home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
         /// <summary>
         ///     Defines which path is using in programs
         /// </summary>
-        public static string[] DefaultPaths = [
+        public static string[] DefaultPaths =
+        [
             $"{home}/MaiAnalysis/A000/",
             $"{home}/MaiAnalysis/Sound/",
             $"{home}/MaiAnalysis/Image/Texture2D/",
@@ -202,6 +207,30 @@ namespace MaichartConverter
             sw.Close();
             // BPMCollection.Save(outputLocation + "bpm.xml");
             // DebugInformationTable.Save(outputLocation + "debug.xml");
+        }
+
+        /// <summary>
+        ///     Log to given position in Json format.
+        /// </summary>
+        /// <param name="outputLocation">Place to log</param>
+        public static void LogTracksInJson(string outputLocation)
+        {
+            StreamWriter sw = new StreamWriter(outputLocation + "log.json", false);
+            // string output = "{\n";
+            // SortedDictionary<int, string> sortedCompiledTrack = new SortedDictionary<int, string>(CompiledTracks);
+            // foreach (KeyValuePair<int, string> track in sortedCompiledTrack)
+            // {
+            //     output += $"\t\"{track.Key}\": \"{track.Value}\",\n";
+            // }
+            // output += "}";
+            JsonSerializerOptions? JsonOptions = new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                WriteIndented = true,
+            };
+            sw.WriteLine(JsonSerializer.Serialize(new SortedDictionary<int, string>(CompiledTracks), JsonOptions));
+            // sw.WriteLine(output);
+            sw.Close();
         }
 
         /// <summary>
