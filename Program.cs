@@ -215,21 +215,13 @@ namespace MaichartConverter
         /// <param name="outputLocation">Place to log</param>
         public static void LogTracksInJson(string outputLocation)
         {
-            StreamWriter sw = new StreamWriter(outputLocation + "log.json", false);
-            // string output = "{\n";
-            // SortedDictionary<int, string> sortedCompiledTrack = new SortedDictionary<int, string>(CompiledTracks);
-            // foreach (KeyValuePair<int, string> track in sortedCompiledTrack)
-            // {
-            //     output += $"\t\"{track.Key}\": \"{track.Value}\",\n";
-            // }
-            // output += "}";
+            StreamWriter sw = new StreamWriter(outputLocation + "index.json", false);
             JsonSerializerOptions? JsonOptions = new JsonSerializerOptions
             {
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                 WriteIndented = true,
             };
             sw.WriteLine(JsonSerializer.Serialize(new SortedDictionary<int, string>(CompiledTracks), JsonOptions));
-            // sw.WriteLine(output);
             sw.Close();
         }
 

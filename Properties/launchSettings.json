@@ -4,6 +4,18 @@
       "commandName": "WSL2",
       "distributionName": ""
     },
+    "For Update": {
+      "commandName": "Project",
+      "commandLineArgs": "CompileDatabase \r\n-g \"6\" \r\n -i \n -d \n -n \n -j \r\n-p \"/Users/Neskol/MaiAnalysis/I100/\"\r\n-c \"/Users/Neskol/MaiAnalysis/Image/Texture2D/\"\r\n-m \"/Users/Neskol/MaiAnalysis/Sound/\" \r\n-o \"/Users/Neskol/MaiAnalysis/Output_NoBGA_I100/\" "
+    },
+    "For MilkBot with HEVC, Strict Decimal": {
+      "commandName": "Project",
+      "commandLineArgs": "CompileDatabase \n-g \"6\" \n -i \n -d \n -n \n -j \r\n-p \"/Users/Neskol/MaiAnalysis/A000/\"\r\n-c \"/Users/Neskol/MaiAnalysis/Image/Texture2D/\"\r\n-m \"/Users/Neskol/MaiAnalysis/Sound/\"\r\n-v \"/Users/Neskol/MaiAnalysis/DXBGA_HEVC/\" \r\n-o \"/Users/Neskol/MaiAnalysis/Output_MilkBot_StrictDecimal_JsonLog_HEVC/\" "
+    },
+    "For MilkBot NoBGA, Strict Decimal": {
+      "commandName": "Project",
+      "commandLineArgs": "CompileDatabase \n-g \"6\" \n -i \n -d \n -n \n -j \r\n-p \"/Users/Neskol/MaiAnalysis/A000/\"\r\n-c \"/Users/Neskol/MaiAnalysis/Image/Texture2D/\"\r\n-m \"/Users/Neskol/MaiAnalysis/Sound/\" \r\n-o \"/Users/Neskol/MaiAnalysis/Output_MilkBot_StrictDecimal_JsonLog_HEVC/\" "
+    },
     "NoBGA Run": {
       "commandName": "Project",
       "commandLineArgs": "CompileDatabase \r\n-p \"/Users/Neskol/MaiAnalysis/A000/\"\r\n-c \"/Users/Neskol/MaiAnalysis/Image/Texture2D/\"\r\n-m \"/Users/Neskol/MaiAnalysis/Sound/\" \r\n-o \"/Users/Neskol/MaiAnalysis/Output_NoBGA/\" "
