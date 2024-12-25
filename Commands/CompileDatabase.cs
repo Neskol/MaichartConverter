@@ -109,7 +109,7 @@ namespace MaichartConverter
             HasOption("v|video=", "Folder of Video to override - end with a path separator",
                 vPath => VideoLocation = vPath);
             HasOption("d|decimal:", "Force output chart to have levels rated by decimal", _ => StrictDecimal = true);
-            HasOption("i|ignore:", "Ignore incomplete assests and proceed converting",
+            HasOption("i|ignore:", "Ignore incomplete assets and proceed converting",
                 _ => IgnoreIncompleteAssets = true);
             HasOption("n|number:", "Use musicID as folder name instead of sort name", _ => MusicIDFolderName = true);
             HasOption("j|json:", "Create a log file of compiled tracks in JSON", _ => LogTracksInJson = true);
@@ -304,7 +304,7 @@ namespace MaichartConverter
                             {
                                 Console.WriteLine("MUSIC FILE NOT FOUND AT: {0}", originalMusicLocation);
                                 Program.ErrorMessage.Add(
-                                    $"Music not fould: {trackInfo.TrackName} at {originalMusicLocation}");
+                                    $"Music not found: {trackInfo.TrackName} at {originalMusicLocation}");
                                 trackAssetIncomplete = true;
                                 if (!IgnoreIncompleteAssets) Console.ReadLine();
                             }
@@ -334,7 +334,7 @@ namespace MaichartConverter
                             {
                                 Console.WriteLine("IMAGE FILE NOT FOUND AT: {0}", originalImageLocation);
                                 Program.ErrorMessage.Add(
-                                    $"Image not fould: {trackInfo.TrackName} at {originalImageLocation}");
+                                    $"Image not found: {trackInfo.TrackName} at {originalImageLocation}");
                                 trackAssetIncomplete = true;
                                 if (!IgnoreIncompleteAssets) Console.ReadLine();
                             }
