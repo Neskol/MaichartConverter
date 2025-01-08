@@ -7,7 +7,7 @@
 
 ### Build
 
-    git clone
+    git clone https://github.com/Neskol/MaichartConverter
     git submodule update --init --recursive
     dotnet build
 
