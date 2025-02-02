@@ -446,7 +446,13 @@ namespace MaichartConverter
                                 compiledTrackDetail);
                             // Program.CompiledChart.Add(trackInfo.TrackName + compiler.GenerateOneLineSummary());
                             Console.WriteLine("Exported to: {0}", trackPath);
-                            if (ExportAsZipFile) ZipFile.CreateFromDirectory(trackPath, $"{trackPath}.zip");
+                            if (ExportAsZipFile)
+                            {
+                                Console.WriteLine("Zip file compressing to: {0}.zip", trackPath);
+                                ZipFile.CreateFromDirectory(trackPath, $"{trackPath}.zip");
+                                Console.WriteLine("Compressed: {0}.zip, removing original folder", trackPath);
+                                Directory.Delete(trackPath, true);
+                            }
                         }
 
                         Console.WriteLine();
