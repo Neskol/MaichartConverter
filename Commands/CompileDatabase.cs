@@ -1,5 +1,6 @@
 using ManyConsole;
 using MaiLib;
+using System.IO.Compression;
 
 namespace MaichartConverter
 {
@@ -14,6 +15,7 @@ namespace MaichartConverter
         public bool IgnoreIncompleteAssets { get; set; }
         public bool MusicIDFolderName { get; set; }
         public bool LogTracksInJson { get; set; }
+        public bool ExportAsZipFile { get; set; }
 
         /// <summary>
         ///     Source file path
@@ -113,6 +115,7 @@ namespace MaichartConverter
                 _ => IgnoreIncompleteAssets = true);
             HasOption("n|number:", "Use musicID as folder name instead of sort name", _ => MusicIDFolderName = true);
             HasOption("j|json:", "Create a log file of compiled tracks in JSON", _ => LogTracksInJson = true);
+            HasOption("z|zip:", "Export Tracks as Zip Files", _ => ExportAsZipFile = true);
         }
 
         /// <summary>
@@ -443,6 +446,7 @@ namespace MaichartConverter
                                 compiledTrackDetail);
                             // Program.CompiledChart.Add(trackInfo.TrackName + compiler.GenerateOneLineSummary());
                             Console.WriteLine("Exported to: {0}", trackPath);
+                            if (ExportAsZipFile) ZipFile.CreateFromDirectory(trackPath, $"{trackPath}.zip");
                         }
 
                         Console.WriteLine();
