@@ -388,7 +388,7 @@ namespace MaichartConverter
                             Console.WriteLine(trackInfo.TrackID);
                             Console.WriteLine(Program.CompensateZero(trackInfo.TrackID));
                             Console.WriteLine(originalBGALocation);
-                            Program.ErrorMessage.Add($"BGA file not found: {trackInfo.TrackName} at {originalBGALocation}");
+                            Program.ErrorMessage.Add($"BGA file not found: {trackInfo.TrackName} with ID {trackInfo.TrackID}");
                             trackAssetIncomplete = true;
                             if (!IgnoreIncompleteAssets) Console.ReadKey();
                         }
