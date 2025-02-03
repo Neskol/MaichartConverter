@@ -211,12 +211,14 @@ namespace MaichartConverter
                     foreach (string bgaFile in bgaFiles)
                     {
                         string musicID = bgaFile.Substring(bgaLocation.Length).Substring(0, 6).Substring(2, 4);
-                        if (!bgaMap.Keys.Contains(Program.CompensateZero(musicID)))
-                            bgaMap.Add(Program.CompensateZero(musicID), bgaFile);
-                        bgaMap.Add("01" + musicID, bgaFile);
-                        bgaMap.Add("10" + musicID, bgaFile);
-                        bgaMap.Add("11" + musicID, bgaFile);
-                        bgaMap.Add("12" + musicID, bgaFile);
+                        if (!bgaMap.Keys.Contains(musicID))
+                            bgaMap.Add(musicID, bgaFile);
+                        // if (!bgaMap.Keys.Contains(Program.CompensateZero(musicID)))
+                        //     bgaMap.Add(Program.CompensateZero(musicID), bgaFile);
+                        // bgaMap.Add("01" + musicID, bgaFile);
+                        // bgaMap.Add("10" + musicID, bgaFile);
+                        // bgaMap.Add("11" + musicID, bgaFile);
+                        // bgaMap.Add("12" + musicID, bgaFile);
                     }
                 }
                 else if (exportBGA)
@@ -225,8 +227,6 @@ namespace MaichartConverter
                 string[] musicFolders = Directory.GetDirectories(musicLocation);
 
                 //Create output directory
-                DirectoryInfo output = new DirectoryInfo(outputLocation);
-
                 Program.NumberTotalTrackCompiled = 0;
                 Program.CompiledTracks = [];
                 //Iterate music folders
@@ -361,29 +361,31 @@ namespace MaichartConverter
                         }
                         // Console.WriteLine("Exported to: " + outputLocation + trackInfo.TrackGenre + sep + trackNameSubstitute + trackInfo.DXChart);
 
-                        bool bgaExists = bgaMap.TryGetValue(Program.CompensateZero(trackInfo.TrackID),
+                        bool bgaExists = bgaMap.TryGetValue(shortID,
                             out string? originalBGALocation);
-                        if (!bgaExists)
-                        {
-                            // Compensate on DX Utage
-                            if (trackInfo.TrackID.Length == 6)
-                            {
-                                bgaExists = bgaMap.TryGetValue(trackInfo.TrackID.Substring(2, 4),
-                                    out originalBGALocation);
-                            }
-                            // Compensate on DX Standard
-                            else if (trackInfo.TrackID.Length == 5)
-                            {
-                                bgaExists = bgaMap.TryGetValue(trackInfo.TrackID.Substring(1, 4),
-                                    out originalBGALocation);
-                            }
-                            // Compensate on Standard
-                            else if (trackInfo.TrackID.Length == 3)
-                            {
-                                bgaExists = bgaMap.TryGetValue(Program.CompensateShortZero(trackInfo.TrackID),
-                                    out originalBGALocation);
-                            }
-                        }
+                        # region IDKIfThisLogicWorks
+                        // if (!bgaExists)
+                        // {
+                        //     // Compensate on DX Utage
+                        //     if (trackInfo.TrackID.Length == 6)
+                        //     {
+                        //         bgaExists = bgaMap.TryGetValue(trackInfo.TrackID.Substring(2, 4),
+                        //             out originalBGALocation);
+                        //     }
+                        //     // Compensate on DX Standard
+                        //     else if (trackInfo.TrackID.Length == 5)
+                        //     {
+                        //         bgaExists = bgaMap.TryGetValue(trackInfo.TrackID.Substring(1, 4),
+                        //             out originalBGALocation);
+                        //     }
+                        //     // Compensate on Standard
+                        //     else if (trackInfo.TrackID.Length == 3)
+                        //     {
+                        //         bgaExists = bgaMap.TryGetValue(Program.CompensateShortZero(trackInfo.TrackID),
+                        //             out originalBGALocation);
+                        //     }
+                        // }
+                        # endregion
 
                         if (exportBGA && !bgaExists)
                         {
