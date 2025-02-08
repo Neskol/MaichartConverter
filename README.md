@@ -23,10 +23,7 @@
   Ma2 chart indexed by ID to assigned format
 - `CompileSimai`([English](./Manuals/ENG/CompileSimai.md)/[中文](./Manuals/CHN/CompileSimai_CN.md)): Compile assigned
   simai chart to assigned format
--
-`ReverseMa2FromSimaiDatabase`([English](./Manuals/ENG/ReverseMa2FromSimaiDatabase.md)/[中文](./Manuals/CHN/ReverseMa2FromSimaiDatabase_CN.md)):
-Reverse Simai Database from given
-folder to MaiAnalysis folder for compilation
+- `ReverseMa2FromSimaiDatabase`([English](./Manuals/ENG/ReverseMa2FromSimaiDatabase.md)/[中文](./Manuals/CHN/ReverseMa2FromSimaiDatabase_CN.md)): Reverse Simai Database from given folder to MaiAnalysis folder for compilation
 
 ### Parameters notice
 
@@ -36,15 +33,15 @@ folder to MaiAnalysis folder for compilation
   compensate 0s at the front to 6 digits
 - image folder should be structured in image/Texture2D/ and the files should start with UI_Jacket_xxxxxx.jpg which
   xxxxxx matches the music id specified in music.xml in each a000 folder, and compensate 0s at the front to 6 digits
-- All of the rules specified above is in convenience for you to directly use after you obtain data from considerable
+- All the rules specified above is in convenience for you to directly use after you obtain data from considerable
   ways
-- The difficulty parameter is listed 0-4 as Basic to Re:Master. In MaiLib I specified rules for Easy and Utage but it
+- The difficulty parameter is listed 0-4 as Basic to Re:Master. In MaiLib I specified rules for Easy and Utage, but it
   takes times for me to figure it out, or you could implement on you own referring MaiLib code
-- All of the path should end with path separator like "/" or "\". You cannot include quote signs in the path.
+- All the path should end with path separator like "/" or "\". You cannot include quote signs in the path.
 - If you have difficulty using the commands, please refer VSCode launch.json where I included several examples
 - The whole program was planned to convert from ma2 to simai initially and all other features were developed after that,
   so there is a HUGE amount of compromises in code design which made it hard to read (but works so far). It would be
-  most kind of you if you would like to help me fixing that
+  most kind of you if you would like to help me to fix that
 
 ### Disclaimer
 
