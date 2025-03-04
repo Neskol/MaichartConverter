@@ -43,7 +43,7 @@
         "preLaunchTask": "build",
         // If you have changed target frameworks, make sure to update the program path.
         "program": "${workspaceFolder}/bin/Debug/net9.0/MaichartConverter.dll",
-        "args": "CompileDatabase -p \"/Users/Neskol/MaiAnalysis/A000/\" -o \"/Users/Neskol/MaiAnalysis/Maichart-Converts/\"",
+        "args": "CompileDatabase -p \"/Users/Neskol/MaiAnalysis/A000/\" -o \"/Users/Neskol/source/repos/Maichart-Converts/\"",
         "cwd": "${workspaceFolder}",
         // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
         "console": "integratedTerminal",
@@ -235,7 +235,7 @@
         "preLaunchTask": "build",
         // If you have changed target frameworks, make sure to update the program path.
         "program": "${workspaceFolder}/bin/Debug/net9.0/MaichartConverter.dll",
-        "args": "CompileDatabase -g 2 -p \"/Users/Neskol/MaiAnalysis-145/A000/\" -c \"/Users/Neskol/MaiAnalysis-145/Image/Texture2D/\" -m \"/Users/Neskol/MaiAnalysis-145/Sound/\" -o \"/Users/Neskol/MaiAnalysis-145/Output_NoBGA_Buddies_Plus/\" -d -i",
+        "args": "CompileDatabase -g 6 -i -j -d -p \"/Users/Neskol/MaiAnalysis/A021/\" -c \"/Users/Neskol/MaiAnalysis/Image/Texture2D/\" -m \"/Users/Neskol/MaiAnalysis/Sound/\" -o \"/Users/Neskol/MaiAnalysis/Output_NoBGA_Update/\"",
         "cwd": "${workspaceFolder}",
         // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
         "console": "integratedTerminal",
@@ -251,7 +251,7 @@
         "preLaunchTask": "build",
         // If you have changed target frameworks, make sure to update the program path.
         "program": "${workspaceFolder}/bin/Debug/net9.0/MaichartConverter.dll",
-        "args": "CompileDatabase -g \"2\" -p \"/Users/Neskol/MaiAnalysis/A000-145/\" -c \"/Users/Neskol/MaiAnalysis/Image/Texture2D/\" -v \"/Users/Neskol/MaiAnalysis/DXBGA_HEVC/\" -m \"/Users/Neskol/MaiAnalysis/Sound/\" -o \"/Users/Neskol/MaiAnalysis/Output_HEVC_Buddies_Plus_ByCab_StrictDecimal/\" -d -i",
+        "args": "CompileDatabase -g 6 -i -j -d -p \"/Users/Neskol/MaiAnalysis/A021/\" -c \"/Users/Neskol/MaiAnalysis/Image/Texture2D/\" -v \"/Users/Neskol/MaiAnalysis/DXBGA_HEVC/\" -m \"/Users/Neskol/MaiAnalysis/Sound/\" -o \"/Users/Neskol/MaiAnalysis/Output_HEVC_Update_StrictDecimal/\"",
         "cwd": "${workspaceFolder}",
         // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
         "console": "integratedTerminal",
