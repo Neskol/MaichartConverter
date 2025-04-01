@@ -139,7 +139,7 @@ namespace MaichartConverter
                 //     Console.WriteLine("Step 1: Provide A000 Location");
                 //     a000Location = Console.ReadLine() ?? "";
                 // }
-                if (a000Location == null || a000Location.Equals(""))
+                if (a000Location is null or "")
                 {
                     a000Location = Program.DefaultPaths[0];
                 }
@@ -234,13 +234,12 @@ namespace MaichartConverter
                 {
                     Console.WriteLine("Iterating on folder {0}", track);
                     // Check the file status
-                    string[] files = Directory.GetFiles(track);
-                    if (files.Length <= 1)
+                    string[] files = Directory.GetFiles(track, "*.ma2");
+                    if (files.Length == 0)
                     {
-                        Console.WriteLine("Not enough files in the folder, skipping track: ", track);
-                        continue; 
+                        Console.WriteLine("This folder does not contain any charts, skipping {0}: ", track);
                     }
-                    if (File.Exists($"{track}/Music.xml"))
+                    else if (File.Exists($"{track}/Music.xml"))
                     {
                         TrackInformation trackInfo = new XmlInformation($"{track}/");
                         Console.WriteLine("There is Music.xml in {0}", track);
@@ -370,29 +369,6 @@ namespace MaichartConverter
 
                         bool bgaExists = bgaMap.TryGetValue(shortID,
                             out string? originalBGALocation);
-                        # region IDKIfThisLogicWorks
-                        // if (!bgaExists)
-                        // {
-                        //     // Compensate on DX Utage
-                        //     if (trackInfo.TrackID.Length == 6)
-                        //     {
-                        //         bgaExists = bgaMap.TryGetValue(trackInfo.TrackID.Substring(2, 4),
-                        //             out originalBGALocation);
-                        //     }
-                        //     // Compensate on DX Standard
-                        //     else if (trackInfo.TrackID.Length == 5)
-                        //     {
-                        //         bgaExists = bgaMap.TryGetValue(trackInfo.TrackID.Substring(1, 4),
-                        //             out originalBGALocation);
-                        //     }
-                        //     // Compensate on Standard
-                        //     else if (trackInfo.TrackID.Length == 3)
-                        //     {
-                        //         bgaExists = bgaMap.TryGetValue(Program.CompensateShortZero(trackInfo.TrackID),
-                        //             out originalBGALocation);
-                        //     }
-                        // }
-                        # endregion
 
                         if (exportBGA && !bgaExists)
                         {
@@ -400,7 +376,8 @@ namespace MaichartConverter
                             Console.WriteLine(trackInfo.TrackID);
                             Console.WriteLine(Program.CompensateZero(trackInfo.TrackID));
                             Console.WriteLine(originalBGALocation);
-                            Program.ErrorMessage.Add($"BGA file not found: {trackInfo.TrackName} with ID {trackInfo.TrackID}");
+                            Program.ErrorMessage.Add(
+                                $"BGA file not found: {trackInfo.TrackName} with ID {trackInfo.TrackID}");
                             trackAssetIncomplete = true;
                             if (!IgnoreIncompleteAssets) Console.ReadKey();
                         }
@@ -490,6 +467,7 @@ namespace MaichartConverter
                 Console.Error.WriteLine(ex.Message);
                 Console.Error.WriteLine(ex.StackTrace);
                 Console.ReadKey();
+                // throw ex; // For debug use
                 return Failed;
             }
         }
