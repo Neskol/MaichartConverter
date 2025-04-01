@@ -233,6 +233,13 @@ namespace MaichartConverter
                 foreach (string track in musicFolders)
                 {
                     Console.WriteLine("Iterating on folder {0}", track);
+                    // Check the file status
+                    string[] files = Directory.GetFiles(track);
+                    if (files.Length <= 1)
+                    {
+                        Console.WriteLine("Not enough files in the folder, skipping track: ", track);
+                        continue; 
+                    }
                     if (File.Exists($"{track}/Music.xml"))
                     {
                         TrackInformation trackInfo = new XmlInformation($"{track}/");
