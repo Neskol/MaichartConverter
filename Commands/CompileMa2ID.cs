@@ -93,11 +93,24 @@ namespace MaichartConverter
                 Ma2Tokenizer tokenizer = new Ma2Tokenizer();
                 Ma2Parser parser = new Ma2Parser();
                 //Chart good = new Ma2(@"/Users/neskol/MaiAnalysis/A000/music/music" + musicID + "/" + musicID + "_0" + difficulty + ".ma2");
-                string tokenLocation = FileLocation ?? throw new FileNotFoundException();
-                string compensatedId =
-                    Program.CompensateZero(ID ?? throw new NullReferenceException("ID shall not be null"));
-                Chart candidate = parser.ChartOfToken(tokenizer.Tokens(
-                    $"{tokenLocation}/music/music{compensatedId}/{compensatedId}_0{Difficulty}.ma2"));
+                string tokenLocation = FileLocation ?? throw new FileNotFoundException("Token location not specified");
+                string compensatedId = Program.CompensateZero(ID ?? throw new NullReferenceException("ID shall not be null"));
+                
+                string ma2Path = Path.Combine(
+                    tokenLocation, 
+                    "music", 
+                    $"music{compensatedId}", 
+                    $"{compensatedId}_0{Difficulty}.ma2"
+                );
+
+                if (!File.Exists(ma2Path))
+                {
+                    Console.WriteLine($"MA2 file not found, skipping: {ma2Path}");
+                    return Success;
+                }
+
+                Chart candidate = parser.ChartOfToken(tokenizer.Tokens(ma2Path));
+
                 if (Rotate != null)
                 {
                     bool rotationIsValid = Enum.TryParse(Rotate, out NoteEnum.FlipMethod rotateMethod);
