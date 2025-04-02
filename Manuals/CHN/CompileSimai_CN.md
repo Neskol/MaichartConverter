@@ -1,4 +1,4 @@
-# `ComposeSimai`命令指南
+# `CompileSimai`命令指南
 
 ### 转译指定Simai谱面到指定格式
 
@@ -6,11 +6,11 @@
 
 ## 基础用法
 
-    MaichartConverter ComposeSimai --参数
+    MaichartConverter CompileSimai --参数
 
 ## 示例用法
 
-    MaichartConverter ComposeSimai -p "/Users/Neskol/MaiAnalysis/Output_NoBGA/maimai/363_OSHAMASCRAMBLE/maidata.txt" -f Ma2_104
+    MaichartConverter CompileSimai -p "/Users/Neskol/MaiAnalysis/Output_NoBGA/maimai/363_OSHAMASCRAMBLE/maidata.txt" -f Ma2_104
 
 ## 可用参数
 
