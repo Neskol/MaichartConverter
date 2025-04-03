@@ -28,6 +28,10 @@
 - `-g | --genre <number 0-6> `: Preferred categorizing scheme.
   `0 = Genre, 1 = Level, 2 = Cabinet, 3 = Composer, 4 = BPM, 5 - SD/DX Chart, 6 = No subfolders`
 - `-d | --decimal`: Option to force levels to be displayed in decimals (e.g. `14+ => 14.7`).
+- `-i | --ignore`: Ignore incomplete assets and proceed converting. Folder will be marked as `_incomplete` if any asset is missing.  Missing Assets will be listed in `log.txt`.
+- `-n | --number`: Use `musicID` as folder name instead of sort name.
+- `-j | --json`: Create a log file of compiled tracks in JSON (`index.json`).
+- `-z | --zip`: Zip each track folder and delete original folder.
 
 ### Depreciated/Under development params:
 
