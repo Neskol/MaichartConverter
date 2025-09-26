@@ -188,7 +188,7 @@ namespace MaichartConverter
         /// <param name="outputLocation">Place to log</param>
         public static void Log(string outputLocation)
         {
-            StreamWriter sw = new(outputLocation + "log.txt", false);
+            StreamWriter sw = new(outputLocation + "_log.txt", false);
             int index = 1;
 
             Console.WriteLine("Total music compiled: {0}", NumberTotalTrackCompiled);
@@ -216,7 +216,7 @@ namespace MaichartConverter
         /// <param name="outputLocation">Place to log</param>
         public static void LogTracksInJson(string outputLocation)
         {
-            StreamWriter sw = new(outputLocation + "index.json", false);
+            StreamWriter sw = new(outputLocation + "_index.json", false);
             JsonSerializerOptions? JsonOptions = new()
             {
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
