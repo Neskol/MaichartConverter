@@ -1,3 +1,35 @@
+
+<div align="right">
+  <details>
+    <summary >🌐 Language</summary>
+    <div>
+      <div align="center">
+        <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=en">English</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=zh-CN">简体中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=zh-TW">繁體中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=ja">日本語</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=ko">한국어</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=hi">हिन्दी</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=th">ไทย</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=fr">Français</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=de">Deutsch</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=es">Español</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=it">Italiano</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=ru">Русский</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=pt">Português</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=nl">Nederlands</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=pl">Polski</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=ar">العربية</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=fa">فارسی</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=tr">Türkçe</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=vi">Tiếng Việt</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=id">Bahasa Indonesia</a>
+        | <a href="https://openaitx.github.io/view.html?user=Neskol&project=MaichartConverter&lang=as">অসমীয়া</
+      </div>
+    </div>
+  </details>
+</div>
+
 # MaichartConverter
 
 ## A simple program provide functionality of converting maimai chart between Simai and Ma2.
